@@ -84,9 +84,8 @@ def test_no_identifiers() -> None:
     found: list[str] = []
     for name in listed_files():
         raw = (ROOT / name).read_bytes()
-        try:
-            text = "" if b"\0" in raw else raw.decode("utf-8")
-        except UnicodeDecodeError:
+        text = raw.decode("utf-8", errors="replace")
+        if b"\0" in raw or "�" in text:
             continue
         found += [f"{name}: {kind}" for kind, pattern in IDENTIFIERS.items() if pattern.search(text)]
         found += [f"{name}: public IP address" for match in IPV4.findall(text) if is_public_ip(match)]

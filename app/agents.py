@@ -65,15 +65,8 @@ async def match(client: SupportsChatGetResponse[Any], defects: list[Defect], cat
     tokens = MATCH_TOKENS + TOKENS_PER_DEFECT * len(defects)
     answer = await ask(client, "matcher", catalogue, MatchResult, tokens, rows)
     found = {match.defect: match for match in answer.matches} if answer else {}
-    unanswered = Match(
-        expanded="",
-        category="",
-        item_code=None,
-        quantity=1,
-        confidence=0,
-        candidates=[],
-        reason="the matcher gave no usable answer for this defect",
-    )
+    reason = "the matcher gave no usable answer for this defect"
+    unanswered = Match(expanded="", category="", item_code=None, quantity=1, confidence=0, candidates=[], reason=reason)
     return [found.get(number, unanswered) for number in range(1, len(defects) + 1)]
 
 
@@ -98,16 +91,9 @@ class Double(FunctionInvocationLayer[Any], BaseChatClient[Any]):
     def guess(self, number: int, text: str) -> DefectMatch:
         found = process.extract(text, self.descriptions, scorer=fuzz.token_set_ratio, limit=3)
         codes = [code for _, _, code in found]
-        best = found[0][1] / 100
-        return DefectMatch(
-            defect=number,
-            expanded=text,
-            category="",
-            item_code=codes[0],
-            quantity=1,
-            confidence=best,
-            candidates=codes,
-            reason=None,
+        chosen = {"defect": number, "expanded": text, "category": "", "item_code": codes[0], "quantity": 1}
+        return DefectMatch.model_validate(
+            chosen | {"confidence": found[0][1] / 100, "candidates": codes, "reason": None}
         )
 
     async def _inner_get_response(

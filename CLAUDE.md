@@ -236,6 +236,61 @@ Three rules govern every choice:
   redefined metrics keep 1.0. Eight runs with recorded extractions (one stopped early), about €0.70.
 - **Budget after this branch:** Python app 1,149/1,400 and tests 571/600; phase 4 has 29 lines of tests left.
 
+## Decisions taken in phase 4
+
+- **Upload.** `POST /api/quotes` takes the PDF as the raw `application/pdf` body: a `Content-Length` over 10 MB is refused
+  (413) before anything is read, and `check` refuses a file that is not a PDF (422); both are dependencies, so they answer
+  with a status before the stream starts. `python-multipart` was removed: nothing parses forms. The answer is FastAPI's own
+  `fastapi.sse`: `status` events, then `quote`, or `error` with the status and the message.
+- **Idempotent by content.** The quote id is `q-` and the first 16 hex characters of the PDF's SHA-256, so the same report
+  uploaded again returns its stored quote and drafts nothing (RE:07). Path ids must match `^q-[0-9a-f]{16}$`.
+- **Routes.** List (the latest 100, `SELECT TOP 100 ... ORDER BY c.created_at DESC` across partitions), get, review,
+  corrections (it proposes; the web confirms by sending the edits as a review answer), document (409 until approved),
+  feedback (204), delete (204), `/healthz` and `/api/version` (workflow version and `ELEVANT_IMAGE`). `/healthz` checks no
+  dependency: a probe that fails with Cosmos DB would restart healthy replicas during an outage. Responses hide
+  `request_id` and `checkpoint_id`.
+- **Roles.** From `X-MS-CLIENT-PRINCIPAL`: no valid header is 401, no allowed role 403. `Quote.Estimator` uploads, reviews,
+  asks for corrections and rates; `Quote.Manager` deletes; both list, read and download. Who is
+  `X-MS-CLIENT-PRINCIPAL-NAME`. `/api/version` needs no role, so phase 6 decides whether the built-in auth excludes it
+  for the release smoke test or the smoke test signs in.
+- **Failures in one place.** `main.failure` maps an oversize file (over 10 MB or 10 pages) to 413, another refused file to
+  422, a domain rule to 409, a 404 from Cosmos DB or Blob to 404, a 429 from the model (`ChatClientException` whose cause
+  is `openai.RateLimitError`) or an Azure SDK to 429 with the service's `Retry-After`, the draft deadline to 504, and any
+  other `AzureError` or `ChatClientException` to 503; everything but a domain rule or a 404 is logged as a warning. The
+  SDKs keep their own retries. In the stream the same mapping becomes an `error` event.
+- **Draft deadline** 120 s, twice the SLA, applied around each step of `workflow.start` with `asyncio.timeout_at`, never
+  around a `yield`: a cancel scope across a `yield` would cancel the consumer of the stream instead of the draft. Tested
+  at 0 s.
+- **Telemetry.** `telemetry.configure` calls `configure_azure_monitor(connection_string=, credential=
+  DefaultAzureCredential(), logger_name="elevant")` only when `APPLICATIONINSIGHTS_CONNECTION_STRING` is set. The distro
+  replaces `fastapi.FastAPI` when it instruments FastAPI, so `main` configures first and creates the app through
+  `fastapi.FastAPI`. KPI events are log records with `microsoft.custom_event.name`, carrying quote ids, numbers and
+  outcomes only; `quote_failed` is sent for a 429 or 5xx only, since a refused file is the client's error.
+  `quote_drafted.duration_ms` runs from the request reaching the app; the replica's cold start before that is measured in
+  phase 7. Agent Framework's spans are on by default with sensitive data off; the distro samples at 1.0 unless
+  `OTEL_TRACES_SAMPLER` is set, and the daily cap (phase 6) bounds the cost.
+- **Storage.** `Store.find` (none on a 404), `summaries` and `delete` (the blobs, then the item, so a failed delete can be
+  repeated); `workflow.forget` deletes the checkpoints of `quote-v1-<id>` first. `store.Memory` is the one in-memory
+  `Storage`, for the evaluation (it replaces `Nowhere`) and the tests. The local lifespan creates the emulator containers;
+  `make serve` runs the API with doubles.
+- **Tests.** `test_api.py` drives every route through HTTP with the in-memory store, and the same flow runs against the
+  emulators in CI (an indirect parameter). It replaces the phase 2 workflow walk, since every request rebuilds the
+  workflow from its checkpoint; the rejected-report check moved with it. mypy excludes OpenTelemetry's untyped in-memory
+  exporter through `untyped_calls_exclude`, not a `type: ignore`.
+- **Accepted after the phase review.** A draft that fails after `extract` (a 429, 503 or 504, or a closed stream)
+  leaves `reports/<id>.pdf` and its checkpoints without a quote: the blob lifecycle (30 days in staging, 730 in
+  production) and the checkpoints' TTL remove them, and the same PDF uploaded again overwrites them. Two uploads of the
+  same PDF at the same moment both draft and the later save wins; with three estimators this is accepted rather than
+  paid for with a conditional create. Dependencies resolve in order, so the role is checked before the body is read, and
+  the body is read in chunks up to 10 MB whatever `Content-Length` says. A 404 is a missing quote only when Azure says
+  so; a 404 from the model is a 503.
+- **For phase 6.** Set `APPLICATIONINSIGHTS_CONNECTION_STRING`, `AZURE_CLIENT_ID` (the user-assigned identity, for
+  `DefaultAzureCredential`), `ELEVANT_IMAGE` (the digest) and `OTEL_PYTHON_FASTAPI_EXCLUDED_URLS=healthz`; serve the
+  built web from the same app.
+- **Budget after phase 4:** Python app 1,356/1,400 and tests 600/600 (formatting compacted in older tests, every check
+  kept or moved). `load/locustfile.py` and `ops/export_run.py` have 44 lines between them, and any new test needs lines
+  freed first.
+
 ## Verified names (installed wheels, 2026-10-30 and 2026-10-31)
 
 | Package | Name |
@@ -258,3 +313,10 @@ Three rules govern every choice:
 | GitHub Actions (2026-10-31) | `environment: {name, deployment: false}` uses an environment's secrets without a deployment object; `defaults.run.shell: bash` runs steps with `-eo pipefail`; `azure/login` v3.1.0 is commit `a641126d1b8aa4d1fa005f4f92df94a3a4c4c906` (node24); `gh pr comment --body-file` |
 | Azure CLI 2.89.0 | `az cognitiveservices account project show --project-name` returns the project endpoint in `properties.endpoints."AI Foundry API"`; the account's `properties.endpoint` serves Document Intelligence |
 | `types-PyYAML` 6.0.12.20261030 · actionlint 1.7.12 | stubs for `yaml.safe_load` under mypy strict · `rhysd/actionlint:1.7.12` with shellcheck, clean on `ci.yml` and `eval.yml` |
+| `fastapi` 0.162.0 · `starlette` 1.10.0 | `fastapi.sse.EventSourceResponse` as the `response_class` of an async generator route yielding `ServerSentEvent(event=, data=)`; the generator runs in a producer task with a 15 s keepalive comment after the response has started; `Body(embed=True)`; `exception_handlers=` on the app |
+| `azure-monitor-opentelemetry` 1.8.11 | `configure_azure_monitor(connection_string=, credential=, logger_name=)`; it attaches `opentelemetry.instrumentation.logging.handler.LoggingHandler` (the SDK's own is deprecated in 1.45) and replaces `fastapi.FastAPI`; default sampling ratio 1.0 |
+| `opentelemetry-sdk` 1.45.2 | `InMemoryLogRecordExporter`, `SimpleLogRecordProcessor`; a record's `log_record.attributes` carry the `extra` fields |
+| `openai` 3.41.0 (through `agent-framework-openai` 1.17.0) | errors take an `httpx2.Response`; `RateLimitError.status_code` and `.response.headers`; the client wraps them in `ChatClientException` with the error as `__cause__`, and the streaming workflow run raises it unchanged |
+| `agent-framework-core` 1.23.0 (checkpoints) | `list_checkpoint_ids(workflow_name=)` and `delete(checkpoint_id)` on both storages; instrumentation on by default, sensitive data off |
+| Built-in auth (Learn `container-apps/authentication`, 2026-07-08; `app-service/configure-authentication-user-identities`, 2025-07-02) | `X-MS-CLIENT-PRINCIPAL` is base64 JSON `{auth_typ, claims: [{typ, val}], name_typ, role_typ}`; `X-MS-CLIENT-PRINCIPAL-NAME` is a readable name; "External requests aren't allowed to set these headers" |
+| Cosmos DB vNext emulator (Learn, 2026-10-07) | ORDER BY on partitioned containers and paging supported; `SELECT TOP 100 c.id, c.state, c.header.lift_id, c.created_at FROM c ORDER BY c.created_at DESC` returns `lift_id` |

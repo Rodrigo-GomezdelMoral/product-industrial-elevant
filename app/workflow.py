@@ -39,11 +39,19 @@ Reader = Callable[[bytes], Awaitable[Layout]]
 
 
 class Storage(Protocol):
+    async def find(self, quote_id: str) -> Quote | None: ...
+
     async def load(self, quote_id: str) -> Quote: ...
 
     async def save(self, quote: Quote) -> None: ...
 
     async def put(self, container: str, name: str, data: bytes) -> None: ...
+
+    async def get(self, container: str, name: str) -> bytes: ...
+
+    async def summaries(self) -> list[dict[str, Any]]: ...
+
+    async def delete(self, quote_id: str) -> None: ...
 
 
 @dataclass
@@ -54,10 +62,13 @@ class Services:
     chat: SupportsChatGetResponse[Any]
 
 
-class Decision(BaseModel):
-    by: str
+class Answer(BaseModel):
     edits: list[Edit] = []
     approve: bool = False
+
+
+class Decision(Answer):
+    by: str
 
 
 class Extract(Executor):
@@ -185,6 +196,12 @@ async def resume(services: Services, quote_id: str, decision: Decision) -> tuple
     except WorkflowCheckpointException as error:
         raise DomainError("this draft was made by an earlier version of Elevant; upload the report again") from error
     return await settle(services, workflow, events, stored.etag)
+
+
+async def forget(services: Services, quote_id: str) -> None:
+    for checkpoint_id in await services.checkpoints.list_checkpoint_ids(workflow_name=f"{VERSION}-{quote_id}"):
+        await services.checkpoints.delete(checkpoint_id)
+    await services.store.delete(quote_id)
 
 
 async def models(

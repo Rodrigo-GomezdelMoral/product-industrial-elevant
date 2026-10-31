@@ -19,6 +19,7 @@ from azure.identity.aio import DefaultAzureCredential
 from app.domain import Quote, load_catalogue, new_quote
 from app.extraction import Layout
 from app.settings import Settings
+from app.store import Memory
 from app.workflow import Services, models, start
 from eval.evaluators import Truth, gate, misses, score, summarise, table
 
@@ -31,17 +32,6 @@ EUROS_INPUT, EUROS_CACHED, EUROS_OUTPUT = 0.22e-6, 0.022e-6, 1.7599e-6
 USAGE = ContextVar[Counter[str] | None]("usage", default=None)
 Drafted = tuple[Quote, float, Counter[str]]
 Drafts = list[Drafted]
-
-
-class Nowhere:
-    """Stores nothing: the evaluation reads each draft from the workflow's own result."""
-
-    async def load(self, quote_id: str) -> Quote:
-        raise KeyError(quote_id)
-
-    async def save(self, quote: Quote) -> None: ...
-
-    async def put(self, container: str, name: str, data: bytes) -> None: ...
 
 
 @chat_middleware
@@ -105,7 +95,7 @@ def report(truths: list[Truth], drafts: Drafts, full: bool, model: str) -> tuple
 async def main(full: bool) -> int:
     settings = Settings()
     async with DefaultAzureCredential() as credential, AsyncExitStack() as stack:
-        services = Services(Nowhere(), InMemoryCheckpointStorage(), *await models(settings, credential, stack))
+        services = Services(Memory(), InMemoryCheckpointStorage(), *await models(settings, credential, stack))
         truths, drafts = await evaluate(services, full)
     text, passed = report(truths, drafts, full, "doubles" if settings.doubles else settings.model)
     sys.stdout.buffer.write(f"{text}\n".encode())

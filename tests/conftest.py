@@ -5,6 +5,7 @@ import pytest
 from agent_framework import BaseChatClient, ChatResponse, FunctionInvocationLayer, Message
 
 from app.domain import Catalogue, Defect, Header, Match, Quote, draft, load_catalogue, new_quote
+from app.store import Memory
 
 
 class Scripted(FunctionInvocationLayer[Any], BaseChatClient[Any]):
@@ -21,31 +22,9 @@ class Scripted(FunctionInvocationLayer[Any], BaseChatClient[Any]):
         return ChatResponse(messages=[Message(role="assistant", contents=[self.answers.pop(0)])])
 
 
-class Memory:
-    def __init__(self) -> None:
-        self.quotes: dict[str, Quote] = {}
-        self.puts: list[str] = []
-
-    async def load(self, quote_id: str) -> Quote:
-        return self.quotes[quote_id]
-
-    async def save(self, quote: Quote) -> None:
-        self.quotes[quote.id] = quote
-
-    async def put(self, container: str, name: str, data: bytes) -> None:
-        self.puts.append(f"{container}/{name}")
-
-
 def proposal(code: str | None, quantity: float = 1, confidence: float = 0.9, candidates: tuple[str, ...] = ()) -> Match:
-    return Match(
-        expanded="",
-        category="",
-        item_code=code,
-        quantity=quantity,
-        confidence=confidence,
-        candidates=list(candidates),
-        reason=None,
-    )
+    chosen = {"item_code": code, "quantity": quantity, "confidence": confidence, "candidates": list(candidates)}
+    return Match.model_validate({"expanded": "", "category": "", "reason": None} | chosen)
 
 
 @pytest.fixture

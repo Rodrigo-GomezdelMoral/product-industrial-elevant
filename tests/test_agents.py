@@ -15,9 +15,7 @@ PDF, EXTRACTED = ROOT / "data" / "reports" / "report-0134.pdf", ROOT / "eval" / 
 
 
 @pytest.mark.parametrize("name", sorted(path.name for path in EXTRACTED.glob("*.json")))
-async def test_the_matcher_sees_defect_text_and_catalogue_codes_only(
-    name: str, catalogue: Catalogue, scripted: Any
-) -> None:
+async def test_the_matcher_sees_only_defect_text_and_codes(name: str, catalogue: Catalogue, scripted: Any) -> None:
     report = read(Layout.model_validate_json((EXTRACTED / name).read_text(encoding="utf-8")))
     client = scripted('{"matches": [')
     matches = await agents.match(client, report.defects, catalogue)
@@ -29,19 +27,14 @@ async def test_the_matcher_sees_defect_text_and_catalogue_codes_only(
     assert {match.reason for match in matches} == {"the matcher gave no usable answer for this defect"}
 
 
-async def test_the_corrector_proposes_catalogue_edits_without_applying_them(
-    drafted: Quote, catalogue: Catalogue, scripted: Any
-) -> None:
+async def test_the_corrector_proposes_and_never_applies(drafted: Quote, catalogue: Catalogue, scripted: Any) -> None:
     item = {"action": "item", "line": 4, "code": "DOR-103", "quantity": None}
     quantity = {"action": "quantity", "line": 4, "code": None, "quantity": 3}
     invented = {"action": "add", "line": None, "code": "DOR-999", "quantity": 1}
     answers = [{"edits": [item, quantity]}, {"edits": [invented]}, {"edits": []}]
     client = scripted(*map(json.dumps, answers))
     proposed = await agents.correct(client, drafted, "line 4 is the 80 mm roller, 3 units", catalogue)
-    assert [(edit.action, edit.code, edit.quantity) for edit in proposed] == [
-        ("item", "DOR-103", None),
-        ("quantity", None, 3),
-    ]
+    assert [(e.action, e.code, e.quantity) for e in proposed] == [("item", "DOR-103", None), ("quantity", None, 3)]
     assert drafted.lines[3].model_dump(include={"item_code", "quantity"}) == {"item_code": "DOR-102", "quantity": 2}
     for message in ("DOR-999 is not in catalogue-v1", "no change found"):
         with pytest.raises(DomainError, match=message):

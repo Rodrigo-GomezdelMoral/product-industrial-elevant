@@ -31,6 +31,10 @@ class RejectedFileError(DomainError):
     """A file Elevant does not read; nothing about it is stored."""
 
 
+class OversizeError(RejectedFileError):
+    """A file over 10 MB or 10 pages."""
+
+
 class Pair(BaseModel):
     key: str
     value: str | None
@@ -59,7 +63,7 @@ def check(pdf: bytes) -> None:
     if not pdf.startswith(b"%PDF-"):
         raise RejectedFileError("the file is not a PDF")
     if len(pdf) > MAX_BYTES:
-        raise RejectedFileError("the file is over 10 MB")
+        raise OversizeError("the file is over 10 MB")
 
 
 def layout(result: AnalyzeResult) -> Layout:
@@ -95,7 +99,7 @@ async def analyze(client: DocumentIntelligenceClient, pdf: bytes) -> Layout:
             raise RejectedFileError("the PDF could not be read") from error
         raise
     if found.pages > MAX_PAGES:
-        raise RejectedFileError("the report is over 10 pages")
+        raise OversizeError("the report is over 10 pages")
     return found
 
 
