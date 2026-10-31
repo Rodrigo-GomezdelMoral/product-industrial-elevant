@@ -1,0 +1,82 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "name": "about",
+      "content": {
+        "json": "## Elevant\nThe health model of the last hour first, then the SLOs of the last 30 days and the KPIs per month. Definitions and targets are in `docs/PRODUCT.md`; what to do when a flow is degraded is in `docs/OPERATIONS.md`."
+      }
+    },
+    {
+      "type": 3,
+      "name": "health-model",
+      "content": {
+        "version": "KqlItem/1.0",
+        "title": "Health model, last hour: degraded when p95 > 45 s or failures > 1 %, unhealthy when p95 > 60 s or failures > 5 %",
+        "query": "let draft = customEvents | where name in (\"quote_drafted\", \"quote_failed\") | summarize n = count(), p95_s = percentile(todouble(customDimensions.duration_ms), 95) / 1000, failed_pct = 100.0 * countif(name == \"quote_failed\") / count() | extend flow = \"draft: extract, match, price\";\nlet issue = requests | where name endswith \"/review\" or name endswith \"/document\" | summarize n = count(), p95_s = percentile(duration, 95) / 1000, failed_pct = 100.0 * countif(toint(resultCode) >= 500) / count() | extend flow = \"issue: review, render, download\";\nunion draft, issue\n| extend state = case(n == 0, \"no traffic\", p95_s > 60 or failed_pct > 5, \"unhealthy\", p95_s > 45 or failed_pct > 1, \"degraded\", \"healthy\")\n| project flow, state, requests = n, p95_s = round(p95_s, 1), failed_pct = round(failed_pct, 2)",
+        "size": 4,
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "table",
+        "timeContext": { "durationMs": 3600000 }
+      }
+    },
+    {
+      "type": 3,
+      "name": "slos",
+      "content": {
+        "version": "KqlItem/1.0",
+        "title": "SLOs, last 30 days: availability in business hours (SLO 99.7 %, SLA 99.5 %), draft p95 (SLO 45 s, SLA 60 s), failed drafts (SLO < 1 %)",
+        "query": "let availability = toscalar(requests | extend local = datetime_utc_to_local(timestamp, \"Europe/Madrid\") | where dayofweek(local) between (1d .. 5d) and hourofday(local) between (7 .. 19) | summarize round(100.0 * countif(toint(resultCode) < 500) / count(), 3));\ncustomEvents\n| where name in (\"quote_drafted\", \"quote_failed\")\n| summarize drafts = countif(name == \"quote_drafted\"), draft_p95_s = round(percentile(todouble(customDimensions.duration_ms), 95) / 1000, 1), failed_pct = round(100.0 * countif(name == \"quote_failed\") / count(), 2)\n| extend availability_pct = availability",
+        "size": 4,
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "table",
+        "timeContext": { "durationMs": 2592000000 }
+      }
+    },
+    {
+      "type": 3,
+      "name": "kpis",
+      "content": {
+        "version": "KqlItem/1.0",
+        "title": "KPIs per month, within the 31 days the workspace keeps: KPI-1 median office time per quote (target 900 s or less), KPI-2 lines accepted unchanged (target 85 %), KPI-3 positive feedback (target 80 %)",
+        "query": "let kpi1 = customEvents | where name == \"quote_approved\" | summarize kpi1_median_s = percentile(todouble(customDimensions.elapsed_s), 50), approved = count() by month = startofmonth(timestamp);\nlet kpi2 = customEvents | where name == \"line_reviewed\" | summarize kpi2_accepted_pct = round(100.0 * countif(tostring(customDimensions.outcome) == \"accepted\") / count(), 1) by month = startofmonth(timestamp);\nlet kpi3 = customEvents | where name == \"feedback\" | summarize kpi3_up_pct = round(100.0 * countif(tostring(customDimensions.value) == \"up\") / count(), 1), votes = count() by month = startofmonth(timestamp);\nkpi1 | join kind=fullouter kpi2 on month | join kind=fullouter kpi3 on month\n| project month = coalesce(month, month1, month2), approved, kpi1_median_s, kpi2_accepted_pct, kpi3_up_pct, votes\n| order by month desc",
+        "size": 4,
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "table",
+        "timeContext": { "durationMs": 2678400000 }
+      }
+    },
+    {
+      "type": 3,
+      "name": "unit-cost",
+      "content": {
+        "version": "KqlItem/1.0",
+        "title": "Model tokens and cost per approved quote, last 30 days (cached input counted at the full price, so an upper bound; the full unit cost adds Cost Management, see docs/cost.md)",
+        "query": "let approved = toscalar(customEvents | where name == \"quote_approved\" | count);\ndependencies\n| where tostring(customDimensions[\"gen_ai.operation.name\"]) == \"chat\" and isnotempty(customDimensions[\"gen_ai.usage.input_tokens\"])\n| summarize calls = count(), input = sum(tolong(customDimensions[\"gen_ai.usage.input_tokens\"])), output = sum(tolong(customDimensions[\"gen_ai.usage.output_tokens\"]))\n| extend approved = approved, model_eur = round((input * 0.22 + output * 1.7599) / 1e6, 4)\n| extend eur_per_approved_quote = iff(approved > 0, round(model_eur / approved, 4), real(null))",
+        "size": 4,
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "table",
+        "timeContext": { "durationMs": 2592000000 }
+      }
+    },
+    {
+      "type": 3,
+      "name": "events",
+      "content": {
+        "version": "KqlItem/1.0",
+        "title": "KPI and SLI events arriving, last 7 days",
+        "query": "customEvents | summarize events = count(), last = max(timestamp) by name | order by name asc",
+        "size": 4,
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "table",
+        "timeContext": { "durationMs": 604800000 }
+      }
+    }
+  ]
+}
