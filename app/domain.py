@@ -123,6 +123,9 @@ class Quote(BaseModel):
     drafted_at: datetime | None = None
     approved_at: datetime | None = None
     approved_by: str | None = None
+    request_id: str | None = None
+    checkpoint_id: str | None = None
+    etag: str | None = Field(default=None, validation_alias="_etag", exclude=True)
 
 
 def money(value: Decimal) -> Decimal:
