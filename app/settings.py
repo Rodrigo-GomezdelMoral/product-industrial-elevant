@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     cosmos_endpoint: str = "http://localhost:8081"
     blob_endpoint: str = ""
     database: str = "elevant"
+    image: str = "local"
+    appinsights: str = Field("", validation_alias="APPLICATIONINSIGHTS_CONNECTION_STRING")
 
     @model_validator(mode="after")
     def no_doubles_in_production(self) -> Self:

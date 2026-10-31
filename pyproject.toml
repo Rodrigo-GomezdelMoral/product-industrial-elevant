@@ -18,6 +18,7 @@ strict = true
 explicit_package_bases = true
 namespace_packages = true
 plugins = ["pydantic.mypy"]
+untyped_calls_exclude = ["opentelemetry.sdk._logs"]
 files = ["."]
 exclude = ["^\\.venv/", "^web/"]
 
