@@ -1,0 +1,156 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-41189",
+   "confidence": 0.997
+  },
+  {
+   "key": "Address",
+   "value": "30 Larch Street, Northgate",
+   "confidence": 0.998
+  },
+  {
+   "key": "Date",
+   "value": "18/09/2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Inspector",
+   "value": "Marta Rubio",
+   "confidence": 0.997
+  },
+  {
+   "key": "Ref",
+   "value": null,
+   "confidence": 0.999
+  },
+  {
+   "key": "Finding",
+   "value": null,
+   "confidence": 0.998
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-41189"
+    ],
+    [
+     "Address",
+     "30 Larch Street, Northgate"
+    ],
+    [
+     "Date",
+     "18/09/2026"
+    ],
+    [
+     "Inspector",
+     "Marta Rubio"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-01",
+     "building: Pigeons nesting on the machine room roof (qty 1)"
+    ],
+    [
+     "F-02",
+     "machine room: Door zone switch worn (qty 1)"
+    ],
+    [
+     "F-03",
+     "car top: Safety gear adjustment required (qty 1)"
+    ],
+    [
+     "F-04",
+     "car: CAR LED CLG PANEL 300 × 300 MM NOT WKG (qty 4)"
+    ],
+    [
+     "F-05",
+     "car top: OVERSPEED GOV REPL REQUIRED (qty 1)"
+    ],
+    [
+     "F-06",
+     "building: Water ingress in the pit from the building drainage (qty 1)"
+    ],
+    [
+     "F-07",
+     "car top: Safety gear adjustment required (qty 1)"
+    ],
+    [
+     "F-08",
+     "machine room: Hydraulic valve seal kit out of adjustment (qty 1)"
+    ],
+    [
+     "F-09",
+     "floor 7: Door operator motor loose (qty 1)"
+    ],
+    [
+     "F-10",
+     "floor 2: LDG DR CLOSER WEIGHT AND CBL DMGD (qty 3)"
+    ],
+    [
+     "F-11",
+     "floor 9: Car door roller, 40 mm worn (qty 1)"
+    ],
+    [
+     "F-12",
+     "machine room: Hydraulic valve seal kit loose (qty 1)"
+    ],
+    [
+     "F-13",
+     "machine room: Motor bearing, non-drive end faulty (qty 2)"
+    ],
+    [
+     "F-14",
+     "car: Car ventilation fan corroded (qty 1)"
+    ],
+    [
+     "F-15",
+     "car top: Slack rope switch not working (qty 1)"
+    ],
+    [
+     "F-16",
+     "machine room: Motor bearing broken (qty 1)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

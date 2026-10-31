@@ -1,0 +1,138 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Unit no.",
+   "value": "LFT-46302",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date of visit",
+   "value": "13 Sep 2026",
+   "confidence": 0.998
+  },
+  {
+   "key": "Site address",
+   "value": "11 Chapel Row, Westmere",
+   "confidence": 0.997
+  },
+  {
+   "key": "Engineer",
+   "value": "Ana Vidal",
+   "confidence": 0.998
+  },
+  {
+   "key": "Pos.",
+   "value": "1\n2\n3\n4\n5\n6\n7\n8",
+   "confidence": 0.995
+  },
+  {
+   "key": "Component",
+   "value": "Owner asks for an extra stop at the basement\nbuilding\nCAR OP PANEL PUSH BTN\nCar mirror\nHYD VALVE SEAL KIT\nCONTROL CAB FAN\nBUFFER CAR SPRING\nLIGHT CURTAIN SINGLE-SIDE\nWater ingress in the pit from the building drainage",
+   "confidence": 0.996
+  },
+  {
+   "key": "Observation",
+   "value": "FLTY, car\nworn, car\nDMGD, machine room\nCORR, machine room\nFLTY, pit\nFLTY, floor 9\nbuilding",
+   "confidence": 0.997
+  },
+  {
+   "key": "Units",
+   "value": "1\n2\n1\n1\n2\n1\n1\n1",
+   "confidence": 0.996
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Unit no.",
+     "LFT-46302",
+     "Date of visit",
+     "13 Sep 2026"
+    ],
+    [
+     "Site address",
+     "11 Chapel Row, Westmere",
+     "Engineer",
+     "Ana Vidal"
+    ]
+   ],
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "1",
+     "Owner asks for an extra stop at the basement",
+     "building",
+     "1"
+    ],
+    [
+     "2",
+     "CAR OP PANEL PUSH BTN",
+     "FLTY, car",
+     "2"
+    ],
+    [
+     "3",
+     "Car mirror",
+     "worn, car",
+     "1"
+    ],
+    [
+     "4",
+     "HYD VALVE SEAL KIT",
+     "DMGD, machine room",
+     "1"
+    ],
+    [
+     "5",
+     "CONTROL CAB FAN",
+     "CORR, machine room",
+     "2"
+    ],
+    [
+     "6",
+     "BUFFER CAR SPRING",
+     "FLTY, pit",
+     "1"
+    ],
+    [
+     "7",
+     "LIGHT CURTAIN SINGLE-SIDE",
+     "FLTY, floor 9",
+     "1"
+    ],
+    [
+     "8",
+     "Water ingress in the pit from the building drainage",
+     "building",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

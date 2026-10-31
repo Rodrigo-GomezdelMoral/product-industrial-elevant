@@ -1,0 +1,117 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift ID:",
+   "value": "LFT-80554",
+   "confidence": 0.997
+  },
+  {
+   "key": "Location:",
+   "value": "118 Quarry Road, Fairholm",
+   "confidence": 0.997
+  },
+  {
+   "key": "Inspection date:",
+   "value": "2026-10-23",
+   "confidence": 0.995
+  },
+  {
+   "key": "Technician:",
+   "value": "Irene Ferrer",
+   "confidence": 0.99
+  },
+  {
+   "key": "No.",
+   "value": "1\n2\n3\n4\n5\n6\n7\n8",
+   "confidence": 0.961
+  },
+  {
+   "key": "Location",
+   "value": "car top\ncar top\nmachine room\nbuilding\nfloor 8\nmachine room\nfloor 5\nmachine room",
+   "confidence": 0.993
+  },
+  {
+   "key": "Defect description",
+   "value": "CAR ROOF BALUSTRADE WRN\nEmergency telephone, landline unit broken\nHydraulic oil loose\nPigeons nesting on the machine room roof\nHALL LANTERN NOT WKG\nBrake lining, drum brake broken\nDoor operator motor, AC broken\nLOAD WEIGHING SENS OUT OF ADJ",
+   "confidence": 0.993
+  },
+  {
+   "key": "Qty",
+   "value": "1\n1\n110 l\n1\n2\n1\n1\n1",
+   "confidence": 0.952
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "1",
+     "car top",
+     "CAR ROOF BALUSTRADE WRN",
+     "1"
+    ],
+    [
+     "2",
+     "car top",
+     "Emergency telephone, landline unit broken",
+     "1"
+    ],
+    [
+     "3",
+     "machine room",
+     "Hydraulic oil loose",
+     "110 l"
+    ],
+    [
+     "4",
+     "building",
+     "Pigeons nesting on the machine room roof",
+     "1"
+    ],
+    [
+     "5",
+     "floor 8",
+     "HALL LANTERN NOT WKG",
+     "2"
+    ],
+    [
+     "6",
+     "machine room",
+     "Brake lining, drum brake broken",
+     "1"
+    ],
+    [
+     "7",
+     "floor 5",
+     "Door operator motor, AC broken",
+     "1"
+    ],
+    [
+     "8",
+     "machine room",
+     "LOAD WEIGHING SENS OUT OF ADJ",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

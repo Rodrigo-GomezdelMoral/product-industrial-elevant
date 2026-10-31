@@ -1,0 +1,216 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Lift ID:",
+   "value": "LFT-23270",
+   "confidence": 0.997
+  },
+  {
+   "key": "Location:",
+   "value": "18 Chapel Row, Northgate",
+   "confidence": 0.997
+  },
+  {
+   "key": "Inspection date:",
+   "value": "2026-10-03",
+   "confidence": 0.996
+  },
+  {
+   "key": "Technician:",
+   "value": "Irene Rubio",
+   "confidence": 0.989
+  },
+  {
+   "key": "No.",
+   "value": "1\n2\n3\n4\n5\n6",
+   "confidence": 0.978
+  },
+  {
+   "key": "Location",
+   "value": "car top\ncar top\ncar\nfloor 9\nfloor 2\npit\nfloor 7",
+   "confidence": 0.979
+  },
+  {
+   "key": "Defect description",
+   "value": "Safety gear adjustment required\nAlarm battery worn\nCar floor covering, rubber faulty\nLanding door closer, weight and cable out of adjustment\nVoice announcer damaged\nCounterweight filler weight not working\nLanding key switch not working\nEmergency light battery out of adjustment\nPigeons nesting on the machine room roof\nBraille floor plate worn\nAlarm battery damaged\nGovernor tension pulley faulty\nPhase monitoring relay corroded\nHANDRAIL ALUMINIUM",
+   "confidence": 0.92
+  },
+  {
+   "key": "Qty",
+   "value": "1\n1\n4 m2\n4\n1\n4\n1\n1\n3",
+   "confidence": 0.953
+  },
+  {
+   "key": "Location",
+   "value": "floor 0",
+   "confidence": 0.937
+  },
+  {
+   "key": "Defect description",
+   "value": "HALL POS IND TFT COLOUR LSE",
+   "confidence": 0.99
+  },
+  {
+   "key": "Qty",
+   "value": "3",
+   "confidence": 0.995
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "1",
+     "car top",
+     "Safety gear adjustment required",
+     "1"
+    ],
+    [
+     "2",
+     "car top",
+     "Alarm battery worn",
+     "1"
+    ],
+    [
+     "3",
+     "car",
+     "Car floor covering, rubber faulty",
+     "4 m2"
+    ],
+    [
+     "4",
+     "floor 9",
+     "Landing door closer, weight and cable out of adjustment",
+     "4"
+    ],
+    [
+     "5",
+     "floor 2",
+     "Voice announcer damaged",
+     "1"
+    ],
+    [
+     "6",
+     "pit",
+     "Counterweight filler weight not working",
+     "4"
+    ],
+    [
+     "7",
+     "floor 7",
+     "Landing key switch not working",
+     "1"
+    ],
+    [
+     "8",
+     "car top",
+     "Emergency light battery out of adjustment",
+     "2"
+    ],
+    [
+     "9",
+     "building",
+     "Pigeons nesting on the machine room roof",
+     "1"
+    ],
+    [
+     "10",
+     "floor 3",
+     "Braille floor plate worn",
+     "3"
+    ],
+    [
+     "11",
+     "car top",
+     "Alarm battery damaged",
+     "2"
+    ],
+    [
+     "12",
+     "pit",
+     "Governor tension pulley faulty",
+     "1"
+    ],
+    [
+     "13",
+     "machine room",
+     "Phase monitoring relay corroded",
+     "1"
+    ],
+    [
+     "14",
+     "car",
+     "CAR HANDRAIL ALUMINIUM BRKN",
+     "3"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "15",
+     "floor 0",
+     "HALL POS IND TFT COLOUR LSE",
+     "3"
+    ],
+    [
+     "16",
+     "car",
+     "Car handrail, stainless steel damaged",
+     "3"
+    ],
+    [
+     "17",
+     "car top",
+     "Emergency telephone, landline unit damaged",
+     "1"
+    ],
+    [
+     "18",
+     "machine room",
+     "Main contactor damaged",
+     "3"
+    ]
+   ],
+   "pages": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  }
+ ]
+}

@@ -1,0 +1,151 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-32808",
+   "confidence": 0.997
+  },
+  {
+   "key": "Address",
+   "value": "14 Mill Lane, Ashdale",
+   "confidence": 0.998
+  },
+  {
+   "key": "Date",
+   "value": "12/10/2026",
+   "confidence": 0.995
+  },
+  {
+   "key": "Inspector",
+   "value": "Irene Navas",
+   "confidence": 0.995
+  },
+  {
+   "key": "Ref",
+   "value": "F-01",
+   "confidence": 0.969
+  },
+  {
+   "key": "Finding",
+   "value": "floor 7: Braille floor plate corroded (qty 4)",
+   "confidence": 0.993
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-32808"
+    ],
+    [
+     "Address",
+     "14 Mill Lane, Ashdale"
+    ],
+    [
+     "Date",
+     "12/10/2026"
+    ],
+    [
+     "Inspector",
+     "Irene Navas"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-01",
+     "floor 7: Braille floor plate corroded (qty 4)"
+    ],
+    [
+     "F-02",
+     "floor 4: LDG DR CLOSER SPRING LSE (qty 3)"
+    ],
+    [
+     "F-03",
+     "car: CAR GUIDE SHOE INSERT FLTY (qty 2)"
+    ],
+    [
+     "F-04",
+     "car top: Safety gear adjustment required (qty 1)"
+    ],
+    [
+     "F-05",
+     "car: Car position indicator loose (qty 1)"
+    ],
+    [
+     "F-06",
+     "machine room: PHASE MONITORING RELAY WRN (qty 1)"
+    ],
+    [
+     "F-07",
+     "car: Car apron faulty (qty 1)"
+    ],
+    [
+     "F-08",
+     "car top: EMERG LIGHT BATT DMGD (qty 1)"
+    ],
+    [
+     "F-09",
+     "floor 7: LDG DR INTERLOCK ELECTRICAL CONT OUT OF ADJ (qty 3)"
+    ],
+    [
+     "F-10",
+     "car top: FINAL LIMIT SW UPPER LSE (qty 2)"
+    ],
+    [
+     "F-11",
+     "floor 3: DR GIB BRKN (qty 4)"
+    ],
+    [
+     "F-12",
+     "car top: PIT REFUGE SIGN NOT WKG (qty 2)"
+    ],
+    [
+     "F-13",
+     "floor 2: Arrival gong faulty (qty 4)"
+    ],
+    [
+     "F-14",
+     "car top: Emergency light battery damaged (qty 2)"
+    ],
+    [
+     "F-15",
+     "car: Car position indicator, dot-matrix not working (qty 1)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

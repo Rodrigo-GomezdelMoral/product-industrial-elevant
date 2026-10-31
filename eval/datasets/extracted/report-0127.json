@@ -1,0 +1,131 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Unit no.",
+   "value": "LFT-46000",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date of visit",
+   "value": "22 Sep 2026",
+   "confidence": 0.997
+  },
+  {
+   "key": "Site address",
+   "value": "62 Larch Street, Northgate",
+   "confidence": 0.998
+  },
+  {
+   "key": "Engineer",
+   "value": "Jorge Campos",
+   "confidence": 0.998
+  },
+  {
+   "key": "Pos.",
+   "value": "1\n2\n4\n5\n6\n7",
+   "confidence": 0.972
+  },
+  {
+   "key": "Component",
+   "value": "Car top inspection box\nCar top inspection box\nLOAD WEIGHING SENS\nUnintended car movement detector\nControl cabinet fan\nTraction sheave, regrooving\nMachine room window glass cracked",
+   "confidence": 0.992
+  },
+  {
+   "key": "Observation",
+   "value": "corroded, car\nout of adjustment, car\nFLTY, machine room\nworn, car top\nout\nadjustment, machine room\nrequired, machine room\nbuilding",
+   "confidence": 0.953
+  },
+  {
+   "key": "Units",
+   "value": "1\n1\n1\n1\n1\n1\n1",
+   "confidence": 0.995
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Unit no.",
+     "LFT-46000",
+     "Date of visit",
+     "22 Sep 2026"
+    ],
+    [
+     "Site address",
+     "62 Larch Street, Northgate",
+     "Engineer",
+     "Jorge Campos"
+    ]
+   ],
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "1",
+     "Car top inspection box",
+     "corroded, car",
+     "1"
+    ],
+    [
+     "2",
+     "Car top inspection box",
+     "out of adjustment, car",
+     "1"
+    ],
+    [
+     "3",
+     "LOAD WEIGHING SENS",
+     "FLTY, machine room",
+     "1"
+    ],
+    [
+     "4",
+     "Unintended car movement detector",
+     "worn, car top",
+     "1"
+    ],
+    [
+     "5",
+     "Control cabinet fan",
+     "out of adjustment, machine room",
+     "1"
+    ],
+    [
+     "6",
+     "Traction sheave, regrooving",
+     "required, machine room",
+     "1"
+    ],
+    [
+     "7",
+     "Machine room window glass cracked",
+     "building",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

@@ -1,0 +1,207 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Unit no.",
+   "value": null,
+   "confidence": 0.996
+  },
+  {
+   "key": "Date of visit",
+   "value": "02 Sep 2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Site address",
+   "value": "115 Chapel Row, Fairholm",
+   "confidence": 0.997
+  },
+  {
+   "key": "Engineer",
+   "value": "Luis Campos",
+   "confidence": 0.997
+  },
+  {
+   "key": "Pos.",
+   "value": "1\n2\n3\n4\n5\n6\n7\n8",
+   "confidence": 0.91
+  },
+  {
+   "key": "Component",
+   "value": "Inverter cooling fan\nControl board relay\nOVERSPEED GOV REPL\nMachine room window glass cracked\nCar position indicator, TFT colour\nfan\naluminium",
+   "confidence": 0.942
+  },
+  {
+   "key": "Observation",
+   "value": "not working, machine room\nout of adjustment, machine room",
+   "confidence": 0.966
+  },
+  {
+   "key": "Units",
+   "value": "2\n1\n1\n1",
+   "confidence": 0.924
+  },
+  {
+   "key": "Pos.",
+   "value": "9\n10\n11\n12\n13",
+   "confidence": 0.995
+  },
+  {
+   "key": "Component",
+   "value": "Car LED ceiling panel, 600 x 600 mm\nCar floor covering, rubber\nOverspeed governor, replacement\nTraction sheave, regrooving\nLIGHT CURTAIN SINGLE-SIDE",
+   "confidence": 0.988
+  },
+  {
+   "key": "Observation",
+   "value": "corroded, car\nout of adjustment, car\nrequired, car top\nrequired, machine room\nWRN, floor 4",
+   "confidence": 0.979
+  },
+  {
+   "key": "Units",
+   "value": "1\n2 m2\n1\n1\n1",
+   "confidence": 0.968
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Unit no.",
+     "",
+     "Date of visit",
+     "02 Sep 2026"
+    ],
+    [
+     "Site address",
+     "115 Chapel Row, Fairholm",
+     "Engineer",
+     "Luis Campos"
+    ]
+   ],
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "1",
+     "Inverter cooling fan",
+     "not working, machine room",
+     "2"
+    ],
+    [
+     "2",
+     "Control board relay",
+     "out of adjustment, machine room",
+     "1"
+    ],
+    [
+     "3",
+     "OVERSPEED GOV REPL",
+     "REQUIRED, car top",
+     "1"
+    ],
+    [
+     "4",
+     "Machine room window glass cracked",
+     "building",
+     "1"
+    ],
+    [
+     "5",
+     "Car position indicator, TFT colour",
+     "out of adjustment, car",
+     "1"
+    ],
+    [
+     "6",
+     "Car guide shoe insert, sliding",
+     "worn, car",
+     "3"
+    ],
+    [
+     "7",
+     "Car ventilation fan",
+     "worn, car",
+     "1"
+    ],
+    [
+     "8",
+     "Car handrail, aluminium",
+     "faulty, car",
+     "2"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "9",
+     "Car LED ceiling panel, 600 x 600 mm",
+     "corroded, car",
+     "1"
+    ],
+    [
+     "10",
+     "Car floor covering, rubber",
+     "out of adjustment, car",
+     "2 m2"
+    ],
+    [
+     "11",
+     "Overspeed governor, replacement",
+     "required, car top",
+     "1"
+    ],
+    [
+     "12",
+     "Traction sheave, regrooving",
+     "required, machine room",
+     "1"
+    ],
+    [
+     "13",
+     "LIGHT CURTAIN SINGLE-SIDE",
+     "WRN, floor 4",
+     "1"
+    ]
+   ],
+   "pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  }
+ ]
+}

@@ -1,0 +1,131 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Unit no.",
+   "value": "LFT-37678",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date of visit",
+   "value": "04 Sep 2026",
+   "confidence": 0.998
+  },
+  {
+   "key": "Site address",
+   "value": "78 Harbour Avenue, Westmere",
+   "confidence": 0.997
+  },
+  {
+   "key": "Engineer",
+   "value": "Clara Molina",
+   "confidence": 0.997
+  },
+  {
+   "key": "Pos.",
+   "value": "1\n2\n3\n4\n5\n6\n7",
+   "confidence": 0.997
+  },
+  {
+   "key": "Component",
+   "value": "Car floor covering, vinyl\nPigeons nesting on the machine room roof\nShaft lighting fitting\nPIT LADDER\nBrake coil\nCONTROL BOARD RELAY\nCAR TOP INSPECTION BOX",
+   "confidence": 0.997
+  },
+  {
+   "key": "Observation",
+   "value": "broken, car\nbuilding\nout of adjustment, pit\nOUT OF ADJ, pit\ncorroded, machine room\nDMGD, machine room\nCORR, car",
+   "confidence": 0.996
+  },
+  {
+   "key": "Units",
+   "value": "4 m2\n1\n2\n1\n2\n3\n1",
+   "confidence": 0.997
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Unit no.",
+     "LFT-37678",
+     "Date of visit",
+     "04 Sep 2026"
+    ],
+    [
+     "Site address",
+     "78 Harbour Avenue, Westmere",
+     "Engineer",
+     "Clara Molina"
+    ]
+   ],
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "1",
+     "Car floor covering, vinyl",
+     "broken, car",
+     "4 m2"
+    ],
+    [
+     "2",
+     "Pigeons nesting on the machine room roof",
+     "building",
+     "1"
+    ],
+    [
+     "3",
+     "Shaft lighting fitting",
+     "out of adjustment, pit",
+     "2"
+    ],
+    [
+     "4",
+     "PIT LADDER",
+     "OUT OF ADJ, pit",
+     "1"
+    ],
+    [
+     "5",
+     "Brake coil",
+     "corroded, machine room",
+     "2"
+    ],
+    [
+     "6",
+     "CONTROL BOARD RELAY",
+     "DMGD, machine room",
+     "3"
+    ],
+    [
+     "7",
+     "CAR TOP INSPECTION BOX",
+     "CORR, car",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

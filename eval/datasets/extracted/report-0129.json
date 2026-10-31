@@ -1,0 +1,136 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-75789",
+   "confidence": 0.997
+  },
+  {
+   "key": "Address",
+   "value": "120 Larch Street, Eastbrook",
+   "confidence": 0.998
+  },
+  {
+   "key": "Date",
+   "value": "23/10/2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Inspector",
+   "value": "Marta Rubio",
+   "confidence": 0.998
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-75789"
+    ],
+    [
+     "Address",
+     "120 Larch Street, Eastbrook"
+    ],
+    [
+     "Date",
+     "23/10/2026"
+    ],
+    [
+     "Inspector",
+     "Marta Rubio"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-01",
+     "machine room: Machine room lighting fitting damaged (qty 1)"
+    ],
+    [
+     "F-02",
+     "machine room: Deflector pulley bearing worn (qty 2)"
+    ],
+    [
+     "F-03",
+     "car top: Slack rope switch broken (qty 1)"
+    ],
+    [
+     "F-04",
+     "machine room: Phase monitoring relay damaged (qty 1)"
+    ],
+    [
+     "F-05",
+     "building: Graffiti on the car walls (qty 1)"
+    ],
+    [
+     "F-06",
+     "car top: Alarm push button not working (qty 2)"
+    ],
+    [
+     "F-07",
+     "floor 8: Landing door closer out of adjustment (qty 3)"
+    ],
+    [
+     "F-08",
+     "machine room: Earthing conductor repair required (qty 1)"
+    ],
+    [
+     "F-09",
+     "machine room: RESIDUAL CURRENT DEVICE DMGD (qty 1)"
+    ],
+    [
+     "F-10",
+     "pit: Governor rope, 6 mm broken (qty 80 m)"
+    ],
+    [
+     "F-11",
+     "pit: Shaft lighting fitting faulty (qty 4)"
+    ],
+    [
+     "F-12",
+     "floor 8: LDG CALL BTN SINGLE WRN (qty 1)"
+    ],
+    [
+     "F-13",
+     "car top: Final limit switch, lower broken (qty 2)"
+    ],
+    [
+     "F-14",
+     "pit: Pit ladder loose (qty 1)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

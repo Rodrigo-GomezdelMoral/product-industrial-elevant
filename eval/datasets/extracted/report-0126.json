@@ -1,0 +1,146 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-31751",
+   "confidence": 0.997
+  },
+  {
+   "key": "Address",
+   "value": "75 Orchard Way, Fairholm",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date",
+   "value": "10/09/2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Inspector",
+   "value": "Luis Rubio",
+   "confidence": 0.996
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-31751"
+    ],
+    [
+     "Address",
+     "75 Orchard Way, Fairholm"
+    ],
+    [
+     "Date",
+     "10/09/2026"
+    ],
+    [
+     "Inspector",
+     "Luis Rubio"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-01",
+     "car top: Final limit switch, lower loose (qty 1)"
+    ],
+    [
+     "F-02",
+     "machine room: Load weighing sensor not working (qty 1)"
+    ],
+    [
+     "F-03",
+     "car top: Emergency light battery faulty (qty 1)"
+    ],
+    [
+     "F-04",
+     "machine room: Fuse, 10 A damaged (qty 3)"
+    ],
+    [
+     "F-05",
+     "floor 0: ARRIVAL GONG CORR (qty 3)"
+    ],
+    [
+     "F-06",
+     "car top: Overspeed governor, service and test required (qty 1)"
+    ],
+    [
+     "F-07",
+     "machine room: DR ZONE SW DMGD (qty 1)"
+    ],
+    [
+     "F-08",
+     "car top: Car roof balustrade worn (qty 1)"
+    ],
+    [
+     "F-09",
+     "car top: Overspeed governor, replacement required (qty 1)"
+    ],
+    [
+     "F-10",
+     "building: Graffiti on the car walls (qty 1)"
+    ],
+    [
+     "F-11",
+     "car: Car wall panel, laminate damaged (qty 4)"
+    ],
+    [
+     "F-12",
+     "car top: Emergency telephone, GSM module corroded (qty 1)"
+    ],
+    [
+     "F-13",
+     "floor 9: Landing door interlock, mechanical lock out of adjustment (qty 2)"
+    ],
+    [
+     "F-14",
+     "floor 6: Braille floor plate worn (qty 1)"
+    ],
+    [
+     "F-15",
+     "machine room: Door zone switch loose (qty 2)"
+    ],
+    [
+     "F-16",
+     "machine room: Control board relay worn (qty 4)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

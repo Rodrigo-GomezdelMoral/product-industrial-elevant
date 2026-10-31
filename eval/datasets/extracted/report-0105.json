@@ -1,0 +1,141 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-98744",
+   "confidence": 0.996
+  },
+  {
+   "key": "Address",
+   "value": "79 Larch Street, Westmere",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date",
+   "value": "02/09/2026",
+   "confidence": 0.997
+  },
+  {
+   "key": "Inspector",
+   "value": "Diego Vidal",
+   "confidence": 0.997
+  },
+  {
+   "key": "Ref",
+   "value": null,
+   "confidence": 0.994
+  },
+  {
+   "key": "Finding",
+   "value": null,
+   "confidence": 0.981
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-98744"
+    ],
+    [
+     "Address",
+     "79 Larch Street, Westmere"
+    ],
+    [
+     "Date",
+     "02/09/2026"
+    ],
+    [
+     "Inspector",
+     "Diego Vidal"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-01",
+     "floor 9: CAR DR CONT FLTY (qty 1)"
+    ],
+    [
+     "F-02",
+     "machine room: M/C ROOM SOCKET DMGD (qty 1)"
+    ],
+    [
+     "F-03",
+     "floor 0: Landing door roller, 60 mm out of adjustment (qty 1)"
+    ],
+    [
+     "F-04",
+     "building: Graffiti on the car walls (qty 1)"
+    ],
+    [
+     "F-05",
+     "floor 0: OVERLOAD IND DMGD (qty 1)"
+    ],
+    [
+     "F-06",
+     "machine room: PHASE MONITORING RELAY LSE (qty 1)"
+    ],
+    [
+     "F-07",
+     "floor 7: Braille floor plate loose (qty 2)"
+    ],
+    [
+     "F-08",
+     "floor 9: Landing door roller, 80 mm out of adjustment (qty 1)"
+    ],
+    [
+     "F-09",
+     "floor 1: Landing door interlock, electrical contact corroded (qty 3)"
+    ],
+    [
+     "F-10",
+     "machine room: TRACTION SHEAVE BRKN (qty 1)"
+    ],
+    [
+     "F-11",
+     "machine room: RESIDUAL CURRENT DEVICE OUT OF ADJ (qty 1)"
+    ],
+    [
+     "F-12",
+     "pit: Counterweight guide shoe insert, sliding not working (qty 4)"
+    ],
+    [
+     "F-13",
+     "car: Car apron broken (qty 1)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

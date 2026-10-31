@@ -1,0 +1,230 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Lift ID:",
+   "value": "LFT-19316",
+   "confidence": 0.995
+  },
+  {
+   "key": "Location:",
+   "value": "41 Orchard Way, Northgate",
+   "confidence": 0.997
+  },
+  {
+   "key": "Inspection date:",
+   "value": "2026-10-16",
+   "confidence": 0.994
+  },
+  {
+   "key": "Technician:",
+   "value": "Pablo Rubio",
+   "confidence": 0.997
+  },
+  {
+   "key": "No.",
+   "value": "2",
+   "confidence": 0.969
+  },
+  {
+   "key": "Location",
+   "value": "car\nfloor 1\ncar\npit",
+   "confidence": 0.941
+  },
+  {
+   "key": "Defect description",
+   "value": "CAR GUIDE SHOE INSERT LSE\nLanding door hanger out of adjustment\nCar top inspection box loose\nRail",
+   "confidence": 0.91
+  },
+  {
+   "key": "Qty",
+   "value": "3\n4",
+   "confidence": 0.908
+  },
+  {
+   "key": "No.\nQty",
+   "value": "15\n4\n16\n4\n17\n1\n18\n3\n19\n3\n20\n1",
+   "confidence": 0.987
+  },
+  {
+   "key": "Location",
+   "value": "floor 9\ncar\nmachine room\npit\nmachine room\nbuilding",
+   "confidence": 0.938
+  },
+  {
+   "key": "Defect description",
+   "value": "Hall position indicator, dot-matrix out of adjustment\nCar guide shoe insert, roller damaged\nTraction sheave, regrooving required\nRail lubricator, car loose\nEarthing conductor repair required\nWater\npit from the building drainage",
+   "confidence": 0.897
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "1",
+     "car",
+     "CAR GUIDE SHOE INSERT LSE",
+     "3"
+    ],
+    [
+     "2",
+     "floor 1",
+     "Landing door hanger out of adjustment",
+     "4"
+    ],
+    [
+     "3",
+     "car",
+     "Car top inspection box loose",
+     "1"
+    ],
+    [
+     "4",
+     "pit",
+     "Rail lubricator, counterweight out of adjustment",
+     "4"
+    ],
+    [
+     "5",
+     "floor 1",
+     "Door operator motor, AC damaged",
+     "1"
+    ],
+    [
+     "6",
+     "machine room",
+     "Hydraulic oil corroded",
+     "80 1"
+    ],
+    [
+     "7",
+     "pit",
+     "TRAV CBL WRN",
+     "10 m"
+    ],
+    [
+     "8",
+     "floor 7",
+     "HALL LANTERN CORR",
+     "2"
+    ],
+    [
+     "9",
+     "machine room",
+     "Brake coil out of adjustment",
+     "2"
+    ],
+    [
+     "10",
+     "machine room",
+     "Motor encoder, incremental loose",
+     "1"
+    ],
+    [
+     "11",
+     "machine room",
+     "HYD HOSE CORR",
+     "2"
+    ],
+    [
+     "12",
+     "floor 6",
+     "Car door roller, 60 mm corroded",
+     "3"
+    ],
+    [
+     "13",
+     "pit",
+     "GOV ROPE 8 MM WRN",
+     "40 m"
+    ],
+    [
+     "14",
+     "floor 5",
+     "Hall lantern out of adjustment",
+     "4"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "15",
+     "floor 9",
+     "Hall position indicator, dot-matrix out of adjustment",
+     "4"
+    ],
+    [
+     "16",
+     "car",
+     "Car guide shoe insert, roller damaged",
+     "4"
+    ],
+    [
+     "17",
+     "machine room",
+     "Traction sheave, regrooving required",
+     "1"
+    ],
+    [
+     "18",
+     "pit",
+     "Rail lubricator, car loose",
+     "3"
+    ],
+    [
+     "19",
+     "machine room",
+     "Earthing conductor repair required",
+     "3"
+    ],
+    [
+     "20",
+     "building",
+     "Water ingress in the pit from the building drainage",
+     "1"
+    ]
+   ],
+   "pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  }
+ ]
+}

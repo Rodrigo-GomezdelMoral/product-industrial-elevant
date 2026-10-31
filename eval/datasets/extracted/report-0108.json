@@ -1,0 +1,193 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-25448",
+   "confidence": 0.997
+  },
+  {
+   "key": "Address",
+   "value": "76 Quarry Road, Southcliff",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date",
+   "value": "06/09/2026",
+   "confidence": 0.995
+  },
+  {
+   "key": "Inspector",
+   "value": "Jorge Rubio",
+   "confidence": 0.997
+  },
+  {
+   "key": "Ref",
+   "value": null,
+   "confidence": 0.998
+  },
+  {
+   "key": "Finding",
+   "value": null,
+   "confidence": 0.994
+  },
+  {
+   "key": "Ref",
+   "value": null,
+   "confidence": 0.765
+  },
+  {
+   "key": "Finding",
+   "value": null,
+   "confidence": 0.92
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-25448"
+    ],
+    [
+     "Address",
+     "76 Quarry Road, Southcliff"
+    ],
+    [
+     "Date",
+     "06/09/2026"
+    ],
+    [
+     "Inspector",
+     "Jorge Rubio"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 0,
+   "rows": [
+    [
+     "F-01",
+     "car top: EMERG LIGHT BATT NOT WKG (qty 1)"
+    ],
+    [
+     "F-02",
+     "car top: PIT REFUGE SIGN LSE (qty 2)"
+    ],
+    [
+     "F-03",
+     "pit: Travelling cable, 24-core not working (qty 60 m)"
+    ],
+    [
+     "F-04",
+     "machine room: Phase monitoring relay worn (qty 1)"
+    ],
+    [
+     "F-05",
+     "building: Graffiti on the car walls (qty 1)"
+    ],
+    [
+     "F-06",
+     "floor 5: Braille floor plate not working (qty 1)"
+    ],
+    [
+     "F-07",
+     "machine room: RESIDUAL CURRENT DEVICE NOT WKG (qty 2)"
+    ],
+    [
+     "F-08",
+     "car top: Final limit switch, upper loose (qty 2)"
+    ],
+    [
+     "F-09",
+     "floor 3: Light curtain, single-side corroded (qty 1)"
+    ],
+    [
+     "F-10",
+     "pit: TRAV CBL LSE (qty 50 m)"
+    ],
+    [
+     "F-11",
+     "machine room: Hydraulic hose, 1 m not working (qty 1)"
+    ],
+    [
+     "F-12",
+     "machine room: BRAKE COIL WRN (qty 2)"
+    ],
+    [
+     "F-13",
+     "car top: Emergency light battery out of adjustment (qty 1)"
+    ],
+    [
+     "F-14",
+     "machine room: MOTOR BRG LSE (qty 1)"
+    ],
+    [
+     "F-15",
+     "car: CAR LED CLG PANEL 300 × 300 MM DMGD (qty 2)"
+    ],
+    [
+     "F-16",
+     "building: Pigeons nesting on the machine room roof (qty 1)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-17",
+     "floor 7: Hall position indicator, dot-matrix damaged (qty 3)"
+    ],
+    [
+     "F-18",
+     "machine room: Hydraulic cylinder packing worn (qty 1)"
+    ],
+    [
+     "F-19",
+     "building: Stairwell lighting out next to the landing door (qty 1)"
+    ],
+    [
+     "F-20",
+     "pit: Governor tension pulley loose (qty 1)"
+    ]
+   ],
+   "pages": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  }
+ ]
+}

@@ -1,0 +1,141 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-53904",
+   "confidence": 0.997
+  },
+  {
+   "key": "Address",
+   "value": "67 Quarry Road, Eastbrook",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date",
+   "value": "21/09/2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Inspector",
+   "value": "Jorge Serrano",
+   "confidence": 0.997
+  },
+  {
+   "key": "Ref",
+   "value": null,
+   "confidence": 0.999
+  },
+  {
+   "key": "Finding",
+   "value": null,
+   "confidence": 0.997
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-53904"
+    ],
+    [
+     "Address",
+     "67 Quarry Road, Eastbrook"
+    ],
+    [
+     "Date",
+     "21/09/2026"
+    ],
+    [
+     "Inspector",
+     "Jorge Serrano"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-01",
+     "machine room: Inverter cooling fan broken (qty 1)"
+    ],
+    [
+     "F-02",
+     "machine room: Load weighing sensor out of adjustment (qty 1)"
+    ],
+    [
+     "F-03",
+     "pit: Governor rope, 6 mm not working (qty 30 m)"
+    ],
+    [
+     "F-04",
+     "car: Car top inspection box out of adjustment (qty 1)"
+    ],
+    [
+     "F-05",
+     "machine room: DEFLECTOR PULLEY BRG FLTY (qty 2)"
+    ],
+    [
+     "F-06",
+     "car: Car floor covering broken (qty 4 m2)"
+    ],
+    [
+     "F-07",
+     "car: Car floor covering, rubber loose (qty 4 m2)"
+    ],
+    [
+     "F-08",
+     "car: CAR EMERG LIGHT BRKN (qty 1)"
+    ],
+    [
+     "F-09",
+     "car top: Emergency telephone, landline unit damaged (qty 1)"
+    ],
+    [
+     "F-10",
+     "floor 0: DR SILL ADJ AND CLEANING LDG REQUIRED (qty 4)"
+    ],
+    [
+     "F-11",
+     "machine room: Control cabinet fan loose (qty 1)"
+    ],
+    [
+     "F-12",
+     "pit: Governor rope, 6 mm corroded (qty 120 m)"
+    ],
+    [
+     "F-13",
+     "car: CAR OP PANEL PUSH BTN FLTY (qty 3)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

@@ -1,0 +1,138 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift ID:",
+   "value": "LFT-44549",
+   "confidence": 0.993
+  },
+  {
+   "key": "Location:",
+   "value": "81 Harbour Avenue, Eastbrook",
+   "confidence": 0.997
+  },
+  {
+   "key": "Inspection date:",
+   "value": "2026-10-20",
+   "confidence": 0.996
+  },
+  {
+   "key": "Technician:",
+   "value": "Pablo Rubio",
+   "confidence": 0.998
+  },
+  {
+   "key": "No.",
+   "value": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11",
+   "confidence": 0.914
+  },
+  {
+   "key": "Location",
+   "value": "pit\nfloor 4\nmachine room\ncar\nfloor 9\ncar top\nmachine room\nbuilding\nfloor 6",
+   "confidence": 0.943
+  },
+  {
+   "key": "Defect description",
+   "value": "Rope fastening, wedge socket out of adjustment\nLanding key switch loose\nMotor encoder, incremental worn\nCar mirror corroded\nDoor sill adjustment and cleaning, landing required\nUnintended car movement detector out of adjustment\nLoad weighing sensor loose\nPigeons nesting on the machine room roof\nMOTOR BRG NON-DRIVE END NOT WKG\nLanding door closer, spring loose\nDoor zone switch worn",
+   "confidence": 0.939
+  },
+  {
+   "key": "Qty",
+   "value": "4\n3\n1\n1\n1\n1\n1",
+   "confidence": 0.935
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "1",
+     "pit",
+     "Rope fastening, wedge socket out of adjustment",
+     "4"
+    ],
+    [
+     "2",
+     "floor 4",
+     "Landing key switch loose",
+     "3"
+    ],
+    [
+     "3",
+     "machine room",
+     "Motor encoder, incremental worn",
+     "1"
+    ],
+    [
+     "4",
+     "car",
+     "Car mirror corroded",
+     "1"
+    ],
+    [
+     "5",
+     "floor 9",
+     "Door sill adjustment and cleaning, landing required",
+     "1"
+    ],
+    [
+     "6",
+     "car top",
+     "Unintended car movement detector out of adjustment",
+     "1"
+    ],
+    [
+     "7",
+     "machine room",
+     "Load weighing sensor loose",
+     "1"
+    ],
+    [
+     "8",
+     "building",
+     "Pigeons nesting on the machine room roof",
+     "1"
+    ],
+    [
+     "9",
+     "machine room",
+     "MOTOR BRG NON-DRIVE END NOT WKG",
+     "2"
+    ],
+    [
+     "10",
+     "floor 6",
+     "Landing door closer, spring loose",
+     "4"
+    ],
+    [
+     "11",
+     "machine room",
+     "Door zone switch worn",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

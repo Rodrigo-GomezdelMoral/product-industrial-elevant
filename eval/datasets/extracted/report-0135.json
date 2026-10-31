@@ -1,0 +1,131 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-42369",
+   "confidence": 0.996
+  },
+  {
+   "key": "Address",
+   "value": "88 Mill Lane, Ashdale",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date",
+   "value": "14/09/2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Inspector",
+   "value": "Pablo Ortega",
+   "confidence": 0.997
+  },
+  {
+   "key": "Ref",
+   "value": null,
+   "confidence": 0.966
+  },
+  {
+   "key": "Finding",
+   "value": null,
+   "confidence": 0.719
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-42369"
+    ],
+    [
+     "Address",
+     "88 Mill Lane, Ashdale"
+    ],
+    [
+     "Date",
+     "14/09/2026"
+    ],
+    [
+     "Inspector",
+     "Pablo Ortega"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-01",
+     "machine room: RESIDUAL CURRENT DEVICE OUT OF ADJ (qty 2)"
+    ],
+    [
+     "F-02",
+     "car top: Final limit switch not working (qty 1)"
+    ],
+    [
+     "F-03",
+     "floor 7: LDG DR CLOSER SPRING OUT OF ADJ (qty 3)"
+    ],
+    [
+     "F-04",
+     "floor 0: Arrival gong worn (qty 4)"
+    ],
+    [
+     "F-05",
+     "machine room: MOTOR ENCODER ABSOLUTE NOT WKG (qty 1)"
+    ],
+    [
+     "F-06",
+     "floor 3: Door operator motor, DC loose (qty 1)"
+    ],
+    [
+     "F-07",
+     "car top: Overspeed governor, replacement required (qty 1)"
+    ],
+    [
+     "F-08",
+     "building: Water ingress in the pit from the building drainage (qty 1)"
+    ],
+    [
+     "F-09",
+     "machine room: Load weighing sensor faulty (qty 1)"
+    ],
+    [
+     "F-10",
+     "pit: Governor rope broken (qty 30 m)"
+    ],
+    [
+     "F-11",
+     "machine room: HYD OIL BRKN (qty 40 l)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

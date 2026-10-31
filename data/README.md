@@ -69,6 +69,13 @@ The script reads the latest catalogue, uses a fixed seed (2081) and writes the s
 `symptom`, `location`, `quantity`, `quantity_text`, `kind` (`common`, `abbreviated`, `ambiguous`, `no_match` or `injection`),
 `item_code` (`null` when ambiguous or unmatched) and `candidates` (the items that fit).
 
+**Recorded extractions.** `../eval/datasets/extracted/` holds what Document Intelligence (`prebuilt-layout`, API
+`2024-11-30`, with key-value pairs) returned for each report, as `app/extraction.py` keeps it: the page count, the
+key-value pairs with their confidence, and every table with its header rows and the page of each row. They were recorded
+on 2026-10-31 from the shared Foundry account with `app.extraction.analyze`, so the tests and the evaluation on pull
+requests read them without calling the service. Reading them back gives every header field and every defect's page and
+row of the truth. `report-0134.json` is also the canned extraction the doubles return (`ELEVANT_DOUBLES=true`).
+
 **Reports for the demo simulations:**
 
 | Simulation | Report |
