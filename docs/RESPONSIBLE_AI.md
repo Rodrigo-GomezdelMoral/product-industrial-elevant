@@ -22,8 +22,8 @@ a person responsible for every quote that leaves the company.
 
 **What the AI decides and what it does not.** The model proposes, per defect, one catalogue code and a quantity, or no code with up to
 three candidates and a reason. It never sees a price, an address, a lift ID or a technician's name, and it never decides an amount.
-Code rejects any code outside the catalogue version or outside the defect's candidates, flags low confidence, and computes every
-amount. An estimator resolves every flag and approves before a document can be produced.
+Code rejects any code outside the catalogue version or outside the defect's candidates, flags low confidence, leaves a
+low-confidence choice among several candidates unpriced as ambiguous, and computes every amount. An estimator resolves every flag and approves before a document can be produced.
 
 ## 2. Intended uses
 

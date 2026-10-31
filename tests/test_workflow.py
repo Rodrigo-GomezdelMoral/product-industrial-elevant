@@ -29,7 +29,7 @@ async def review_and_approve(services: Services, quote_id: str) -> Quote:
     refused, error = await resume(services, quote.id, Decision(by="estimator", approve=True))
     assert refused.state == "review" and error and error.startswith("resolve every flag")
     assert refused.request_id != quote.request_id
-    edits = [Edit(action="accept", line=line.number) for line in refused.lines if line.flag]
+    edits = [Edit(action="item", line=line.number, code=line.candidates[0]) for line in refused.lines if line.flag]
     approved, error = await resume(services, quote.id, Decision(by="estimator", edits=edits, approve=True))
     assert error is None and approved.state == "approved" and approved.approved_by == "estimator"
     assert [event.by for event in approved.events] == ["estimator"] * (len(edits) + 1)

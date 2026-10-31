@@ -41,6 +41,7 @@ def test_amounts_vat_and_totals_round_half_up_in_code(drafted: Quote, catalogue:
         ({"code": None, "candidates": ("DOR-101", "DOR-101", "MAC-999", "DOR-102")}, "ambiguous", DOORS[:2], False),
         ({"code": None}, "no_match", [], False),
         ({"code": "DOR-102", "confidence": NAN}, "low_confidence", [], True),
+        ({"code": "DOR-102", "confidence": 0.5, "candidates": DOORS[1::-1]}, "ambiguous", list(DOORS[1::-1]), False),
         ({"code": "DOR-102", "quantity": 50, "confidence": 0.2}, "low_confidence", [], False),
         ({"code": "DOR-102", "quantity": INF}, "invalid_quantity", [], False),
         ({"code": "DOR-102", "quantity": 2.5}, "invalid_quantity", [], False),

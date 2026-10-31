@@ -112,6 +112,8 @@ the first release and has at least one recorded simulation in the published demo
   match*.
 - **Given** any output of the model, **when** it names a code that is not in that catalogue version or not among the defect's
   candidates, **then** the code is rejected and the line is flagged.
+- **Given** a choice the model is unsure of (confidence under 0.6) among several candidate items, **then** the line is flagged
+  *ambiguous* with those candidates and no price, for the estimator to choose.
 - **Given** a draft, **then** its amounts, VAT and totals are computed in code from the catalogue prices, never by the model, and the
   model never receives prices or header fields.
 
