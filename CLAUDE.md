@@ -339,6 +339,66 @@ Three rules govern every choice:
 - **For phase 6.** Serve `web/dist` from the app; exclude `/healthz` and `/api/version` from the built-in auth.
 - **Sample.** `web/public/samples/report-0108.pdf` (synthetic, scanned, layout B) backs "Try a sample scanned report".
 
+## Decisions taken in phase 6
+
+- **Bicep.** `infra/main.bicep` (resource group scope) with four modules, `monitoring`, `data`, `app` and `budget`, plus
+  `roles.bicep` for the built-in role names, kept without hyphens so the identifier scan stays strict. Per-environment values
+  live in `main.<env>.bicepparam`; secrets and endpoints arrive as environment variables from the workflows. The app identity
+  `id-elevant-<env>` is `existing`: `02-app-identity.sh` creates it with `AcrPull` and `Foundry User` on the shared base, so the
+  first deployment can pull and call; Bicep gives it Cosmos DB Built-in Data Contributor, `Storage Blob Data Contributor` and
+  `Monitoring Metrics Publisher` on its own environment, the only roles the CI principal's RBAC condition allows. The endpoints
+  are GitHub variables, because the production CI principal cannot read the Foundry account. The registry's login server is
+  built from `environment().suffixes.acrLoginServer`, so no host is written.
+- **API versions.** As the build prompt, except Storage `2026-06-01`: Bicep 0.48.1 has no types for `2026-09-01` (BCP081).
+  Log Analytics `2026-03-01`; diagnostic settings `2021-05-01-preview`, the latest, with the lint rule disabled on that line.
+- **Data.** Cosmos DB serverless, continuous 7-day backup, local auth and key-based metadata writes off; containers `quotes` and
+  `checkpoints` with a TTL equal to the retention (30 days staging, 730 production), so a quote in review keeps its checkpoints
+  while it is touched. Blob containers `reports` and `quotes`, shared key off, soft delete 7 days, a lifecycle rule deleting at the
+  retention. Key Vault RBAC, soft delete 7 days and purge protection, empty and with no role (ADR-010).
+- **Monitoring.** Own Log Analytics (31 days, daily cap 0.1 or 0.5 GB, local auth off) and workspace-based Application Insights
+  with local auth off. The workbook is `infra/workbook.json` (health model of the last hour, SLOs of 30 days, KPIs per month,
+  model tokens per approved quote, events arriving), loaded with `loadJsonContent`. One SLO alert in production: every 15
+  minutes over the last hour, one row per breached SLO with `slo` as a dimension; minimum 20 requests for availability and 3
+  drafts for latency, failed drafts at 1 % of the hour's drafts (one failure at this volume). The KPI tile looks back 31
+  days, the workspace's retention, so the previous month can be partial. The unit-cost tile counts `chat` spans only:
+  Agent Framework copies the usage onto the `invoke_agent` span too. Container logs reach the workspace through a diagnostic setting.
+- **App.** One Consumption workload profile environment per environment; the app at 0.5 vCPU and 1 GiB, 0 to 3 (staging) or 5
+  (production) replicas, HTTP rule at 10 concurrent requests, startup probe up to 2 minutes, liveness and readiness on
+  `/healthz`. Staging single revision with all traffic on the latest; production multiple revisions, the release's revision at
+  0 % as `green` and the serving one as `blue`, then 100 % to `green` after the smoke test (ADR-009). The cron replica waits for
+  the phase 7 measurement (ADR-008). Built-in auth: Entra ID with the sign-in app, issuer `<login endpoint><tenant>/v2.0`,
+  `api://<client id>` as an allowed audience, `/healthz` and `/api/version` excluded, HTTPS required.
+- **Served web.** `app.main` mounts `web/dist` at `/` when it exists, after every API route.
+- **Image.** Two stages: `node:24.22.2-trixie-slim` builds the web with `vite build` (CI type-checks it), then
+  `python:3.12.16-slim-trixie` with the requirements, `app/`, `data/reference/`, the recorded layout of `report-0134` for the
+  doubles and `web/dist`, running as UID 10001. Both bases pinned by digest; Dependabot watches `docker`. `.dockerignore` is an
+  allow-list. The `image` job of `ci.yml` builds it on every pull request and checks the user.
+- **Workflows.** `deploy.yml` builds once on the runner, pushes `YYYYMMDD-main-<sha7>`, resolves the digest, runs `what-if` and
+  deploys, then checks `/healthz` and that `/api/version` returns the digest; `workflow_dispatch` with a tag redeploys an older
+  image. `release.yml` verifies that the tag's commit has a successful `deploy.yml` push run and a successful `load-test.yml`
+  run, waits for the `production` approval, resolves the commit's tag to its digest with `AcrPull`, deploys `green`, smoke-tests
+  through the label address and moves the traffic. `load-test.yml` checks that staging serves the dispatched commit's digest,
+  sets `ELEVANT_DOUBLES=true` (a new revision of the same image), runs normal, peak, stress and soak, removes the doubles and
+  runs the real-model scenario; Locust sets its exit code itself (Locust 2.47 otherwise exits 1 on any failure): 1 for a
+  non-stress scenario whose draft p95 exceeds 60 s or whose failures exceed 0.5 %, else 0. Only the stats and platform files
+  are uploaded, since Locust's failure file holds request URLs with the app's host.
+  Locust uses `report-0134.pdf` with a unique trailer, so the idempotent upload drafts each time. It runs in `staging` with
+  `deployment: false`, so only merges create staging deployments. mypy excludes Locust's untyped event hooks through
+  `untyped_calls_exclude`.
+- **Sign-in apps** (`02-app-identity.sh`): single tenant, ID token issuance on, `api://<client id>` identifier, v2 access tokens
+  (so a client-credentials token has the client id as audience and the v2 issuer), app roles with stable ids, assignment
+  required; the owner holds both roles in both environments, and in staging `Quote.Estimator` also allows applications and is
+  given to the staging CI principal. `03-auth-redirect.sh <env>` adds `https://<app address>/.auth/login/aad/callback`.
+- **Checks in phase 6** (2026-10-31): `bicep build` and `lint` clean; `what-if` in both groups shows 20 resources to create and
+  nothing else, plus 3 role assignments shown as unsupported because their names derive from the principal id of
+  `id-elevant-<env>`, which exists only after `02-app-identity.sh`; nothing deployed. The image built and ran against the
+  emulators with the doubles: `/healthz`, `/api/version`, the web at `/`, 401 without a principal, an upload drafted to
+  review with 12 lines, the list. Names `stelevant<env>swc`, `kv-elevant-<env>-swc` and `cosmos-elevant-<env>-swc` were free.
+- **Collision, recorded.** A second phase 6 run wrote to this checkout between 22:45 and 23:00 on 2026-10-31 and then stopped.
+  Every file under `infra/`, the Dockerfile and `.dockerignore` were rewritten in full by this run; its `infra/bicepconfig.json`
+  was removed (the default linter rules apply), the duplicated web mount in `app/main.py` was reduced to one, and the
+  `docker` entry it added to `.github/dependabot.yml` was kept, since phase 6 adds it.
+
 ## Verified names (installed wheels, 2026-10-30 and 2026-10-31)
 
 | Package | Name |
@@ -372,3 +432,5 @@ Three rules govern every choice:
 | `vite` 8.3.5 · `@playwright/test` 1.64.1 | a `server.proxy` entry takes http-proxy-3 `headers`, and `preview.proxy` defaults to `server.proxy` · `webServer` takes an array and merges its `env` over `process.env`; `ControlOrMeta` |
 | `react-markdown` 10.1.0 · `lucide-react` 1.65.0 | `allowedElements` with `unwrapDisallowed`; tables need `remark-gfm`, so the lines table is JSX · `TriangleAlert`, `CircleCheck`, `LoaderCircle`, `Paperclip`, `ArrowUp` |
 | `fastapi` 0.162.0 (`fastapi.sse`) | every `data` is JSON-encoded, plain strings included (`data: "Pricing"`) |
+| Bicep 0.48.1 (2026-10-31) | types for `Microsoft.Storage/*@2026-06-01`, not `2026-09-01`; `@export()` variables and functions imported with `import { } from`; `loadJsonContent` |
+| Azure CLI 2.89.0 (2026-10-31) | `az deployment group what-if -p <file>.bicepparam --result-format ResourceIdOnly`; `az account get-access-token --scope`; `az containerapp ingress traffic set --label-weight`; `az acr` with a data-plane role falls back to `<name>.azurecr.io` |
