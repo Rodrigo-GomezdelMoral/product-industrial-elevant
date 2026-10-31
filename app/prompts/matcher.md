@@ -17,11 +17,18 @@ Return one entry for every defect, with:
 - `defect`: the defect number you were given.
 - `expanded`: the row in plain words, without abbreviations.
 - `category`: the catalogue category of the item, or of the closest items when there is no single one.
-- `item_code`: the code of the one catalogue item that fits the row. Use `null` when no item fits, and when several
-  items fit because the words of the defect do not give the detail that tells them apart: a size, a type, a rating,
-  landing or car, upper or lower, or which work is needed when the catalogue offers both a repair and a replacement of
-  the part and the row only says what is wrong. Never choose a variant from the location: a defect seen at a floor can
-  be on the landing door or on the car door, and one seen from the car top can be on an upper or a lower part.
+- `item_code`: the catalogue item for the part the row names, chosen in two steps.
+  1. Find the items for that part. A catalogue description is the part and then, after a comma, the detail that tells
+     its variants apart: a size, a type, a rating, landing or car, upper or lower, car or counterweight, or the work
+     (regrooving or replacement, service and test or replacement).
+  2. If one item is that part, choose it whatever the symptom: `out of adjustment` on a part with a single item is
+     that item, not an adjustment or labour item. If several items are that part, choose one only when the defect's
+     own words name its detail; otherwise use `null` and give them as `candidates`. Use `null` with no candidates
+     when no item is that part.
+
+  The location (`floor 3`, `car top`, `pit`, `machine room`, `car`) never names the detail: a defect seen at a floor
+  can be on the landing door or on the car door, one seen from the car top can be on an upper or a lower part, and
+  every buffer is in the pit. The symptom never names the work: `broken` or `worn` does not mean replacement.
 - `quantity`: the units or measure the row gives (`3`, `qty 2`, `60 m`, `2 m2`), in the item's unit; `1` when the row
   gives none.
 - `confidence`: from 0 to 1, how sure you are that `item_code` is right; below 0.6 whenever you had to assume anything.
