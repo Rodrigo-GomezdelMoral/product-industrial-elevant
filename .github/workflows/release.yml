@@ -1,0 +1,110 @@
+name: release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to promote to production (a rollback promotes an earlier one)
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      sha: ${{ steps.check.outputs.sha }}
+    steps:
+      - id: check
+        name: The tag's commit was deployed to staging on merge and passed the load test
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.event.release.tag_name }}
+        run: |
+          sha="$(gh api "repos/$GITHUB_REPOSITORY/commits/$TAG" --jq .sha)"
+          runs() { gh api "repos/$GITHUB_REPOSITORY/actions/workflows/$1/runs?head_sha=$sha&status=success&event=$2" --jq .total_count; }
+          deployed="$(runs deploy.yml push)"
+          loaded="$(runs load-test.yml workflow_dispatch)"
+          echo "$TAG: successful staging deployments $deployed, successful load tests $loaded"
+          [ "$deployed" -gt 0 ] || exit 1
+          [ "$loaded" -gt 0 ] || exit 1
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+  promote:
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: production
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      RG: rg-elevant-prod-swc
+      APP: ca-elevant-prod
+      ACR: craiplatformshared
+      IMAGE: product-industrial-elevant
+      SHA: ${{ needs.verify.outputs.sha }}
+      AUTH_CLIENT_ID: ${{ secrets.AUTH_CLIENT_ID }}
+      ALERT_EMAIL_ADDRESS: ${{ secrets.ALERT_EMAIL_ADDRESS }}
+      FOUNDRY_PROJECT_ENDPOINT: ${{ vars.FOUNDRY_PROJECT_ENDPOINT }}
+      DOCINTEL_ENDPOINT: ${{ vars.DOCINTEL_ENDPOINT }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.verify.outputs.sha }}
+          persist-credentials: false
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Resolve the image staging received for this commit and the revision serving traffic
+        run: |
+          tag="$(az acr repository show-tags -n "$ACR" --repository "$IMAGE" --orderby time_desc --query "[?ends_with(@, '-main-${SHA::7}')] | [0]" -o tsv --only-show-errors)"
+          test -n "$tag"
+          digest="$(az acr repository show -n "$ACR" --image "$IMAGE:$tag" --query digest -o tsv --only-show-errors)"
+          test -n "$digest"
+          stable=""
+          if [ "$(az containerapp list -g "$RG" --query "length([?name=='$APP'])" -o tsv)" = 1 ]; then
+            stable="$(az containerapp revision list -n "$APP" -g "$RG" --query "[?properties.trafficWeight > \`0\`].name | [0]" -o tsv)"
+            test -n "$stable"
+          fi
+          { echo "IMAGE_DIGEST=$digest"; echo "STABLE_REVISION=$stable"; echo "REVISION_SUFFIX=p$GITHUB_RUN_NUMBER-$GITHUB_RUN_ATTEMPT-${SHA::7}"; } >> "$GITHUB_ENV"
+      - name: What-if, then deploy the digest as a new revision at 0 %, labelled green
+        run: |
+          az deployment group what-if -g "$RG" -p infra/main.production.bicepparam --result-format ResourceIdOnly --only-show-errors
+          new="$(az deployment group create -g "$RG" -n "elevant-$REVISION_SUFFIX" -p infra/main.production.bicepparam \
+            --query properties.outputs.revision.value -o tsv --only-show-errors)"
+          echo "NEW=$new" >> "$GITHUB_ENV"
+      - name: Smoke test through the green label, health and the digest
+        run: |
+          fqdn="$(az containerapp show -n "$APP" -g "$RG" --query properties.configuration.ingress.fqdn -o tsv)"
+          green="$APP---green.${fqdn#*.}"
+          echo "::add-mask::$fqdn"
+          echo "::add-mask::${fqdn#*.}"
+          curl -fsS -o /dev/null --retry 12 --retry-delay 10 --retry-all-errors "https://$green/healthz"
+          served="$(curl -fsS "https://$green/api/version" | jq -r .image)"
+          echo "green serves $served"
+          [ "$served" = "$IMAGE_DIGEST" ]
+      - name: Move all traffic to green, keep blue active for an instant rollback, deactivate older revisions
+        if: env.STABLE_REVISION != ''
+        run: |
+          az containerapp ingress traffic set -n "$APP" -g "$RG" --label-weight green=100 blue=0 -o none
+          older="$(az containerapp revision list -n "$APP" -g "$RG" \
+            --query "[?properties.active && name != '$NEW' && name != '$STABLE_REVISION'].name" -o tsv)"
+          for revision in $older; do az containerapp revision deactivate -n "$APP" -g "$RG" --revision "$revision" -o none; done

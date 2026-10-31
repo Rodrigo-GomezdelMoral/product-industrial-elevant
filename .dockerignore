@@ -1,0 +1,12 @@
+*
+!app/
+!data/reference/
+!eval/datasets/extracted/report-0134.json
+!requirements.txt
+!web/
+web/dist/
+web/node_modules/
+web/tests/
+web/test-results/
+web/playwright-report/
+**/__pycache__/

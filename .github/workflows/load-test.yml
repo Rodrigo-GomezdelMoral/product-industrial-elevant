@@ -1,0 +1,100 @@
+name: load-test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: staging
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  locust:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    environment:
+      name: staging
+      deployment: false
+    env:
+      RG: rg-elevant-stg-swc
+      APP: ca-elevant-stg
+      ACR: craiplatformshared
+      IMAGE: product-industrial-elevant
+      AUTH_CLIENT_ID: ${{ secrets.AUTH_CLIENT_ID }}
+      LOCUST: locust -f load/locustfile.py --headless --only-summary
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - name: Install Locust at the pinned version
+        run: grep '^locust==' requirements-dev.txt | xargs python -m pip install --quiet
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Staging serves the image built from this commit, now with the doubles
+        run: |
+          tag="$(az acr repository show-tags -n "$ACR" --repository "$IMAGE" --orderby time_desc --query "[?ends_with(@, '-main-${GITHUB_SHA::7}')] | [0]" -o tsv --only-show-errors)"
+          [ -n "$tag" ] || { echo "::error::No image was built from this commit: merge it first"; exit 1; }
+          digest="$(az acr repository show -n "$ACR" --image "$IMAGE:$tag" --query digest -o tsv --only-show-errors)"
+          image="$(az containerapp show -n "$APP" -g "$RG" --query "properties.template.containers[0].image" -o tsv)"
+          [[ -n "$digest" && "$image" == *"@$digest" ]] || { echo "::error::Deploy this commit to staging first"; exit 1; }
+          fqdn="$(az containerapp show -n "$APP" -g "$RG" --query properties.configuration.ingress.fqdn -o tsv)"
+          echo "::add-mask::$fqdn"
+          { echo "FQDN=$fqdn"; echo "START=$(date -u +%Y-%m-%dT%H:%M:%SZ)"; } >> "$GITHUB_ENV"
+          az containerapp update -n "$APP" -g "$RG" --set-env-vars ELEVANT_DOUBLES=true -o none --only-show-errors
+          curl -fsS -o /dev/null --retry 12 --retry-delay 10 --retry-all-errors "https://$fqdn/healthz"
+      - name: Normal, peak, stress and soak with the doubles
+        run: |
+          LOAD_TOKEN="$(az account get-access-token --scope "api://$AUTH_CLIENT_ID/.default" --query accessToken -o tsv)"
+          echo "::add-mask::$LOAD_TOKEN"
+          export LOAD_TOKEN
+          mkdir -p results
+          LOAD_SCENARIO=normal $LOCUST -H "https://$FQDN" -u 5 -r 1 -t 3m --csv results/normal
+          LOAD_SCENARIO=peak $LOCUST -H "https://$FQDN" -u 20 -r 5 -t 3m --csv results/peak
+          LOAD_SCENARIO=stress $LOCUST -H "https://$FQDN" -u 100 -r 0.34 -t 5m --csv results/stress
+          LOAD_SCENARIO=soak $LOCUST -H "https://$FQDN" -u 5 -r 1 -t 20m --csv results/soak
+      - name: Sign in again, since the federated token expires after minutes
+        if: always()
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Remove the doubles
+        if: always()
+        run: az containerapp update -n "$APP" -g "$RG" --remove-env-vars ELEVANT_DOUBLES -o none --only-show-errors
+      - name: The real matcher and Document Intelligence, about ten quotes
+        run: |
+          curl -fsS -o /dev/null --retry 12 --retry-delay 10 --retry-all-errors "https://$FQDN/healthz"
+          LOAD_TOKEN="$(az account get-access-token --scope "api://$AUTH_CLIENT_ID/.default" --query accessToken -o tsv)"
+          echo "::add-mask::$LOAD_TOKEN"
+          export LOAD_TOKEN
+          LOAD_SCENARIO=real $LOCUST -H "https://$FQDN" -u 3 -r 1 -t 2m --csv results/real
+      - name: Replicas, CPU and memory during the run
+        if: always()
+        run: |
+          id="$(az containerapp show -n "$APP" -g "$RG" --query id -o tsv)"
+          az monitor metrics list --resource "$id" --metric Replicas UsageNanoCores WorkingSetBytes --aggregation Maximum --interval PT1M \
+            --start-time "$START" --query "value[].[name.value, max(timeseries[].data[].maximum)]" -o tsv | tee results/platform.tsv
+          for csv in results/*_stats.csv; do echo "### ${csv#results/}"; grep -E '^(POST|GET|,Aggregated)' "$csv" | cut -d, -f2-4,10,12,17,19; done >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: load-test-results
+          path: |
+            results/*_stats.csv
+            results/platform.tsv
+          retention-days: 30

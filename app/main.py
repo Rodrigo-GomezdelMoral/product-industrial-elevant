@@ -2,6 +2,7 @@ import asyncio
 import base64
 import hashlib
 import json
+import pathlib
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
@@ -13,6 +14,7 @@ from azure.core.exceptions import AzureError
 from fastapi import Body, Depends, HTTPException, Path, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.sse import EventSourceResponse, ServerSentEvent
+from fastapi.staticfiles import StaticFiles
 
 from app import agents, telemetry
 from app.domain import DomainError, Edit, Quote, load_catalogue, new_quote
@@ -27,6 +29,7 @@ DRAFT_SECONDS = 120
 FAILURES = (DomainError, AgentFrameworkException, AzureError, TimeoutError)
 HIDDEN = {"request_id", "checkpoint_id"}
 DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+WEB = pathlib.Path(__file__).resolve().parent.parent / "web" / "dist"
 QuoteId = Annotated[str, Path(pattern=r"^q-[0-9a-f]{16}$")]
 Text = Annotated[str, Body(embed=True, min_length=1, max_length=500)]
 Rating = Annotated[Literal["up", "down"], Body(embed=True)]
@@ -221,3 +224,7 @@ async def delete(quote_id: QuoteId, _: Manager, services: Wired) -> None:
     await stored(services, quote_id)
     await forget(services, quote_id)
     telemetry.event("quote_deleted", quote_id=quote_id)
+
+
+if WEB.is_dir():
+    app.mount("/", StaticFiles(directory=WEB, html=True), name="web")

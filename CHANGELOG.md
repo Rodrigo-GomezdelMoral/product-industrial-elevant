@@ -59,6 +59,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `GET /api/me` for the signed-in user, and `GET /api/quotes/{id}/catalogue` for the items of the catalogue version a
   quote pinned (REQ-02, REQ-07).
 - Dependabot version updates for the web's npm packages.
+- Infrastructure as code for staging and production: the Container App with built-in sign-in and app roles, health probes and
+  an HTTP scale rule from zero; Cosmos DB and Blob Storage with retention, backups and no keys; an empty Key Vault; Log
+  Analytics and Application Insights with daily caps; the KPI, SLO and health workbook; the production SLO alert; monthly
+  budgets (REQ-06, REQ-10).
+- A multi-stage, non-root image serving the API and the web, built on every pull request.
+- Delivery: one image per merge deployed to staging by digest with a smoke test, a manual load test with four scenarios and a
+  real-model one, and releases promoted to production blue/green behind the owner's approval.
+- Architecture, threat model, operations draft, cost and thirteen architecture decision records.
 
 ### Changed
 
