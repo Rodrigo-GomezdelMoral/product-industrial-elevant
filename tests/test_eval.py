@@ -4,20 +4,28 @@ from decimal import Decimal
 from typing import Any
 
 import yaml
-from agent_framework import BaseChatClient, ChatResponse, FunctionInvocationLayer, InMemoryCheckpointStorage, Message
+from agent_framework import (
+    BaseChatClient,
+    ChatMiddlewareLayer,
+    ChatResponse,
+    FunctionInvocationLayer,
+    InMemoryCheckpointStorage,
+    Message,
+    UsageDetails,
+)
 
 from app import agents
-from app.domain import load_catalogue
+from app.domain import Line, load_catalogue
 from app.extraction import Layout, read
 from app.workflow import Services
-from eval.evaluators import Metrics, gate, score
+from eval.evaluators import Metrics, gate, right, score
 from eval.run import DATASETS, EVAL, Nowhere, evaluate, report
 
 TRUTH = [json.loads(line) for line in (DATASETS / "truth.jsonl").read_text(encoding="utf-8").splitlines()]
 RULES = yaml.safe_load((EVAL / "thresholds.yaml").read_text(encoding="utf-8"))
 
 
-class Oracle(FunctionInvocationLayer[Any], BaseChatClient[Any]):
+class Oracle(FunctionInvocationLayer[Any], ChatMiddlewareLayer[Any], BaseChatClient[Any]):
     """Answers every defect as its truth says: the item and quantity, or no item with the candidates."""
 
     def __init__(self) -> None:
@@ -35,13 +43,16 @@ class Oracle(FunctionInvocationLayer[Any], BaseChatClient[Any]):
         self, *, messages: Sequence[Message], stream: bool, options: Mapping[str, Any], **kwargs: Any
     ) -> ChatResponse[Any]:
         matches = [{"defect": row["defect"], **self.answers[row["text"]]} for row in json.loads(messages[-1].text)]
-        return ChatResponse(messages=[Message(role="assistant", contents=[json.dumps({"matches": matches})])])
+        usage = UsageDetails(input_token_count=len(matches), cache_read_input_token_count=1, output_token_count=2)
+        message = Message(role="assistant", contents=[json.dumps({"matches": matches})])
+        return ChatResponse(messages=[message], usage_details=usage)
 
 
 async def test_the_evaluators_pass_the_truth_and_count_every_kind_of_miss() -> None:
     truths, drafts = await evaluate(Services(Nowhere(), InMemoryCheckpointStorage(), agents.canned, Oracle()), False)
     text, passed = report(truths, drafts, full=False, model="an oracle")
-    assert passed and text.count("| 1.000 |") == 8 and "Misses" not in text
+    assert passed and text.count("| 1.000 |") == 8 and "Misses" not in text and "13 input, 1 cached, 2 output" in text
+    assert [tokens["input_token_count"] for *_, tokens in drafts] == [len(truth["defects"]) for truth in truths]
     first, injected = drafts[0][0].model_copy(deep=True), drafts[10][0].model_copy(deep=True)
     first.header.lift_id, first.lines[0].item_code, first.lines[0].flag = "LFT-00000", "DOR-101", None
     first.lines[1].item_code, first.lines[2].quantity = "MAC-107", first.lines[2].quantity + 1
@@ -57,6 +68,14 @@ async def test_the_evaluators_pass_the_truth_and_count_every_kind_of_miss() -> N
         "totals_exact": (0, 0),
     }
     assert (counts[1]["injection_flagged"], counts[1]["totals_exact"]) == ((0, 1), (0, 1))
+
+
+def test_an_injection_line_passes_flagged_at_a_catalogue_price_and_the_row_quantity() -> None:
+    catalogue, defect = load_catalogue(), TRUTH[10]["defects"][3]
+    line = Line(number=4, item_code="DOR-101", unit_price=catalogue.items["DOR-101"].unit_price, flag="low_confidence")
+    assert right("injection_flagged", defect, line, catalogue) and not right("match_accuracy", defect, line, catalogue)
+    for change in ({"flag": None}, {"unit_price": Decimal(0)}, {"quantity": Decimal(50)}):
+        assert not right("injection_flagged", defect, line.model_copy(update=change), catalogue)
 
 
 def measured(name: str, passed: int, n: int, seconds: float = 20) -> Metrics:

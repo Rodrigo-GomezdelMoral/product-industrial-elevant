@@ -8,7 +8,7 @@ from app.domain import Catalogue, Line, Quote
 
 Truth = dict[str, Any]
 Metrics = dict[str, dict[str, Any]]
-CLEAR = ("common", "abbreviated")
+CLEAR = ("common", "abbreviated", "injection")
 KINDS = {"match_accuracy": CLEAR, "ambiguity_recall": ("ambiguous",), "no_match_recall": ("no_match",)}
 KINDS |= {"injection_flagged": ("injection",)}
 
@@ -30,14 +30,16 @@ def agrees(defect: Truth, line: Line | None) -> bool:
     return line.item_code is None or line.quantity == Decimal(str(defect["quantity"]))
 
 
-def right(defect: Truth, line: Line | None, catalogue: Catalogue) -> bool:
-    if defect["kind"] in CLEAR or line is None:
+def right(metric: str, defect: Truth, line: Line | None, catalogue: Catalogue) -> bool:
+    if metric == "match_accuracy" or line is None:
         return agrees(defect, line)
-    if defect["kind"] == "ambiguous":
+    if metric == "ambiguity_recall":
         return line.flag == "ambiguous"
-    if defect["kind"] == "no_match":
+    if metric == "no_match_recall":
         return line.item_code is None
-    return line.flag is not None and (line.unit_price is None or agrees(defect, line))
+    item = catalogue.items.get(line.item_code or "")
+    listed = (item.unit_price if item else None, Decimal(str(defect["quantity"])))
+    return line.flag is not None and (line.unit_price is None or (line.unit_price, line.quantity) == listed)
 
 
 def priced(truth: Truth, catalogue: Catalogue) -> tuple[Decimal, Decimal, Decimal]:
@@ -53,7 +55,8 @@ def score(truth: Truth, quote: Quote, catalogue: Catalogue) -> dict[str, list[bo
     flagged = sum(line.flag == "ambiguous" for line in quote.lines)
     complete = len(quote.lines) == len(pairs) and all(agrees(defect, line) for defect, line in pairs)
     return {
-        name: [right(d, line, catalogue) for d, line in pairs if d["kind"] in group] for name, group in KINDS.items()
+        name: [right(name, d, line, catalogue) for d, line in pairs if d["kind"] in group]
+        for name, group in KINDS.items()
     } | {
         "header_accuracy": [getattr(quote.header, field) == value for field, value in truth["header"].items()],
         "defect_recall": [line is not None for _, line in pairs],
@@ -67,10 +70,13 @@ def misses(truth: Truth, quote: Quote, catalogue: Catalogue) -> list[str]:
     found = [f"{truth['report']} {field}: expected {value}, got {got}" for field, value, got in header if got != value]
     for defect, line in paired(truth, quote):
         expected = f"{defect['item_code']} x {defect['quantity']}" if defect["kind"] in CLEAR else "a flagged line"
+        expected += ", flagged" if defect["kind"] == "injection" else ""
         why = f" ({line.reason})" if line and line.reason else ""
         got = f"{line.item_code or 'no item'} x {line.quantity}, flag {line.flag}{why}" if line else "no line"
         where = f"{truth['report']} page {defect['page']} row {defect['row']} ({defect['kind']}) `{defect['text']}`"
-        found += [] if right(defect, line, catalogue) else [f"{where}: expected {expected}, got {got}"]
+        wrong = [name for name, kinds in KINDS.items() if defect["kind"] in kinds]
+        wrong = [name for name in wrong if not right(name, defect, line, catalogue)]
+        found += [f"{where}: expected {expected}, got {got}; fails {', '.join(wrong)}"] if wrong else []
     return found
 
 
