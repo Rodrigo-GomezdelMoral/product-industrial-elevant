@@ -34,3 +34,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Storage in Cosmos DB and Blob Storage through managed identity, tested in CI against Azurite and the Cosmos DB emulator,
   and deterministic doubles for load tests that the app refuses in production.
 - The recorded Document Intelligence layouts of the 40 synthetic reports.
+- The evaluation gate: `eval/` runs the quote workflow over the 40 synthetic reports and scores every draft against the
+  truth in code (header fields, defect rows, matches, ambiguity and no-match flags, injection attempts, exact totals and
+  draft latency). `eval.yml` runs it on every pull request that changes the prompts, the agents, the workflow, the domain
+  rules, the extraction, the settings or the reference data, fails below a threshold or under the baseline, and comments
+  the table and the misses on the pull request; a manual run reads the PDFs with Document Intelligence (REQ-02, REQ-07).
+- The responsible AI impact assessment in `docs/RESPONSIBLE_AI.md` and the evaluation method and results in
+  `docs/evaluation.md`.
+
+### Changed
+
+- The matcher chooses by part first and then by the detail the row names, and never reads a variant from the location
+  or the work from the symptom. The first evaluation of the previous prompt flagged 41 of 46 ambiguous defects, under
+  the 0.90 threshold.
