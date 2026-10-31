@@ -22,3 +22,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Versioned reference data: catalogue v1 with 123 items and the quote template v1, pinned by each quote with their SHA-256, and a
   CI check that a released version is never changed in place (REQ-07).
 - 40 synthetic inspection reports in three layouts, 10 of them scanned, with the truth of every header field and defect.
+- Report reading with Document Intelligence layout: the header from key-value pairs, every defect with its page and row,
+  unsure header fields flagged, and files that are not PDFs, over 10 MB, over 10 pages or unreadable rejected before
+  anything is stored (REQ-01).
+- The matcher and the corrector, two Agent Framework agents on gpt-5-mini with structured output. The model sees only
+  defect text and the catalogue's codes, descriptions and units; an answer it cannot complete flags the lines instead of
+  guessing, and a correction is only proposed, never applied (REQ-02, REQ-08).
+- The quote workflow (extract, match, price, review, render) with the estimator's approval as a human-in-the-loop
+  request, checkpoints in Cosmos DB, resumption across requests and a quote that refuses any answer once approved
+  (REQ-03, REQ-04).
+- Storage in Cosmos DB and Blob Storage through managed identity, tested in CI against Azurite and the Cosmos DB emulator,
+  and deterministic doubles for load tests that the app refuses in production.
+- The recorded Document Intelligence layouts of the 40 synthetic reports.
