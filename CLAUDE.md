@@ -95,9 +95,34 @@ Three rules govern every choice:
 - **CI** runs one Python job through `make check`; the web and Bicep jobs skip their steps until `web/package.json` and
   `infra/main.bicep` exist.
 
+## Decisions taken in phase 1
+
+- **Reference data is the client's, not code.** `catalogue-v1.xlsx` and `quote-template-v1.docx` were made once and are maintained
+  as files; no script regenerates them. A quote pins both versions (name and SHA-256) when it is created and keeps them through
+  review; a pinned file whose hash changed is refused, and the `reference` job of `ci.yml` fails a pull request that modifies or
+  deletes a released file. The VAT rate lives in the catalogue (`terms!B1`), versioned with the prices it applies to.
+- **Fail closed.** A proposed code outside the catalogue version, or outside its own first three candidates, is `invalid_code`;
+  a confidence below 0.6 or not a number is `low_confidence`; a quantity outside (0, max], with more than two decimals, or
+  fractional for a counted unit is `invalid_quantity`, without hiding a review flag. Missing header fields and a quote with no
+  lines block approval like any flag.
+- **Pure changes.** `draft`, `review` and `approve` return a new quote; a refused batch leaves the stored one untouched. `approve`
+  re-checks the pinned catalogue and template, so an approved quote always has its document.
+- **KPI-2 from the lines.** A line is `proposed` until the estimator acts; `changed` only when its item or quantity really differ;
+  `accepted` at approval when untouched.
+- **The Word quote** numbers the kept lines 1 to n for the customer and traces each one by code, catalogue version and report page
+  and row. The approver stays on the record, not on the document. The date is the UTC approval date, which equals the Madrid date
+  inside business hours; `tzdata` is not added for the hours outside them.
+- **Types.** `types-openpyxl` and `types-reportlab` stubs are pinned for mypy strict; `docxtpl` and `pypdfium2` have none and are
+  declared `ignore_missing_imports`.
+- **Dataset.** Seed 2081 was chosen because its 40 reports contain the cases of simulations S1 to S5; `data/README.md` maps them.
+
 ## Verified names (installed wheels, 2026-10-30)
 
 | Package | Name |
 |---|---|
 | `agent-framework-core` 1.23.0 · `agent-framework-foundry` 1.15.0 | `agent_framework.foundry.FoundryChatClient` |
 | `agent-framework-azure-cosmos` 1.0.0b261015 | `agent_framework_azure_cosmos.CosmosCheckpointStorage` (not `agent_framework.azure_cosmos`) |
+| `docxtpl` 0.20.2 | `DocxTemplate(file).render(context, autoescape=True)`; table rows repeat with `{%tr for %}` and `{%tr endfor %}` |
+| `openpyxl` 3.1.5 | `load_workbook(file, data_only=True)`; `types-openpyxl` 3.1.5.20261017 |
+| `reportlab` 5.1.0 | `SimpleDocTemplate(..., invariant=1)` writes byte-identical PDFs; `types-reportlab` 5.0.0.20261008 |
+| `pillow` 13.0.0 | PDF `creationDate` and `modDate` take a `time.struct_time` |

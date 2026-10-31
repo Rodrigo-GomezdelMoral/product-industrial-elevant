@@ -244,12 +244,12 @@ The plan; each phase fills in its evidence, and the README shows the final statu
 | REQ | Test | Live evidence in staging | Demo |
 |---|---|---|---|
 | REQ-01 | extraction tests: three layouts, scans, missing fields, rejected files | upload, header and defects with page and row on screen | simulations S1, S2, S4 |
-| REQ-02 | pricing, rounding and invalid-code tests; evaluation match accuracy and ambiguity recall | draft with matched and flagged lines | S1, S3, S5 |
-| REQ-03 | restart-and-resume and refused-approval workflow tests; API tests | correct, approve, read-only after approval | S3, S4, S6 |
-| REQ-04 | every rendered line traced; no document before approval | download the `.docx` and open it | S6 |
+| REQ-02 | `test_domain.py`: pricing, rounding and invalid-code tests (phase 1); evaluation match accuracy and ambiguity recall | draft with matched and flagged lines | S1, S3, S5 |
+| REQ-03 | `test_domain.py`: edits with who and when, refused approval, read-only after approval (phase 1); restart-and-resume workflow tests; API tests | correct, approve, read-only after approval | S3, S4, S6 |
+| REQ-04 | `test_render.py`: every rendered line traced, no document before approval (phase 1) | download the `.docx` and open it | S6 |
 | REQ-05 | evaluation latency; load tests | `quote_drafted` p95 in KQL, cold start included | S1 with real timings |
 | REQ-06 | availability query in the workbook | availability SLI in the workbook | workbook |
-| REQ-07 | a catalogue v2 test: drafts in review keep v1 | a quote showing its versions | S6 |
+| REQ-07 | `test_domain.py`: a catalogue v2 test, drafts in review keep v1 (phase 1); `test_data.py`: every catalogue version well formed | a quote showing its versions | S6 |
 | REQ-08 | proposal applied only on confirmation, catalogue codes only | correction confirmed in the browser | S6 |
 | REQ-09 | feedback recorded | KQL showing `feedback` events | KPI workbook |
 | REQ-10 | delete removes the quote, its checkpoints and its blobs | delete as the manager | operations runbook |

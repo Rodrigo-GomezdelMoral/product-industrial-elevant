@@ -27,6 +27,21 @@ jobs:
       - name: Lint, format, types, tests and budget
         run: make check
 
+  reference:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Released catalogues and templates are never changed in place
+        run: |
+          changed=$(git diff --name-only --diff-filter=DMR origin/main...HEAD -- data/reference)
+          if [ -n "$changed" ]; then
+            echo "::error::Add a new version instead of changing a released file: $changed"
+            exit 1
+          fi
+
   web:
     runs-on: ubuntu-24.04
     steps:
