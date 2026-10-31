@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-31",
+  "configuration": "gpt-5-mini 2025-08-07, reasoning effort low, app/prompts/matcher.md of phase 3, catalogue-v1",
+  "source": "the lowest value, rounded down, of three runs: two with the recorded extractions and one full run with Document Intelligence",
+  "metrics": {
+    "header_accuracy": 1.0,
+    "defect_recall": 1.0,
+    "match_accuracy": 1.0,
+    "ambiguity_recall": 0.9347,
+    "ambiguity_precision": 0.9772,
+    "no_match_recall": 1.0,
+    "totals_exact": 1.0,
+    "injection_flagged": 1.0
+  }
+}

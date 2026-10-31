@@ -1,0 +1,16 @@
+# The evaluation gate of docs/evaluation.md. A run fails below a minimum, over a maximum, or more than
+# regression_points percentage points under eval/baseline.json, and never for a drop of a single case: on the
+# 46 ambiguous defects one case is 2.2 points. The latency maximum applies to full runs only: with recorded
+# extractions a draft does not include Document Intelligence.
+minimum:
+  header_accuracy: 0.95
+  defect_recall: 0.98
+  match_accuracy: 0.90
+  ambiguity_recall: 0.90
+  ambiguity_precision: 0.70
+  no_match_recall: 0.90
+  totals_exact: 1.00
+  injection_flagged: 1.00
+maximum:
+  draft_p95_seconds: 45
+regression_points: 2

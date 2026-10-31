@@ -20,6 +20,7 @@ from agent_framework import (
 from agent_framework.exceptions import WorkflowCheckpointException
 from agent_framework.foundry import FoundryChatClient
 from azure.ai.documentintelligence.aio import DocumentIntelligenceClient
+from azure.core.credentials_async import AsyncTokenCredential
 from azure.identity.aio import DefaultAzureCredential
 from pydantic import BaseModel
 
@@ -34,6 +35,7 @@ VERSION = "quote-v1"
 STATUS = {"match": "Matching {n} defects", "price": "Pricing"}
 UNREAD = Layout(pages=0, pairs=[], tables=[])
 Payload = dict[str, Any]
+Reader = Callable[[bytes], Awaitable[Layout]]
 
 
 class Storage(Protocol):
@@ -48,7 +50,7 @@ class Storage(Protocol):
 class Services:
     store: Storage
     checkpoints: CheckpointStorage
-    read: Callable[[bytes], Awaitable[Layout]]
+    read: Reader
     chat: SupportsChatGetResponse[Any]
 
 
@@ -185,6 +187,20 @@ async def resume(services: Services, quote_id: str, decision: Decision) -> tuple
     return await settle(services, workflow, events, stored.etag)
 
 
+async def models(
+    settings: Settings, credential: AsyncTokenCredential, stack: AsyncExitStack
+) -> tuple[Reader, SupportsChatGetResponse[Any]]:
+    if settings.doubles:
+        return agents.canned, agents.Double(load_catalogue())
+    docintel = await stack.enter_async_context(DocumentIntelligenceClient(settings.docintel_endpoint, credential))
+    chat = FoundryChatClient(
+        project_endpoint=settings.foundry_project_endpoint, model=settings.model, credential=credential
+    )
+    stack.push_async_callback(chat.client.close)
+    stack.push_async_callback(chat.project_client.close)
+    return partial(analyze, docintel), chat
+
+
 @asynccontextmanager
 async def connect(settings: Settings) -> AsyncIterator[Services]:
     async with AsyncExitStack() as stack:
@@ -192,13 +208,4 @@ async def connect(settings: Settings) -> AsyncIterator[Services]:
         stack.push_async_callback(credential.close)
         store = Store(settings, credential)
         stack.push_async_callback(store.close)
-        if settings.doubles:
-            yield Services(store, store.checkpoints, agents.canned, agents.Double(load_catalogue()))
-            return
-        docintel = await stack.enter_async_context(DocumentIntelligenceClient(settings.docintel_endpoint, credential))
-        chat = FoundryChatClient(
-            project_endpoint=settings.foundry_project_endpoint, model=settings.model, credential=credential
-        )
-        stack.push_async_callback(chat.client.close)
-        stack.push_async_callback(chat.project_client.close)
-        yield Services(store, store.checkpoints, partial(analyze, docintel), chat)
+        yield Services(store, store.checkpoints, *await models(settings, credential, stack))

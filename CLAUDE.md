@@ -169,6 +169,45 @@ Three rules govern every choice:
   layouts (2026-10-31): unambiguous items 445/450, ambiguity recall 43/46 and precision 43/48, no-match 37/37, injection
   2/2; matcher p50 12.3 s, p95 18.7 s.
 
+## Decisions taken in phase 3
+
+- **The evaluation runs the product.** `eval/run.py` drafts each of the 40 reports through `app.workflow.start` (extract,
+  match, price, up to the review request) with an in-memory store and checkpoints, so a change to the workflow, the
+  domain rules or the prompts is measured end to end. On pull requests the recorded layouts stand in for Document
+  Intelligence; `--full` reads the PDFs. `workflow.models()` builds the reader and the chat client for both the app
+  (`connect`) and the evaluation.
+- **Metrics in code, against the truth.** No LLM judge: every answer has a known truth. Agent Framework's evaluation
+  API (`evaluate_agent`, `LocalEvaluator`) is experimental in 1.23.0 and scores items pass or fail, while these metrics
+  are ratios over different subsets of defects; Foundry cloud evaluations add judges and cost for nothing measurable
+  here. A truth defect pairs with the draft line of the same page and row only when their texts agree (`rapidfuzz`
+  partial ratio at least 90), so an extraction that shifts rows counts as missed rows, not as matcher errors. Expected
+  totals are recomputed in integer cents with half-up VAT, independently of `domain.money`.
+- **One metric added to the prompt's table:** `no_match_recall` (a defect with no catalogue item is left without one),
+  0.90 like ambiguity recall. Without it a matcher that invents items for building defects would pass. An injection
+  line passes when it is flagged and prices nothing but the truth's item and quantity.
+- **The gate.** Below a threshold, over the latency maximum (full runs only: with recorded layouts a draft has no
+  Document Intelligence), or more than 2 points under `eval/baseline.json`, but never for a single case: on the 46
+  ambiguous defects one case is 2.2 points and the model varies by one case between identical runs. The baseline is
+  the lowest value of three runs of the accepted configuration (two on recorded layouts, one full) and is changed by
+  hand in the pull request that justifies it.
+- **The matcher prompt** now chooses by part and then by the detail the row names; the location never names a variant
+  and the symptom never names the work. The phase 2 prompt failed the gate (ambiguity recall 41/46).
+- **`eval.yml`.** Pull requests use `AZURE_CLIENT_ID_PR` (the staging app's `pull_request` credential, as the setup
+  designed) and skip forks and Dependabot, which get no OIDC secrets: a Dependabot update of `agent-framework-*` or the
+  Azure SDKs is evaluated with the manual full run after merging. The manual run is dispatched from `main` in
+  environment `staging` with `deployment: false`, so it creates no deployment record. Both resolve the shared
+  endpoints after login with `az cognitiveservices account [project] show` (the CI principal's `Foundry User` includes
+  `Microsoft.CognitiveServices/*/read`), so no new variable or script is needed. Each pull request run posts a new
+  comment with the head commit, the table and up to 30 misses, or says that the evaluation did not complete.
+- **Runs.** Two drafts at a time (measured at about 47K of the shared deployment's 100K tokens per minute; the rate
+  limit counts actual tokens, not the output cap) and a 300 s deadline per draft, in a `TaskGroup`, so one failure
+  stops the run cleanly.
+- **For phase 6.** `release.yml` can keep checking for a successful `staging` deployment: evaluation runs create none.
+  An optional hardening for the user: a dedicated evaluation app registration with only `Foundry User`, instead of
+  the staging deployer's `pull_request` credential.
+- **Budget after phase 3:** Python app 1,117/1,400 and tests 553/600; phase 4 has to fit the API, telemetry and its
+  tests in what is left.
+
 ## Verified names (installed wheels, 2026-10-30 and 2026-10-31)
 
 | Package | Name |
@@ -187,3 +226,7 @@ Three rules govern every choice:
 | `azure-cosmos` 4.17.1 · `azure-storage-blob` 12.31.1 | `upsert_item(body, etag=, match_condition=MatchConditions.IfNotModified)` raises `CosmosAccessConditionFailedError`; `BlobServiceClient.from_connection_string("UseDevelopmentStorage=true")` |
 | `aiohttp` 3.14.5 | the transport of the async Azure clients, pinned because the app imports the `aio` clients directly |
 | Emulators | Azurite 3.37.0 (`azurite-blob --skipApiVersionCheck`); Cosmos DB vNext `vnext-EN20261019`, HTTP on 8081, readiness on `:8080/ready` |
+| `agent-framework-core` 1.23.0 (evaluation) | `EvalItem`, `LocalEvaluator`, `evaluator`, `evaluate_agent` and `evaluate_workflow` exist and are marked experimental |
+| GitHub Actions (2026-10-31) | `environment: {name, deployment: false}` uses an environment's secrets without a deployment object; `defaults.run.shell: bash` runs steps with `-eo pipefail`; `azure/login` v3.1.0 is commit `a641126d1b8aa4d1fa005f4f92df94a3a4c4c906` (node24); `gh pr comment --body-file` |
+| Azure CLI 2.89.0 | `az cognitiveservices account project show --project-name` returns the project endpoint in `properties.endpoints."AI Foundry API"`; the account's `properties.endpoint` serves Document Intelligence |
+| `types-PyYAML` 6.0.12.20261030 · actionlint 1.7.12 | stubs for `yaml.safe_load` under mypy strict · `rhysd/actionlint:1.7.12` with shellcheck, clean on `ci.yml` and `eval.yml` |
