@@ -91,7 +91,10 @@ async def walk(api: httpx.AsyncClient, pdf: bytes) -> dict[str, Any]:
 async def test_only_signed_in_roles_and_readable_reports_get_in(api: httpx.AsyncClient, memory: Any) -> None:
     assert (await api.get("/healthz")).json() == {"status": "ok"}
     assert (await api.get("/api/version")).json() == {"workflow": "quote-v1", "image": "local"}
+    me = (await api.get("/api/me", headers=signed("Quote.Estimator", "Other"))).json()
+    assert me == {"name": "Ana", "roles": ["Quote.Estimator"]}
     calls = [("POST", "/api/quotes", {}, 401), ("GET", "/api/quotes", {"X-MS-CLIENT-PRINCIPAL": "?"}, 401)]
+    calls += [("GET", "/api/me", {}, 401), ("GET", f"/api/quotes/{ID}/catalogue", signed(), 403)]
     calls += [("GET", "/api/quotes", signed(), 403), ("DELETE", f"/api/quotes/{ID}", ESTIMATOR, 403)]
     calls += [("POST", f"/api/quotes/{ID}/review", MANAGER, 403), ("GET", f"/api/quotes/{ID}", MANAGER, 404)]
     for method, path, headers, status in [*calls, ("GET", "/api/quotes/q-..%5Cx", MANAGER, 422)]:
@@ -113,6 +116,8 @@ async def test_each_request_resumes_a_fresh_workflow(api: httpx.AsyncClient, kpi
     quote = await walk(api, PDF + uuid4().hex.encode())
     qid, listed = quote["id"], (await api.get("/api/quotes", headers=MANAGER)).json()
     assert {"id": qid, "state": "approved"}.items() <= listed[0].items() and "request_id" not in quote
+    items = (await api.get(f"/api/quotes/{qid}/catalogue", headers=MANAGER)).json()
+    assert len(items) == 123 and set(items[0]) == {"code", "description", "unit", "unit_price"}
     assert (await api.post(f"/api/quotes/{qid}/feedback", json={"value": "up"}, headers=ESTIMATOR)).status_code == 204
     if isinstance(services.store, Store):
         stale = await services.store.load(qid)
