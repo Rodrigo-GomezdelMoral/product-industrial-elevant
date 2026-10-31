@@ -47,3 +47,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The matcher chooses by part first and then by the detail the row names, and never reads a variant from the location
   or the work from the symptom. The first evaluation of the previous prompt flagged 41 of 46 ambiguous defects, under
   the 0.90 threshold.
+- A choice the matcher is unsure of among several catalogue items is flagged ambiguous with its candidates and no price,
+  instead of being priced as a low-confidence line (REQ-02).
+- The evaluation's injection metric follows the build prompt (flagged, no price or quantity outside the catalogue), and
+  match accuracy now also counts the injection defects; each run reports tokens, euros and p50 latency per draft. The
+  matcher's output cap is 1,500 plus 150 tokens per defect.

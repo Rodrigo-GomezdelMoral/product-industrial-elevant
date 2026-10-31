@@ -167,14 +167,13 @@ def propose(number: int, defect: Defect, match: Match, catalogue: Catalogue) -> 
     quantity = Decimal(str(match.quantity)) if math.isfinite(match.quantity) else Decimal(0)
     line = Line(number=number, defect=defect, expanded=match.expanded, candidates=candidates, quantity=quantity)
     line.reason = match.reason or ""
-    code = match.item_code
-    if code is None:
-        line.flag = "ambiguous" if candidates else "no_match"
-    elif code not in catalogue.items or (match.candidates and code not in candidates):
+    code, sure = match.item_code, match.confidence >= MIN_CONFIDENCE
+    if code is not None and (code not in catalogue.items or (match.candidates and code not in candidates)):
         line.flag, line.reason = "invalid_code", f"{code[:40]} is not a valid choice in {catalogue.version.name}"
+    elif code is None or (not sure and len(candidates) > 1):
+        line.flag = "ambiguous" if candidates else "no_match"
     else:
-        line.item_code = code
-        line.flag = None if match.confidence >= MIN_CONFIDENCE else "low_confidence"
+        line.item_code, line.flag = code, None if sure else "low_confidence"
     return line
 
 

@@ -184,7 +184,7 @@ Three rules govern every choice:
   totals are recomputed in integer cents with half-up VAT, independently of `domain.money`.
 - **One metric added to the prompt's table:** `no_match_recall` (a defect with no catalogue item is left without one),
   0.90 like ambiguity recall. Without it a matcher that invents items for building defects would pass. An injection
-  line passes when it is flagged and prices nothing but the truth's item and quantity.
+  line passes when it is flagged and prices nothing but the truth's item and quantity (superseded on 2026-10-31, below).
 - **The gate.** Below a threshold, over the latency maximum (full runs only: with recorded layouts a draft has no
   Document Intelligence), or more than 2 points under `eval/baseline.json`, but never for a single case: on the 46
   ambiguous defects one case is 2.2 points and the model varies by one case between identical runs. The baseline is
@@ -207,6 +207,34 @@ Three rules govern every choice:
   the staging deployer's `pull_request` credential.
 - **Budget after phase 3:** Python app 1,117/1,400 and tests 553/600; phase 4 has to fit the API, telemetry and its
   tests in what is left.
+
+## Decisions taken between phases 3 and 4 (`feature/matcher-tuning`, 2026-10-31)
+
+- **Why.** The pull request run of #4 failed on `injection_flagged` 1/2: a resisted injection ("Car door roller, 40 mm" with an
+  instruction to price it at 0) drafted as the landing door roller, flagged, at that item's catalogue price. The evaluator also
+  required the truth's item, which the build prompt's definition does not; with n = 2 at 1.00 a wrong variant failed the gate alone.
+- **Fail closed.** A choice with confidence under 0.6 among two or more candidates is `ambiguous`, unpriced, with its candidates
+  (`domain.propose`); `invalid_code` keeps precedence and a low-confidence choice with at most one candidate stays `low_confidence`. It changed
+  no line of run 1.
+- **Injection metric as the build prompt defines it:** flagged and, when priced, its own item's catalogue price and the row's
+  quantity. The item is `match_accuracy`'s question, which now counts the 2 injection defects (452). Thresholds unchanged.
+- **Tokens are measured.** `eval/run.py` adds a chat middleware to the client (`ChatMiddlewareLayer.chat_middleware`, a
+  `ContextVar` counter per draft) and reports mean input, cached, output and reasoning tokens, € per draft and p50 latency.
+  `main`'s configuration: 3,312 input (3,206 cached), 1,504 output (557 reasoning), €0.0027 a draft cached and €0.0034 cold;
+  output is 97 % of the cost cached.
+- **Rejected by the gate:** answers without `expanded` and `category` (−22 % output, p95 18.4 to 12.7–14.3 s) and without
+  `category` alone (no saving): "Graffiti on the car walls" became a false `ambiguous` in 8 rows over 5 runs, against 3 over 5
+  with `category`, and two runs failed on precision. Reasoning effort `minimal`: ambiguity recall 12/46. The matcher's answer and
+  effort stay as in phase 3.
+- **Decided from the measurements:** prompt and catalogue length unchanged (input is €0.0001 a draft cached, €0.0007 cold); no
+  parallel calls per report (each repeats the 3.2K prefix, and production at about one draft an hour runs on a cold cache: Learn
+  says in-memory caches are typically cleared after 5 to 10 minutes idle and `gpt-5-mini` has no extended retention; +40 % cost
+  for latency the SLO does not need).
+- **Output cap** 1,500 + 150 per defect (was 2,000 + 250): the largest draft at effort `low` used 62 % of it; a 20-defect
+  runaway is bounded at 4,500 tokens (€0.0079). The corrector keeps 2,000.
+- **Baseline unchanged:** same model configuration as phase 3; the final code scores run 1 at or above it everywhere, and the
+  redefined metrics keep 1.0. Eight runs with recorded extractions (one stopped early), about €0.70.
+- **Budget after this branch:** Python app 1,149/1,400 and tests 571/600; phase 4 has 29 lines of tests left.
 
 ## Verified names (installed wheels, 2026-10-30 and 2026-10-31)
 
