@@ -20,7 +20,7 @@ from app.extraction import Layout, check
 
 PROMPTS = Path(__file__).resolve().parent / "prompts"
 CANNED = PROMPTS.parent.parent / "eval" / "datasets" / "extracted" / "report-0134.json"
-MATCH_TOKENS, TOKENS_PER_DEFECT, CORRECT_TOKENS = 2000, 250, 2000
+MATCH_TOKENS, TOKENS_PER_DEFECT, CORRECT_TOKENS = 1500, 150, 2000
 LINE_FIELDS = {"number", "expanded", "item_code", "quantity"}
 
 
