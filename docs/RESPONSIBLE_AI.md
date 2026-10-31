@@ -97,7 +97,7 @@ client's catalogue.
 |---|---|---|
 | Wrong item or quantity accepted | A customer quoted for the wrong part or amount | Estimator review; KPI-2 in production; the line is traceable to its defect, so it is corrected and re-issued |
 | A defect missing from the draft | A needed repair is not quoted | Defect recall 100 % on the evaluation set; every line shows its page and row; the technician's report remains the record of the inspection |
-| Service down or the model throttled | No draft; the estimator waits or quotes by hand | Clear "busy, try again" message (phase 4); availability SLO and alert (phases 6 and 7) |
+| Service down or the model throttled | No draft; the estimator waits or quotes by hand | A clear "Elevant is busy; try again in N s" with `Retry-After`, and a 503 or 504 with a plain reason when a dependency is down or a draft passes 120 s (`test_api.py`, phase 4); availability SLO and alert (phases 6 and 7) |
 
 **Impact of misuse.** Prompt injection through the text of a report (a row that asks to change a price, a code or a quantity) is the
 main one: the model cannot set a price, any code is checked against the catalogue, and the matcher's prompt treats every row as data

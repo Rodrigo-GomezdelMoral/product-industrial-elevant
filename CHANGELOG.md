@@ -41,6 +41,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   the table and the misses on the pull request; a manual run reads the PDFs with Document Intelligence (REQ-02, REQ-07).
 - The responsible AI impact assessment in `docs/RESPONSIBLE_AI.md` and the evaluation method and results in
   `docs/evaluation.md`.
+- The API: upload a PDF and follow the draft as server-sent events, list and read quotes, review and approve, ask for a
+  correction in plain words, download the Word quote, rate the draft and delete a quote, with `/healthz` and
+  `/api/version`. Every path but those two needs the platform's sign-in, and the API checks the app role: estimators
+  upload, review and rate, the manager deletes, both read (REQ-01, REQ-03, REQ-04, REQ-08, REQ-09, REQ-10).
+- Uploads are idempotent: the same PDF returns its existing quote instead of a second draft. Files over 10 MB are refused
+  before they are read.
+- Clear answers when something fails: a throttled model gives "try again in N s" with `Retry-After`, a draft past 120 s
+  stops with a 504, and a dependency that is down gives a 503 with a plain reason.
+- KPI and SLO events (`quote_drafted`, `quote_failed`, `line_reviewed`, `quote_approved`, `feedback`, `quote_deleted`)
+  sent to Application Insights through the Azure Monitor OpenTelemetry distro, with quote ids and numbers only.
 
 ### Changed
 
