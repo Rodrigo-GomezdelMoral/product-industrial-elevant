@@ -32,7 +32,7 @@ Three rules govern every choice:
 
   ```
   ── PHASE n COMPLETE ──
-  Counts: files <n>/80 · Python app <n>/1,400 · tests <n>/600 · Bicep <n>/490 · TypeScript <n> (< 800) · comments <n>/5
+  Counts: files <n>/80 · Python app <n>/1,500 · tests <n>/650 · Bicep <n>/490 · TypeScript <n> (< 800) · comments <n>/5
   Verified: ruff ✓ mypy ✓ pytest ✓ budget ✓ <phase checks ✓>
   Requirements: REQ-nn <test> + <live check> · …
   Guidance: <syllabus sections and Well-Architected codes checked>
@@ -59,8 +59,8 @@ Three rules govern every choice:
 2. **Zero secrets.** Managed identity and `DefaultAzureCredential` everywhere; local and shared-key auth disabled on Cosmos DB, Storage
    and Application Insights ingestion. GitHub holds only the identifiers set by the setup scripts.
 3. **Size budget, enforced by `tests/test_budget.py`:** at most 80 files (excluding `docs/`, `data/`, `eval/datasets/`,
-   `web/fixtures/`, `web/public/`, lock files and `node_modules/`); Python in `app/ eval/ load/ ops/` at most 1,400 non-blank lines;
-   tests at most 600; Bicep at most 490; TypeScript under 800; Python functions at most 35 lines.
+   `web/fixtures/`, `web/public/`, lock files and `node_modules/`); Python in `app/ eval/ load/ ops/` at most 1,500 non-blank lines;
+   tests at most 650; Bicep at most 490; TypeScript under 800; Python functions at most 35 lines.
 4. **Comments:** at most 5 `#` comments in all the Python. The why goes in the ADRs and the README.
 5. **No bare `except Exception`.** Catch the SDK's exception types and turn them into a clear message.
 6. **Pinned dependencies:** `==` in both requirements files, `package-lock.json` committed, GitHub Actions pinned to a full commit SHA
@@ -251,8 +251,8 @@ Three rules govern every choice:
   `request_id` and `checkpoint_id`.
 - **Roles.** From `X-MS-CLIENT-PRINCIPAL`: no valid header is 401, no allowed role 403. `Quote.Estimator` uploads, reviews,
   asks for corrections and rates; `Quote.Manager` deletes; both list, read and download. Who is
-  `X-MS-CLIENT-PRINCIPAL-NAME`. `/api/version` needs no role, so phase 6 decides whether the built-in auth excludes it
-  for the release smoke test or the smoke test signs in.
+  `X-MS-CLIENT-PRINCIPAL-NAME`. `/api/version` needs no role and stays unauthenticated like `/healthz` (decided after phase 4
+  and recorded in the build prompt), so the release smoke test needs no session.
 - **Failures in one place.** `main.failure` maps an oversize file (over 10 MB or 10 pages) to 413, another refused file to
   422, a domain rule to 409, a 404 from Cosmos DB or Blob to 404, a 429 from the model (`ChatClientException` whose cause
   is `openai.RateLimitError`) or an Azure SDK to 429 with the service's `Retry-After`, the draft deadline to 504, and any
@@ -291,6 +291,54 @@ Three rules govern every choice:
   kept or moved). `load/locustfile.py` and `ops/export_run.py` have 44 lines between them, and any new test needs lines
   freed first.
 
+## Decisions taken in phase 5
+
+- **Budget.** The user raised it after phase 4: Python app 1,500 and tests 650 (`LIMITS` in `tests/test_budget.py`). After
+  phase 5: files 48/80, Python app 1,367/1,500, tests 605/650, TypeScript 710/799.
+- **One web, two builds.** React 19, TypeScript 6 and Vite 8, no component library but `lucide-react`, the tokens as CSS
+  variables in `web/src/styles.css`. `VITE_DEMO=true` builds the demo: `web/src/api.ts` swaps the HTTP client for a replay
+  of `web/fixtures/*.json`, and the glob sits behind the flag, so the live bundle carries no recording (checked by
+  building with a marker file).
+- **Two routes for the web.** `GET /api/me` gives the signed-in name and app roles (401 without a principal), for the
+  sidebar. `GET /api/quotes/{id}/catalogue` gives code, description, unit and unit price of the quote's pinned catalogue
+  version, so search and candidate names come from the version the draft uses (REQ-02, REQ-07).
+- **One change, one review answer.** Each control sends one edit and the quote comes back priced, so the totals update at
+  once and money stays in `domain.py` (REQ-03). Answers are queued, never dropped. The lines table and the review card are
+  one real table with labelled controls, read-only once approved. Approve stays focusable with `aria-disabled` and names
+  the open flags; candidates are buttons; quantity and header fields commit on Enter or blur.
+- **Corrections (REQ-08).** A proposal is a confirmation card; Confirm sends its edits as a normal review answer. The
+  doubles propose nothing, so the API answers 409 "no change found"; the walk-through shows that message, then stubs the
+  corrections route in the browser only, to prove the confirm path through the real review API.
+- **Report text is untrusted.** Markdown renders only `p`, `strong` and `code`: a lift ID or defect cannot add a link or a
+  remote image, and raw HTML is never rendered.
+- **WCAG 2.2 AA.** The thread scrolls in its own region above the composer, so nothing focused is ever covered (2.4.11;
+  axe's `target-size` caught the first, sticky composer). The selected conversation's text is `#4552E0`, because the
+  accent on `#EEF0FF` is 4.05:1. Success green (3.5:1 on white) is used for icons only and error red text only on white
+  (4.67:1). Input borders and placeholders use the secondary colour (6:1). Focus moves to the download link after
+  approval, to the composer after a proposal is settled, and to the Menu button when the mobile sidebar closes (Escape
+  closes it).
+- **The walk-through.** `vite.config.ts` proxies `/api` to `127.0.0.1:8000` with an estimator-and-manager
+  `X-MS-CLIENT-PRINCIPAL`, in `vite dev` and `vite preview` only; in Azure the built-in auth sets that header and strips
+  external ones. `web/tests/web.spec.ts` (Playwright) runs against the API with doubles and the emulators (`make
+  emulators`, then `make web`; Playwright starts or reuses uvicorn and the preview server). By keyboard alone it uploads
+  `report-0134`, changes a quantity, accepts a line, resolves the five ambiguous lines, asks for a correction and confirms
+  it, rates the draft, approves and downloads the `.docx`, and runs axe (`wcag2a` to `wcag22aa`) on the empty state, the
+  review card, the correction card and the approved card. The CI web job does the same and also builds the demo.
+- **Demo mode.** The empty state keeps the three suggestions of the deployed web (the user's decision after the phase
+  review, so the demo and the reference for later products match the Interface); each replays the recording whose
+  `suggestion` names it. The sidebar lists every recording and choosing one replays it; inside a run, the review
+  controls and its recorded corrections, offered as chips, are the only inputs. A visitor's review action is
+  replayed only when it equals the recorded next request; otherwise the card says what the recording did next. Checked
+  with a temporary recording made from a local draft, then deleted.
+- **For phase 8 (`ops/export_run.py`).** A recording is `Recording` in `web/src/api.ts`: `{title, file, suggestion?, status: [[text,
+  ms]], draft, steps: [{edits, approve, ms, quote, error}], corrections: [{text, edits, ms}], catalogue, document}`.
+  `steps[].edits` must be the exact bodies the web sent (the quote's event list holds each as `Edit` JSON; quantities as
+  numbers); the draft's time is `drafted_at` minus `created_at`. Scrub `approved_by` and `events[].by` (principal names)
+  as well as the header: the identifier scan skips `web/fixtures/`. `suggestion` names the empty-state suggestion
+  that replays the run: S1 "Upload an inspection report", S2 "Try a sample scanned report", S3 "Open quotes in review".
+- **For phase 6.** Serve `web/dist` from the app; exclude `/healthz` and `/api/version` from the built-in auth.
+- **Sample.** `web/public/samples/report-0108.pdf` (synthetic, scanned, layout B) backs "Try a sample scanned report".
+
 ## Verified names (installed wheels, 2026-10-30 and 2026-10-31)
 
 | Package | Name |
@@ -320,3 +368,7 @@ Three rules govern every choice:
 | `agent-framework-core` 1.23.0 (checkpoints) | `list_checkpoint_ids(workflow_name=)` and `delete(checkpoint_id)` on both storages; instrumentation on by default, sensitive data off |
 | Built-in auth (Learn `container-apps/authentication`, 2026-07-08; `app-service/configure-authentication-user-identities`, 2025-07-02) | `X-MS-CLIENT-PRINCIPAL` is base64 JSON `{auth_typ, claims: [{typ, val}], name_typ, role_typ}`; `X-MS-CLIENT-PRINCIPAL-NAME` is a readable name; "External requests aren't allowed to set these headers" |
 | Cosmos DB vNext emulator (Learn, 2026-10-07) | ORDER BY on partitioned containers and paging supported; `SELECT TOP 100 c.id, c.state, c.header.lift_id, c.created_at FROM c ORDER BY c.created_at DESC` returns `lift_id` |
+| npm registry (2026-10-31) | `react` and `react-dom` 19.3.1, `vite` 8.3.5 (Node 20.19 or 22.12 and later), `@vitejs/plugin-react` 6.1.2, `typescript` 6.0.3, `lucide-react` 1.65.0, `react-markdown` 10.1.0, `@fontsource-variable/inter` 5.3.0, `@axe-core/playwright` 4.14.0 (Node 22.12 and later), `@playwright/test` 1.64.1; `@types/react` and `@types/react-dom` 19.3.0 added for TypeScript |
+| `vite` 8.3.5 · `@playwright/test` 1.64.1 | a `server.proxy` entry takes http-proxy-3 `headers`, and `preview.proxy` defaults to `server.proxy` · `webServer` takes an array and merges its `env` over `process.env`; `ControlOrMeta` |
+| `react-markdown` 10.1.0 · `lucide-react` 1.65.0 | `allowedElements` with `unwrapDisallowed`; tables need `remark-gfm`, so the lines table is JSX · `TriangleAlert`, `CircleCheck`, `LoaderCircle`, `Paperclip`, `ArrowUp` |
+| `fastapi` 0.162.0 (`fastapi.sse`) | every `data` is JSON-encoded, plain strings included (`data: "Pricing"`) |

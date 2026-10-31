@@ -32,17 +32,22 @@ Text = Annotated[str, Body(embed=True, min_length=1, max_length=500)]
 Rating = Annotated[Literal["up", "down"], Body(embed=True)]
 
 
+def principal(request: Request) -> tuple[str, set[str]]:
+    try:
+        signed = json.loads(base64.b64decode(request.headers["x-ms-client-principal"]))
+        kinds = {signed.get("role_typ"), "roles"}
+        roles = {claim["val"] for claim in signed["claims"] if claim["typ"] in kinds}
+    except (AttributeError, KeyError, TypeError, ValueError) as error:
+        raise HTTPException(401, "sign in to use Elevant") from error
+    return request.headers.get("x-ms-client-principal-name", "unnamed"), roles & {ESTIMATOR, MANAGER}
+
+
 def role(*allowed: str) -> Callable[[Request], Awaitable[str]]:
     async def caller(request: Request) -> str:
-        try:
-            principal = json.loads(base64.b64decode(request.headers["x-ms-client-principal"]))
-            kinds = {principal.get("role_typ"), "roles"}
-            roles = {claim["val"] for claim in principal["claims"] if claim["typ"] in kinds}
-        except (AttributeError, KeyError, TypeError, ValueError) as error:
-            raise HTTPException(401, "sign in to use Elevant") from error
+        name, roles = principal(request)
         if not roles & set(allowed):
             raise HTTPException(403, f"this needs the {' or '.join(allowed)} role")
-        return request.headers.get("x-ms-client-principal-name", "unnamed")
+        return name
 
     return caller
 
@@ -140,6 +145,12 @@ async def version() -> dict[str, str]:
     return {"workflow": VERSION, "image": SETTINGS.image}
 
 
+@app.get("/api/me")
+async def me(request: Request) -> dict[str, Any]:
+    name, roles = principal(request)
+    return {"name": name, "roles": sorted(roles)}
+
+
 @app.post("/api/quotes", response_class=EventSourceResponse)
 async def upload(_: Estimator, pdf: Report, services: Wired) -> AsyncIterator[ServerSentEvent]:
     quote, began = new_quote(f"q-{hashlib.sha256(pdf).hexdigest()[:16]}"), time.monotonic()
@@ -182,6 +193,12 @@ async def decide(quote_id: QuoteId, answer: Answer, by: Estimator, services: Wir
 async def corrections(quote_id: QuoteId, text: Text, _: Estimator, services: Wired) -> list[Edit]:
     quote = await stored(services, quote_id)
     return await agents.correct(services.chat, quote, text, load_catalogue(quote.catalogue))
+
+
+@app.get("/api/quotes/{quote_id}/catalogue")
+async def catalogue(quote_id: QuoteId, _: Staff, services: Wired) -> list[dict[str, Any]]:
+    items = load_catalogue((await stored(services, quote_id)).catalogue).items.values()
+    return [item.model_dump(mode="json", include={"code", "description", "unit", "unit_price"}) for item in items]
 
 
 @app.get("/api/quotes/{quote_id}/document")
