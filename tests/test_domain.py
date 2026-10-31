@@ -66,20 +66,16 @@ def test_review_updates_totals_and_records_who_and_when(
     quote = review(drafted, [*edits, Edit(action="add", code="LAB-102", quantity=1)], "estimator-1", catalogue)
     assert [line.amount for line in quote.lines] == [Decimal(n) for n in ("112.35", "18.87", "17.60", "43.40", "56.20")]
     assert quote.subtotal == Decimal("248.42")
-    assert [(event.by, event.action) for event in quote.events] == [
-        ("estimator-1", a) for a in ("item", "quantity", "add")
-    ]
+    assert [(e.by, e.action) for e in quote.events] == [("estimator-1", a) for a in ("item", "quantity", "add")]
     assert [line.outcome for line in quote.lines] == ["changed", "proposed", "changed", "proposed", "added"]
     assert (drafted.subtotal, drafted.events) == (Decimal("155.90"), [])
     risky = draft(new_quote("q-0005"), [(DEFECT, match("DOR-102", 50, 0.2))], catalogue)
-    assert (
-        review(risky, [Edit(action="quantity", line=1, quantity=2)], "e", catalogue).lines[0].flag == "low_confidence"
-    )
+    lowered = review(risky, [Edit(action="quantity", line=1, quantity=2)], "e", catalogue)
+    assert lowered.lines[0].flag == "low_confidence"
     wrong = [Edit(action="accept", line=3), Edit(action="item", line=1, code="X"), Edit(action="remove", line=9)]
     wrong += [Edit(action="quantity", line=1, quantity=NAN), Edit(action="header", field="location", value="  ")]
-    for edit, message in zip(
-        wrong, ("needs an item", "X is not", "line 9", "greater than zero", "needs a value"), strict=True
-    ):
+    messages = ("needs an item", "X is not", "line 9", "greater than zero", "needs a value")
+    for edit, message in zip(wrong, messages, strict=True):
         with pytest.raises(DomainError, match=message):
             review(drafted, [edit], "estimator-1", catalogue)
 
@@ -91,9 +87,8 @@ def test_approval_waits_for_every_flag_then_the_quote_is_read_only(drafted: Quot
     with pytest.raises(DomainError, match="the quote has no lines"):
         approve(review(drafted, [Edit(action="remove", line=n) for n in range(1, 5)], "e", catalogue), "e", catalogue)
     edits = [Edit(action="header", field="lift_id", value="LFT-41732"), Edit(action="item", line=3, code="ELE-105")]
-    approved = approve(
-        review(drafted, [*edits, Edit(action="item", line=4, code="DOR-102")], "e", catalogue), "e", catalogue
-    )
+    edits.append(Edit(action="item", line=4, code="DOR-102"))
+    approved = approve(review(drafted, edits, "e", catalogue), "e", catalogue)
     assert (approved.state, approved.approved_by, approved.approved_at is not None) == ("approved", "e", True)
     assert [line.outcome for line in approved.lines] == ["accepted", "accepted", "changed", "accepted"]
     with pytest.raises(DomainError, match="approved and can no longer change"):

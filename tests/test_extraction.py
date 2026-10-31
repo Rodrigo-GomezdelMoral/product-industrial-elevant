@@ -15,8 +15,7 @@ TRUTH = [json.loads(line) for line in (DATASETS / "truth.jsonl").read_text(encod
 
 class Analyzer:
     def __init__(self, pages: int, inner: str | None) -> None:
-        self.pages, self.inner = pages, inner
-        self.asked: dict[str, Any] = {}
+        self.pages, self.inner, self.asked = pages, inner, dict[str, Any]()
 
     async def begin_analyze_document(self, *args: Any, **kwargs: Any) -> "Analyzer":
         self.asked = kwargs
@@ -34,8 +33,7 @@ class Analyzer:
 def test_reads_the_header_and_every_defect_of_each_layout(truth: dict[str, Any]) -> None:
     recorded = (DATASETS / "extracted" / truth["report"].replace(".pdf", ".json")).read_text(encoding="utf-8")
     report = read(Layout.model_validate_json(recorded))
-    assert report.header.model_dump() == truth["header"]
-    assert report.flags == {}
+    assert (report.header.model_dump(), report.flags) == (truth["header"], {})
     assert [(defect.page, defect.row) for defect in report.defects] == [(d["page"], d["row"]) for d in truth["defects"]]
     for defect, expected in zip(report.defects, truth["defects"], strict=True):
         assert expected["component"].split()[0].strip(",").lower() in defect.text.lower()
@@ -49,9 +47,7 @@ def test_flags_unsure_header_fields_and_leaves_missing_ones_empty() -> None:
         Pair(key="Location", value="floor 2\npit", confidence=0.95),
     ]
     header, flags = read_header(pairs)
-    assert header.model_dump() == {"lift_id": "LFT-10001", "location": None, "inspection_date": "31/31/2026"} | {
-        "technician": None
-    }
+    assert header.model_dump(exclude_none=True) == {"lift_id": "LFT-10001", "inspection_date": "31/31/2026"}
     assert flags == {"lift_id": "low_confidence", "inspection_date": "low_confidence"}
 
 
