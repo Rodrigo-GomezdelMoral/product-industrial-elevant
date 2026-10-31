@@ -1,0 +1,228 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Unit no.",
+   "value": "LFT-54199",
+   "confidence": 0.998
+  },
+  {
+   "key": "Date of visit",
+   "value": "08 Sep 2026",
+   "confidence": 0.998
+  },
+  {
+   "key": "Site address",
+   "value": "25 Larch Street, Eastbrook",
+   "confidence": 0.997
+  },
+  {
+   "key": "Engineer",
+   "value": "Marta Ferrer",
+   "confidence": 0.998
+  },
+  {
+   "key": "Pos.",
+   "value": "1\n2\n3\n4\n5\n6\n7\n8",
+   "confidence": 0.991
+  },
+  {
+   "key": "Component",
+   "value": "Machine room lighting fitting\nHydraulic oil\nDR SILL ADJ AND CLEANING LDG\nHYD HOSE 1 M\nFinal limit switch, upper\nCounterweight filler weight\nMachine room socket\nLanding door roller",
+   "confidence": 0.977
+  },
+  {
+   "key": "Observation",
+   "value": "corroded, machine room\ndamaged, machine room\nREQUIRED, floor 8\nDMGD, machine room\nout of adjustment, car top\nout of adjustment, pit\nbroken, machine room\nworn, floor 8",
+   "confidence": 0.916
+  },
+  {
+   "key": "Units",
+   "value": "3\n30 l\n1\n1\n1\n4\n1\n2",
+   "confidence": 0.956
+  },
+  {
+   "key": "Pos.",
+   "value": "9",
+   "confidence": 0.94
+  },
+  {
+   "key": "Component",
+   "value": "Motor bearing, non-drive end\nPHASE MONITORING RELAY\nCounterweight guide shoe insert, roller",
+   "confidence": 0.92
+  },
+  {
+   "key": "Observation",
+   "value": null,
+   "confidence": 0.993
+  },
+  {
+   "key": "Units",
+   "value": "1\n1",
+   "confidence": 0.935
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Unit no.",
+     "LFT-54199",
+     "Date of visit",
+     "08 Sep 2026"
+    ],
+    [
+     "Site address",
+     "25 Larch Street, Eastbrook",
+     "Engineer",
+     "Marta Ferrer"
+    ]
+   ],
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "1",
+     "Machine room lighting fitting",
+     "corroded, machine room",
+     "3"
+    ],
+    [
+     "2",
+     "Hydraulic oil",
+     "damaged, machine room",
+     "30 l"
+    ],
+    [
+     "3",
+     "DR SILL ADJ AND CLEANING LDG",
+     "REQUIRED, floor 8",
+     "1"
+    ],
+    [
+     "4",
+     "HYD HOSE 1 M",
+     "DMGD, machine room",
+     "1"
+    ],
+    [
+     "5",
+     "Final limit switch, upper",
+     "out of adjustment, car top",
+     "1"
+    ],
+    [
+     "6",
+     "Counterweight filler weight",
+     "out of adjustment, pit",
+     "4"
+    ],
+    [
+     "7",
+     "Machine room socket",
+     "broken, machine room",
+     "1"
+    ],
+    [
+     "8",
+     "Landing door roller",
+     "worn, floor 8",
+     "2"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "9",
+     "Motor bearing, non-drive end",
+     "broken, machine room",
+     "1"
+    ],
+    [
+     "10",
+     "PHASE MONITORING RELAY",
+     "FLTY, machine room",
+     "1"
+    ],
+    [
+     "11",
+     "Counterweight guide shoe insert, roller",
+     "damaged, pit",
+     "3"
+    ],
+    [
+     "12",
+     "CAR APRON",
+     "BRKN, car",
+     "1"
+    ],
+    [
+     "13",
+     "HYD VALVE SEAL KIT",
+     "WRN, machine room",
+     "1"
+    ],
+    [
+     "14",
+     "SHAFT LIMIT SW UPPER",
+     "NOT WKG, pit",
+     "1"
+    ],
+    [
+     "15",
+     "HALL POS IND",
+     "CORR, floor 3",
+     "3"
+    ],
+    [
+     "16",
+     "Lift main switch",
+     "loose, machine room",
+     "1"
+    ]
+   ],
+   "pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  }
+ ]
+}

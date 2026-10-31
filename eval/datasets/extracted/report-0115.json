@@ -1,0 +1,221 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Unit no.",
+   "value": "LFT-29037",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date of visit",
+   "value": "14 Oct 2026",
+   "confidence": 0.997
+  },
+  {
+   "key": "Site address",
+   "value": "26 Beacon Hill, Ashdale",
+   "confidence": 0.997
+  },
+  {
+   "key": "Engineer",
+   "value": "Ana Rubio",
+   "confidence": 0.998
+  },
+  {
+   "key": "Pos.",
+   "value": "1\n2\n3\n4\n5",
+   "confidence": 0.953
+  },
+  {
+   "key": "Component",
+   "value": "Car roof balustrade\nLoad weighing sensor\nDR OPERATOR BELT\nEarthing conductor repair\ngib",
+   "confidence": 0.979
+  },
+  {
+   "key": "Observation",
+   "value": "corroded, car top\nloose, machine room\nNOT WKG, floor 6\nroom",
+   "confidence": 0.974
+  },
+  {
+   "key": "Units",
+   "value": "1\n1\n1\n4\n3\n2",
+   "confidence": 0.962
+  },
+  {
+   "key": "Pos.",
+   "value": "9\n10\n11\n12\n13\n14\n15",
+   "confidence": 0.995
+  },
+  {
+   "key": "Component",
+   "value": "Brake coil\nFUSE 6 A\nDoor operator belt\nCAR FLOOR COVERING RUBBER\nEMERG LIGHT BATT\nSafety gear adjustment\nFuse, 16 A",
+   "confidence": 0.996
+  },
+  {
+   "key": "Observation",
+   "value": "not working, machine room\nNOT WKG, machine room\nout of adjustment, floor 9\nLSE, car\nOUT OF ADJ, car top\nrequired, car top\nout of adjustment, machine room",
+   "confidence": 0.997
+  },
+  {
+   "key": "Units",
+   "value": "2\n1\n1\n1 m2\n2\n1\n3",
+   "confidence": 0.996
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Unit no.",
+     "LFT-29037",
+     "Date of visit",
+     "14 Oct 2026"
+    ],
+    [
+     "Site address",
+     "26 Beacon Hill, Ashdale",
+     "Engineer",
+     "Ana Rubio"
+    ]
+   ],
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "1",
+     "Car roof balustrade",
+     "corroded, car top",
+     "1"
+    ],
+    [
+     "2",
+     "Load weighing sensor",
+     "loose, machine room",
+     "1"
+    ],
+    [
+     "3",
+     "DR OPERATOR BELT",
+     "NOT WKG, floor 6",
+     "1"
+    ],
+    [
+     "4",
+     "Earthing conductor repair",
+     "required, machine room",
+     "4"
+    ],
+    [
+     "5",
+     "Door gib",
+     "not working, floor 3",
+     "3"
+    ],
+    [
+     "6",
+     "RESIDUAL CURRENT DEVICE",
+     "DMGD, machine room",
+     "2"
+    ],
+    [
+     "7",
+     "Owner asks for an extra stop at the basement",
+     "building",
+     "1"
+    ],
+    [
+     "8",
+     "Buffer, car, oil",
+     "faulty, pit",
+     "2"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "9",
+     "Brake coil",
+     "not working, machine room",
+     "2"
+    ],
+    [
+     "10",
+     "FUSE 6 A",
+     "NOT WKG, machine room",
+     "1"
+    ],
+    [
+     "11",
+     "Door operator belt",
+     "out of adjustment, floor 9",
+     "1"
+    ],
+    [
+     "12",
+     "CAR FLOOR COVERING RUBBER",
+     "LSE, car",
+     "1 m2"
+    ],
+    [
+     "13",
+     "EMERG LIGHT BATT",
+     "OUT OF ADJ, car top",
+     "2"
+    ],
+    [
+     "14",
+     "Safety gear adjustment",
+     "required, car top",
+     "1"
+    ],
+    [
+     "15",
+     "Fuse, 16 A",
+     "out of adjustment, machine room",
+     "3"
+    ]
+   ],
+   "pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  }
+ ]
+}

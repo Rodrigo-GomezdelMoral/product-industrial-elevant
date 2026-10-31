@@ -1,0 +1,216 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Unit no.",
+   "value": "LFT-84013",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date of visit",
+   "value": "23 Oct 2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Site address",
+   "value": "35 Beacon Hill, Fairholm",
+   "confidence": 0.997
+  },
+  {
+   "key": "Engineer",
+   "value": "Diego Serrano",
+   "confidence": 0.998
+  },
+  {
+   "key": "Pos.",
+   "value": "1\n2\n3\n4\n5\n6\n7\n8",
+   "confidence": 0.997
+  },
+  {
+   "key": "Component",
+   "value": "Travelling cable, 40-core\nRail lubricator, counterweight\nArrival gong\nSAFETY GEAR ADJ\nControl cabinet fan\nLanding door hanger\nTraction sheave, regrooving\nEmergency light battery",
+   "confidence": 0.997
+  },
+  {
+   "key": "Observation",
+   "value": "loose, pit\ncorroded, pit\nbroken, floor 9\nREQUIRED, car top\nout of adjustment, machine room\nnot working, floor 8\nrequired, machine room\nbroken, car top",
+   "confidence": 0.997
+  },
+  {
+   "key": "Units",
+   "value": "50 m\n2\n3\n1\n2\n2\n1\n1",
+   "confidence": 0.998
+  },
+  {
+   "key": "Pos.",
+   "value": null,
+   "confidence": 0.967
+  },
+  {
+   "key": "Component",
+   "value": null,
+   "confidence": 0.994
+  },
+  {
+   "key": "Observation\nUnits",
+   "value": null,
+   "confidence": 0.949
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Unit no.",
+     "LFT-84013",
+     "Date of visit",
+     "23 Oct 2026"
+    ],
+    [
+     "Site address",
+     "35 Beacon Hill, Fairholm",
+     "Engineer",
+     "Diego Serrano"
+    ]
+   ],
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "1",
+     "Travelling cable, 40-core",
+     "loose, pit",
+     "50 m"
+    ],
+    [
+     "2",
+     "Rail lubricator, counterweight",
+     "corroded, pit",
+     "2"
+    ],
+    [
+     "3",
+     "Arrival gong",
+     "broken, floor 9",
+     "3"
+    ],
+    [
+     "4",
+     "SAFETY GEAR ADJ",
+     "REQUIRED, car top",
+     "1"
+    ],
+    [
+     "5",
+     "Control cabinet fan",
+     "out of adjustment, machine room",
+     "2"
+    ],
+    [
+     "6",
+     "Landing door hanger",
+     "not working, floor 8",
+     "2"
+    ],
+    [
+     "7",
+     "Traction sheave, regrooving",
+     "required, machine room",
+     "1"
+    ],
+    [
+     "8",
+     "Emergency light battery",
+     "broken, car top",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "9",
+     "CAR POS IND TFT COLOUR",
+     "LSE, car",
+     "1"
+    ],
+    [
+     "10",
+     "Landing door closer",
+     "damaged, floor 8",
+     "4"
+    ],
+    [
+     "11",
+     "Control cabinet fan",
+     "damaged, machine room",
+     "1"
+    ],
+    [
+     "12",
+     "Overspeed governor, replacement",
+     "required, car top",
+     "1"
+    ],
+    [
+     "13",
+     "Car door contact",
+     "corroded, floor 0",
+     "1"
+    ],
+    [
+     "14",
+     "ROPE FASTENING WEDGE SOCKET",
+     "NOT WKG, pit",
+     "1"
+    ],
+    [
+     "15",
+     "Landing door roller, 80 mm",
+     "not working, floor 1",
+     "2"
+    ]
+   ],
+   "pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  }
+ ]
+}

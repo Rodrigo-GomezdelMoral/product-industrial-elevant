@@ -1,0 +1,121 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-12183",
+   "confidence": 0.997
+  },
+  {
+   "key": "Address",
+   "value": "120 Larch Street, Southcliff",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date",
+   "value": "09/10/2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Inspector",
+   "value": "Ana Navas",
+   "confidence": 0.997
+  },
+  {
+   "key": "Ref",
+   "value": "F-02",
+   "confidence": 0.907
+  },
+  {
+   "key": "Finding",
+   "value": "machine room: Hydraulic valve seal kit not working (qty 1)\nfloor 4:\n3)",
+   "confidence": 0.897
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-12183"
+    ],
+    [
+     "Address",
+     "120 Larch Street, Southcliff"
+    ],
+    [
+     "Date",
+     "09/10/2026"
+    ],
+    [
+     "Inspector",
+     "Ana Navas"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-01",
+     "machine room: Hydraulic valve seal kit not working (qty 1)"
+    ],
+    [
+     "F-02",
+     "floor 4: Door gib, car door faulty (qty 3)"
+    ],
+    [
+     "F-03",
+     "car: CAR OP PANEL PUSH BTN DMGD (qty 3)"
+    ],
+    [
+     "F-04",
+     "car: Car position indicator, dot-matrix loose (qty 1)"
+    ],
+    [
+     "F-05",
+     "pit: Governor rope damaged (qty 30 m)"
+    ],
+    [
+     "F-06",
+     "pit: Pit ladder not working (qty 1)"
+    ],
+    [
+     "F-07",
+     "pit: Pit stop switch worn (qty 1)"
+    ],
+    [
+     "F-08",
+     "car top: Overspeed governor, service and test required (qty 1)"
+    ],
+    [
+     "F-09",
+     "car: Car ventilation fan loose (qty 1)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

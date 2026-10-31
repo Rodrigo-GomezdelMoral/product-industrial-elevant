@@ -116,7 +116,60 @@ Three rules govern every choice:
   declared `ignore_missing_imports`.
 - **Dataset.** Seed 2081 was chosen because its 40 reports contain the cases of simulations S1 to S5; `data/README.md` maps them.
 
-## Verified names (installed wheels, 2026-10-30)
+## Decisions taken in phase 2
+
+- **Document Intelligence runs before the graph.** `Workflow.run` saves an entry checkpoint before the first executor,
+  so `start` reads the PDF first: a file that is not a PDF, is over 10 MB, has more than 10 pages (the service is asked
+  for pages 1 to 11 only, which bounds the cost of a page bomb) or is unreadable (400 with inner code `InvalidContent`)
+  never reaches a checkpoint or a blob. Any other 400 is a configuration error and propagates. The `extract` executor
+  then turns the layout into the header and the defects and stores the PDF. The PDF and the layout reach it through its
+  constructor, never a message, so checkpoints stay at about 2 to 6 KB.
+- **Plain JSON between executors.** Messages and `request_info` payloads are dicts, so the restricted unpickler of the
+  checkpoint storages needs no application type.
+- **Header.** The first key-value pair per field whose key is close to a synonym (`rapidfuzz` ratio at least 85),
+  ignoring pairs whose key is a column header of a defects table and single-line keys with multi-line values (table
+  columns); a two-line key merged by the service is paired line by line. Dates become ISO. A confidence under 0.8 or an
+  unreadable date flags `low_confidence`; a missing field stays empty and `open_flags` blocks approval.
+- **Defects.** Every table row after its header rows that is not a label-value row, without the leading reference
+  column, with the page of its own cells and its row counted per page. On the recorded layouts: 160/160 header fields
+  and 535/535 defects with the page and row of the truth, in two recordings whose header-row marking differed.
+- **Matcher.** One call per report. The catalogue (code, category, description, unit; no price) goes in the
+  instructions as a stable prefix, and from the second call 2.7k to 3.1k of about 3.3k input tokens are read from the
+  cache. The defects go as JSON in the user message. Options: structured output, reasoning effort `low`, `store: false`
+  (Foundry keeps no response), and an output cap of 2,000 plus 250 per defect (observed 120 to 135 per defect, reasoning
+  included). An answer that cannot be parsed (cut short or malformed) flags every line "no usable answer"; any other
+  client error (a 429, an outage) propagates for the API to turn into a clear message in phase 4.
+- **Corrector.** It receives each line's number, plain-words defect, item code and quantity, and proposes edits that
+  are checked by applying them to a copy with `review`; nothing is applied until the estimator confirms.
+- **No streaming from the agents.** Each call returns one structured answer, so the test chat client returns a
+  `ChatResponse` only.
+- **Resume by quote id.** `resume` answers the stored quote's own request from its own checkpoint, never ids from the
+  caller; an approved quote refuses any answer; the save after a resume is conditional on the Cosmos DB etag, so two
+  answers to the same request cannot both win; a graph change becomes a clear message (drain reviews before changing
+  the graph and bump `VERSION`).
+- **Progress.** "Reading the report" before the service call, then the framework's `executor_invoked` events for
+  `match` (with the number of defects) and `price`; custom event types are a closed `Literal` in 1.23.0.
+- **Storage.** With `ELEVANT_ENV=local` the store uses the emulators: the Cosmos DB vNext emulator, which does not check
+  keys (Learn `cosmos-db/emulator-linux`, 2026-10-07), so the key is a constant that says so; and Azurite through the
+  SDK's own `UseDevelopmentStorage=true`. In Azure, `DefaultAzureCredential` only. Containers `quotes` (`/id`, point
+  reads) and `checkpoints` (`/workflow_name`, one partition per quote); `create_local` makes them in the emulators, and
+  Bicep makes them in Azure (phase 6), the checkpoints container with a TTL so the checkpoints of a failed draft age
+  out. Azurite needs `--skipApiVersionCheck` because the SDK speaks API `2026-10-06`. `make emulators` starts both,
+  pinned by digest, and `ci.yml` runs the tests against them with `ELEVANT_EMULATORS=true`.
+- **Doubles.** `ELEVANT_DOUBLES=true` swaps the model for `agents.Double` (the closest `rapidfuzz` description, no
+  corrections) and Document Intelligence for the recorded layout of `report-0134`: the Dockerfile (phase 6) copies
+  `eval/datasets/extracted/report-0134.json`. `Settings` refuses doubles when `ELEVANT_ENV=production`.
+- **Recorded layouts.** The 40 reports were read once with `app.extraction.analyze` and kept in
+  `eval/datasets/extracted/` (phase 3 uses them for pull-request evaluations).
+- **For phase 4.** A deadline on the draft (the poller has none; the OpenAI client defaults to 600 s and 2 retries),
+  client errors turned into clear messages, and deletion by quote id of the quote, its checkpoints
+  (`list_checkpoint_ids` for `quote-v1-<id>`) and its blobs.
+- **Known weak case for phase 3.** "Door sill adjustment and cleaning" seen at a floor is still sometimes matched to the
+  landing variant instead of being flagged ambiguous. Development check of the matcher prompt over the 40 recorded
+  layouts (2026-10-31): unambiguous items 445/450, ambiguity recall 43/46 and precision 43/48, no-match 37/37, injection
+  2/2; matcher p50 12.3 s, p95 18.7 s.
+
+## Verified names (installed wheels, 2026-10-30 and 2026-10-31)
 
 | Package | Name |
 |---|---|
@@ -126,3 +179,11 @@ Three rules govern every choice:
 | `openpyxl` 3.1.5 | `load_workbook(file, data_only=True)`; `types-openpyxl` 3.1.5.20261017 |
 | `reportlab` 5.1.0 | `SimpleDocTemplate(..., invariant=1)` writes byte-identical PDFs; `types-reportlab` 5.0.0.20261008 |
 | `pillow` 13.0.0 | PDF `creationDate` and `modDate` take a `time.struct_time` |
+| `agent-framework-core` 1.23.0 (workflows) | `WorkflowBuilder(name=, start_executor=, checkpoint_storage=)`, `Executor`, `@handler`, `@response_handler`, `FunctionExecutor(func, id=)`; `ctx.request_info(data, response_type)`; `Workflow.run(message, stream=True)` and `run(checkpoint_id=, responses=)`; `resolve_pause_checkpoint_id(request_ids)`; `WorkflowRunResult` is a list of `WorkflowEvent`; `agent_framework.exceptions.WorkflowCheckpointException` |
+| `agent-framework-core` 1.23.0 (agents) | `Agent(client, instructions, name=, default_options=)`; a chat client receives the instructions as `options["instructions"]`; `BaseChatClient` with `FunctionInvocationLayer` and `_inner_get_response`; client errors arrive as `ChatClientException` with the original as `__cause__` |
+| `agent-framework-foundry` 1.15.0 | `FoundryChatClient(project_endpoint=, model=, credential=)`, closed through `.client` and `.project_client`; options `response_format`, `reasoning={"effort": "low"}`, `max_tokens` (the Responses `max_output_tokens`, reasoning included), `store` |
+| `agent-framework-azure-cosmos` 1.0.0b261015 | `CosmosCheckpointStorage(container_client=)` creates nothing; `load` queries every partition by checkpoint id |
+| `azure-ai-documentintelligence` 1.0.2 | `aio.DocumentIntelligenceClient`; `begin_analyze_document("prebuilt-layout", AnalyzeDocumentRequest(bytes_source=), pages=, features=[DocumentAnalysisFeature.KEY_VALUE_PAIRS], output_content_format=DocumentContentFormat.MARKDOWN)`; an unreadable file is a 400 with inner error code `InvalidContent` |
+| `azure-cosmos` 4.17.1 · `azure-storage-blob` 12.31.1 | `upsert_item(body, etag=, match_condition=MatchConditions.IfNotModified)` raises `CosmosAccessConditionFailedError`; `BlobServiceClient.from_connection_string("UseDevelopmentStorage=true")` |
+| `aiohttp` 3.14.5 | the transport of the async Azure clients, pinned because the app imports the `aio` clients directly |
+| Emulators | Azurite 3.37.0 (`azurite-blob --skipApiVersionCheck`); Cosmos DB vNext `vnext-EN20261019`, HTTP on 8081, readiness on `:8080/ready` |

@@ -1,0 +1,133 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift ID:",
+   "value": "LFT-11280",
+   "confidence": 0.995
+  },
+  {
+   "key": "Location:",
+   "value": "52 Quarry Road, Ashdale",
+   "confidence": 0.997
+  },
+  {
+   "key": "Inspection date:",
+   "value": "2026-10-04",
+   "confidence": 0.997
+  },
+  {
+   "key": "No.",
+   "value": "1\n2\n3\n4\n5",
+   "confidence": 0.994
+  },
+  {
+   "key": "Location",
+   "value": "car\ncar top\nmachine room\ncar\nmachine room",
+   "confidence": 0.963
+  },
+  {
+   "key": "Defect description",
+   "value": "CAR EMERG LIGHT FLTY\nOVERSPEED GOV FLTY\nBrake coil loose\nCar apron corroded\nControl cabinet fan out of adjustment\nAlarm push button worn\nCAR POS IND BRKN\nCWT GUIDE SHOE INSERT SLIDING BRKN\nthe car walls\nHydraulic hose, 1 m not working\nHall lantern",
+   "confidence": 0.921
+  },
+  {
+   "key": "Qty",
+   "value": "2\n1\n1\n1\n2\n3",
+   "confidence": 0.946
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "1",
+     "car",
+     "CAR EMERG LIGHT FLTY",
+     "2"
+    ],
+    [
+     "2",
+     "car top",
+     "OVERSPEED GOV FLTY",
+     "1"
+    ],
+    [
+     "3",
+     "machine room",
+     "Brake coil loose",
+     "1"
+    ],
+    [
+     "4",
+     "car",
+     "Car apron corroded",
+     "1"
+    ],
+    [
+     "5",
+     "machine room",
+     "Control cabinet fan out of adjustment",
+     "2"
+    ],
+    [
+     "6",
+     "car top",
+     "Alarm push button worn",
+     "1"
+    ],
+    [
+     "7",
+     "car",
+     "CAR POS IND BRKN",
+     "1"
+    ],
+    [
+     "8",
+     "pit",
+     "CWT GUIDE SHOE INSERT SLIDING BRKN",
+     "3"
+    ],
+    [
+     "9",
+     "building",
+     "Graffiti on the car walls",
+     "1"
+    ],
+    [
+     "10",
+     "machine room",
+     "Hydraulic hose, 1 m not working",
+     "2"
+    ],
+    [
+     "11",
+     "floor 7",
+     "Hall lantern broken",
+     "4"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

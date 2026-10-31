@@ -1,0 +1,145 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift ID:",
+   "value": "LFT-37838",
+   "confidence": 0.996
+  },
+  {
+   "key": "Location:",
+   "value": "70 Beacon Hill, Southcliff",
+   "confidence": 0.997
+  },
+  {
+   "key": "Inspection date:",
+   "value": "2026-09-07",
+   "confidence": 0.997
+  },
+  {
+   "key": "Technician:",
+   "value": "Ana Rubio",
+   "confidence": 0.998
+  },
+  {
+   "key": "No.",
+   "value": "1\n2\n3\n4\n5\n6\n12",
+   "confidence": 0.977
+  },
+  {
+   "key": "Location",
+   "value": "machine room\nmachine room\ncar\ncar top\npit\npit\nmachine room\nmachine room\nmachine room\n0",
+   "confidence": 0.947
+  },
+  {
+   "key": "Defect description",
+   "value": "FLOOR LEVELLING SENS OPTICAL NOT WKG\nControl board relay not working\nCAR WALL PANEL LAMINATE WRN\nFinal limit switch, upper faulty\nTravelling cable, 40-core worn\nROPE FASTENING WEDGE SOCKET NOT WKG\nHydraulic oil not working\nDR ZONE SW LSE\nBRAKE COIL FLTY\nBrake coil not working\nHydraulic hose, 2 m worn\nHall position indicator, TFT colour faulty",
+   "confidence": 0.989
+  },
+  {
+   "key": "Qty",
+   "value": "2\n1\n2\n1\n20 m\n2\n110 l\n1\n1\n2\n2\n2",
+   "confidence": 0.926
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "1",
+     "machine room",
+     "FLOOR LEVELLING SENS OPTICAL NOT WKG",
+     "2"
+    ],
+    [
+     "2",
+     "machine room",
+     "Control board relay not working",
+     "1"
+    ],
+    [
+     "3",
+     "car",
+     "CAR WALL PANEL LAMINATE WRN",
+     "2"
+    ],
+    [
+     "4",
+     "car top",
+     "Final limit switch, upper faulty",
+     "1"
+    ],
+    [
+     "5",
+     "pit",
+     "Travelling cable, 40-core worn",
+     "20 m"
+    ],
+    [
+     "6",
+     "pit",
+     "ROPE FASTENING WEDGE SOCKET NOT WKG",
+     "2"
+    ],
+    [
+     "7",
+     "machine room",
+     "Hydraulic oil not working",
+     "110 l"
+    ],
+    [
+     "8",
+     "machine room",
+     "DR ZONE SW LSE",
+     "1"
+    ],
+    [
+     "9",
+     "machine room",
+     "BRAKE COIL FLTY",
+     "1"
+    ],
+    [
+     "10",
+     "machine room",
+     "Brake coil not working",
+     "2"
+    ],
+    [
+     "11",
+     "machine room",
+     "Hydraulic hose, 2 m worn",
+     "2"
+    ],
+    [
+     "12",
+     "floor 0",
+     "Hall position indicator, TFT colour faulty",
+     "2"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

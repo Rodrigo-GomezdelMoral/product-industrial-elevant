@@ -1,0 +1,183 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-44133",
+   "confidence": 0.997
+  },
+  {
+   "key": "Address",
+   "value": "19 Beacon Hill, Southcliff",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date",
+   "value": "04/09/2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Inspector",
+   "value": "Pablo Molina",
+   "confidence": 0.997
+  },
+  {
+   "key": "Ref",
+   "value": null,
+   "confidence": 0.996
+  },
+  {
+   "key": "Finding",
+   "value": null,
+   "confidence": 0.871
+  },
+  {
+   "key": "Ref",
+   "value": "F-17",
+   "confidence": 0.877
+  },
+  {
+   "key": "pit:",
+   "value": "Governor rope, 6 mm corroded (qty 60 m)",
+   "confidence": 0.989
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-44133"
+    ],
+    [
+     "Address",
+     "19 Beacon Hill, Southcliff"
+    ],
+    [
+     "Date",
+     "04/09/2026"
+    ],
+    [
+     "Inspector",
+     "Pablo Molina"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-01",
+     "machine room: Hydraulic cylinder packing faulty (qty 1)"
+    ],
+    [
+     "F-02",
+     "floor 0: CAR DR CONT BRKN (qty 1)"
+    ],
+    [
+     "F-03",
+     "floor 4: Landing door hanger broken (qty 1)"
+    ],
+    [
+     "F-04",
+     "floor 7: OVERLOAD IND LSE (qty 1)"
+    ],
+    [
+     "F-05",
+     "pit: Shaft lighting fitting out of adjustment (qty 2)"
+    ],
+    [
+     "F-06",
+     "car: Car position indicator loose (qty 1)"
+    ],
+    [
+     "F-07",
+     "machine room: BRAKE COIL NOT WKG (qty 2)"
+    ],
+    [
+     "F-08",
+     "car top: Final limit switch faulty (qty 1)"
+    ],
+    [
+     "F-09",
+     "building: Stairwell lighting out next to the landing door (qty 1)"
+    ],
+    [
+     "F-10",
+     "building: Water ingress in the pit from the building drainage (qty 1)"
+    ],
+    [
+     "F-11",
+     "floor 5: LIGHT CURTAIN NOT WKG (qty 1)"
+    ],
+    [
+     "F-12",
+     "building: Owner asks for an extra stop at the basement (qty 1)"
+    ],
+    [
+     "F-13",
+     "pit: Pit ladder out of adjustment (qty 1)"
+    ],
+    [
+     "F-14",
+     "pit: Governor tension pulley out of adjustment (qty 1)"
+    ],
+    [
+     "F-15",
+     "pit: Buffer loose (qty 2)"
+    ],
+    [
+     "F-16",
+     "machine room: Load weighing sensor not working (qty 1)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-17",
+     "pit: Governor rope, 6 mm corroded (qty 60 m)"
+    ]
+   ],
+   "pages": [
+    2,
+    2
+   ]
+  }
+ ]
+}

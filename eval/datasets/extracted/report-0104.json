@@ -1,0 +1,140 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift ID:",
+   "value": "LFT-73974",
+   "confidence": 0.996
+  },
+  {
+   "key": "Location:",
+   "value": "91 Orchard Way, Fairholm",
+   "confidence": 0.997
+  },
+  {
+   "key": "Inspection date:",
+   "value": "2026-09-30",
+   "confidence": 0.996
+  },
+  {
+   "key": "Technician:\nNo.",
+   "value": "Jorge Ferrer\nDefect",
+   "confidence": 0.989
+  },
+  {
+   "key": "Location",
+   "value": null,
+   "confidence": 0.826
+  },
+  {
+   "key": "description",
+   "value": "Control cabinet fan corroded",
+   "confidence": 0.818
+  },
+  {
+   "key": "Qty",
+   "value": null,
+   "confidence": 0.999
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "1",
+     "machine room",
+     "Control cabinet fan corroded",
+     "1"
+    ],
+    [
+     "2",
+     "machine room",
+     "Machine room lighting fitting out of adjustment",
+     "2"
+    ],
+    [
+     "3",
+     "machine room",
+     "Gearbox oil change required",
+     "1"
+    ],
+    [
+     "4",
+     "machine room",
+     "MOTOR ENCODER OUT OF ADJ",
+     "1"
+    ],
+    [
+     "5",
+     "car top",
+     "Overspeed governor, replacement required",
+     "1"
+    ],
+    [
+     "6",
+     "floor 4",
+     "HALL LANTERN OUT OF ADJ",
+     "3"
+    ],
+    [
+     "7",
+     "machine room",
+     "RESIDUAL CURRENT DEVICE NOT WKG",
+     "1"
+    ],
+    [
+     "8",
+     "car top",
+     "Final limit switch, upper faulty",
+     "1"
+    ],
+    [
+     "9",
+     "floor 4",
+     "Door sill adjustment and cleaning, landing required",
+     "2"
+    ],
+    [
+     "10",
+     "floor 6",
+     "Landing door interlock worn",
+     "4"
+    ],
+    [
+     "11",
+     "car",
+     "CAR VENT FAN FLTY",
+     "1"
+    ],
+    [
+     "12",
+     "car",
+     "Car apron damaged",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

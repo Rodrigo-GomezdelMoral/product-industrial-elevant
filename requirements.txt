@@ -1,6 +1,7 @@
 agent-framework-core==1.23.0
 agent-framework-foundry==1.15.0
 agent-framework-azure-cosmos==1.0.0b261015
+aiohttp==3.14.5
 azure-ai-documentintelligence==1.0.2
 azure-identity==1.27.0
 azure-cosmos==4.17.1

@@ -1,0 +1,126 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-76469",
+   "confidence": 0.997
+  },
+  {
+   "key": "Address",
+   "value": "112 Mill Lane, Ashdale",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date",
+   "value": "14/10/2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Inspector",
+   "value": "Diego Ferrer",
+   "confidence": 0.997
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-76469"
+    ],
+    [
+     "Address",
+     "112 Mill Lane, Ashdale"
+    ],
+    [
+     "Date",
+     "14/10/2026"
+    ],
+    [
+     "Inspector",
+     "Diego Ferrer"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 0,
+   "rows": [
+    [
+     "F-01",
+     "pit: PIT LADDER NOT WKG (qty 1)"
+    ],
+    [
+     "F-02",
+     "car top: Safety gear adjustment required (qty 1)"
+    ],
+    [
+     "F-03",
+     "car: Car LED ceiling panel damaged (qty 2)"
+    ],
+    [
+     "F-04",
+     "car: Car wall panel, laminate faulty (qty 2)"
+    ],
+    [
+     "F-05",
+     "floor 5: Light curtain, single-side not working (qty 1)"
+    ],
+    [
+     "F-06",
+     "machine room: Control board relay corroded (qty 3)"
+    ],
+    [
+     "F-07",
+     "pit: Suspension rope, 10 mm loose (qty 110 m)"
+    ],
+    [
+     "F-08",
+     "floor 0: Door operator belt loose (qty 1)"
+    ],
+    [
+     "F-09",
+     "machine room: Residual current device not working (qty 2)"
+    ],
+    [
+     "F-10",
+     "machine room: TRACTION SHEAVE REPL REQUIRED (qty 1)"
+    ],
+    [
+     "F-11",
+     "machine room: Gearbox oil change required (qty 1)"
+    ],
+    [
+     "F-12",
+     "pit: Pit stop switch out of adjustment (qty 1)"
+    ],
+    [
+     "F-13",
+     "floor 4: DR OPERATOR MOTOR DC FLTY (qty 1)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

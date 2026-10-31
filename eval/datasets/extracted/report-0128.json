@@ -1,0 +1,147 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift ID:",
+   "value": "LFT-25523",
+   "confidence": 0.996
+  },
+  {
+   "key": "Location:",
+   "value": "18 Quarry Road, Ashdale",
+   "confidence": 0.996
+  },
+  {
+   "key": "Inspection date:",
+   "value": "2026-09-01",
+   "confidence": 0.993
+  },
+  {
+   "key": "Technician:",
+   "value": "Marta Campos",
+   "confidence": 0.997
+  },
+  {
+   "key": "No.\nLocation",
+   "value": "1\nfloor 9\n2",
+   "confidence": 0.884
+  },
+  {
+   "key": "Defect description",
+   "value": "Landing door closer, weight and cable loose\nEarthing conductor repair required\nGOV ROPE 8 MM FLTY\nEmergency\nDMGD",
+   "confidence": 0.866
+  },
+  {
+   "key": "Qty",
+   "value": "4\n2",
+   "confidence": 0.906
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "1",
+     "floor 9",
+     "Landing door closer, weight and cable loose",
+     "4"
+    ],
+    [
+     "2",
+     "machine room",
+     "Earthing conductor repair required",
+     "2"
+    ],
+    [
+     "3",
+     "pit",
+     "GOV ROPE 8 MM FLTY",
+     "90 m"
+    ],
+    [
+     "4",
+     "car top",
+     "Emergency telephone, GSM module damaged",
+     "1"
+    ],
+    [
+     "5",
+     "car",
+     "Car top inspection box not working",
+     "1"
+    ],
+    [
+     "6",
+     "car",
+     "Car handrail, stainless steel faulty",
+     "3"
+    ],
+    [
+     "7",
+     "building",
+     "Graffiti on the car walls",
+     "1"
+    ],
+    [
+     "8",
+     "car top",
+     "Slack rope switch not working",
+     "1"
+    ],
+    [
+     "9",
+     "floor 8",
+     "HALL POS IND DOT-MATRIX LSE",
+     "3"
+    ],
+    [
+     "10",
+     "car",
+     "CAR APRON DMGD",
+     "1"
+    ],
+    [
+     "11",
+     "car",
+     "Car floor covering not working",
+     "3 m2"
+    ],
+    [
+     "12",
+     "car",
+     "Car LED ceiling panel, 300 × 300 mm worn",
+     "4"
+    ],
+    [
+     "13",
+     "pit",
+     "Pit ladder not working",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

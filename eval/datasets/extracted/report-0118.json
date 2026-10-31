@@ -1,0 +1,179 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Unit no.",
+   "value": "LFT-46310",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date of visit",
+   "value": "12 Oct 2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Site address",
+   "value": "30 Chapel Row, Westmere",
+   "confidence": 0.996
+  },
+  {
+   "key": "Engineer",
+   "value": "Diego Rubio",
+   "confidence": 0.998
+  },
+  {
+   "key": "Pos.",
+   "value": "1\n2",
+   "confidence": 0.922
+  },
+  {
+   "key": "Component",
+   "value": "HYD HOSE 1 M\nAlarm battery",
+   "confidence": 0.955
+  },
+  {
+   "key": "Observation",
+   "value": "CORR, machine room\nfaulty, car top",
+   "confidence": 0.91
+  },
+  {
+   "key": "Units",
+   "value": "2\n2",
+   "confidence": 0.947
+  },
+  {
+   "key": "Pos.",
+   "value": "9",
+   "confidence": 0.99
+  },
+  {
+   "key": "Component",
+   "value": "CAR WALL PANEL LAMINATE",
+   "confidence": 0.996
+  },
+  {
+   "key": "Observation",
+   "value": "WRN, car",
+   "confidence": 0.997
+  },
+  {
+   "key": "Units",
+   "value": "3",
+   "confidence": 0.994
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Unit no.",
+     "LFT-46310",
+     "Date of visit",
+     "12 Oct 2026"
+    ],
+    [
+     "Site address",
+     "30 Chapel Row, Westmere",
+     "Engineer",
+     "Diego Rubio"
+    ]
+   ],
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "1",
+     "HYD HOSE 1 M",
+     "CORR, machine room",
+     "2"
+    ],
+    [
+     "2",
+     "Alarm battery",
+     "faulty, car top",
+     "2"
+    ],
+    [
+     "3",
+     "OVERSPEED GOV SERVICE AND TEST",
+     "REQUIRED, car top",
+     "1"
+    ],
+    [
+     "4",
+     "Car guide shoe insert",
+     "worn, car",
+     "2"
+    ],
+    [
+     "5",
+     "Traction sheave, replacement",
+     "required, machine room",
+     "1"
+    ],
+    [
+     "6",
+     "Car ventilation fan",
+     "damaged, car",
+     "1"
+    ],
+    [
+     "7",
+     "Car top inspection box",
+     "corroded, car",
+     "1"
+    ],
+    [
+     "8",
+     "Unintended car movement detector",
+     "loose, car top",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "9",
+     "CAR WALL PANEL LAMINATE",
+     "WRN, car",
+     "3"
+    ]
+   ],
+   "pages": [
+    2,
+    2
+   ]
+  }
+ ]
+}

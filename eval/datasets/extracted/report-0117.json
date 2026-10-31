@@ -1,0 +1,106 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift no.",
+   "value": "LFT-59656",
+   "confidence": 0.997
+  },
+  {
+   "key": "Address",
+   "value": "68 Orchard Way, Westmere",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date",
+   "value": "28/09/2026",
+   "confidence": 0.996
+  },
+  {
+   "key": "Inspector",
+   "value": "Luis Vidal",
+   "confidence": 0.997
+  },
+  {
+   "key": "Ref",
+   "value": null,
+   "confidence": 0.997
+  },
+  {
+   "key": "Finding",
+   "value": null,
+   "confidence": 0.952
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Lift no.",
+     "LFT-59656"
+    ],
+    [
+     "Address",
+     "68 Orchard Way, Westmere"
+    ],
+    [
+     "Date",
+     "28/09/2026"
+    ],
+    [
+     "Inspector",
+     "Luis Vidal"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Ref",
+     "Finding"
+    ],
+    [
+     "F-01",
+     "building: Owner asks for an extra stop at the basement (qty 1)"
+    ],
+    [
+     "F-02",
+     "floor 1: Hall position indicator, TFT colour loose (qty 4)"
+    ],
+    [
+     "F-03",
+     "car top: Emergency telephone, GSM module broken (qty 1)"
+    ],
+    [
+     "F-04",
+     "floor 8: Hall position indicator, dot-matrix corroded (qty 2)"
+    ],
+    [
+     "F-05",
+     "pit: Governor rope, 8 mm loose (qty 70 m)"
+    ],
+    [
+     "F-06",
+     "pit: TRAV CBL 24-CORE BRKN (qty 30 m)"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

@@ -1,0 +1,242 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Unit no.",
+   "value": "LFT-45774",
+   "confidence": 0.997
+  },
+  {
+   "key": "Date of visit",
+   "value": "15 Oct 2026",
+   "confidence": 0.997
+  },
+  {
+   "key": "Site address",
+   "value": "71 Harbour Avenue, Northgate",
+   "confidence": 0.996
+  },
+  {
+   "key": "Engineer",
+   "value": "Jorge Ortega",
+   "confidence": 0.998
+  },
+  {
+   "key": "Pos.",
+   "value": "1\n2\n3\n4\n5\n6\n7\n8",
+   "confidence": 0.997
+  },
+  {
+   "key": "Component",
+   "value": "Rail lubricator\nMachine room lighting fitting\nLIFT MAIN SW\nUnintended car movement detector\nDoor zone switch\nFloor levelling sensor\nBuffer\nDoor operator motor",
+   "confidence": 0.997
+  },
+  {
+   "key": "Observation",
+   "value": "broken, pit\ndamaged, machine room\nFLTY, machine room\nout of adjustment, car top\nfaulty, machine room\nnot working, machine room\ndamaged, pit\nbroken, floor 3",
+   "confidence": 0.997
+  },
+  {
+   "key": "Units",
+   "value": "4\n4\n1\n1\n1\n1\n2\n1",
+   "confidence": 0.997
+  },
+  {
+   "key": "Pos.",
+   "value": "9\n10\n11\n12\n13\n14\n15\n16\n17\n18",
+   "confidence": 0.846
+  },
+  {
+   "key": "Component",
+   "value": "Car ventilation fan\nCar roof balustrade\ncontact\nOPTICAL\nthe\nM/C ROOM LTG",
+   "confidence": 0.883
+  },
+  {
+   "key": "Observation",
+   "value": "not working, car\nloose, car top\nnot working, floor 1\ncorroded, machine room\nDMGD, machine room\nbroken, machine room\nworn, car top\nout of adjustment, machine room\nNOT WKG, machine room",
+   "confidence": 0.892
+  },
+  {
+   "key": "Units",
+   "value": "1\n1",
+   "confidence": 0.884
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Unit no.",
+     "LFT-45774",
+     "Date of visit",
+     "15 Oct 2026"
+    ],
+    [
+     "Site address",
+     "71 Harbour Avenue, Northgate",
+     "Engineer",
+     "Jorge Ortega"
+    ]
+   ],
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "1",
+     "Rail lubricator",
+     "broken, pit",
+     "4"
+    ],
+    [
+     "2",
+     "Machine room lighting fitting",
+     "damaged, machine room",
+     "4"
+    ],
+    [
+     "3",
+     "LIFT MAIN SW",
+     "FLTY, machine room",
+     "1"
+    ],
+    [
+     "4",
+     "Unintended car movement detector",
+     "out of adjustment, car top",
+     "1"
+    ],
+    [
+     "5",
+     "Door zone switch",
+     "faulty, machine room",
+     "1"
+    ],
+    [
+     "6",
+     "Floor levelling sensor",
+     "not working, machine room",
+     "1"
+    ],
+    [
+     "7",
+     "Buffer",
+     "damaged, pit",
+     "2"
+    ],
+    [
+     "8",
+     "Door operator motor",
+     "broken, floor 3",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "9",
+     "Car ventilation fan",
+     "not working, car",
+     "1"
+    ],
+    [
+     "10",
+     "Car roof balustrade",
+     "loose, car top",
+     "1"
+    ],
+    [
+     "11",
+     "Car door contact",
+     "not working, floor 1",
+     "2"
+    ],
+    [
+     "12",
+     "Main contactor",
+     "corroded, machine room",
+     "3"
+    ],
+    [
+     "13",
+     "FLOOR LEVELLING SENS OPTICAL",
+     "DMGD, machine room",
+     "2"
+    ],
+    [
+     "14",
+     "Deflector pulley bearing",
+     "broken, machine room",
+     "2"
+    ],
+    [
+     "15",
+     "Owner asks for an extra stop at the basement",
+     "building",
+     "1"
+    ],
+    [
+     "16",
+     "Pit refuge sign",
+     "worn, car top",
+     "1"
+    ],
+    [
+     "17",
+     "Hydraulic cylinder packing",
+     "out of adjustment, machine room",
+     "1"
+    ],
+    [
+     "18",
+     "M/C ROOM LTG FITTING",
+     "NOT WKG, machine room",
+     "1"
+    ]
+   ],
+   "pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  }
+ ]
+}

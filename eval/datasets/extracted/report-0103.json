@@ -1,0 +1,242 @@
+{
+ "pages": 2,
+ "pairs": [
+  {
+   "key": "Unit no.",
+   "value": "LFT-79818",
+   "confidence": 0.996
+  },
+  {
+   "key": "Date of visit",
+   "value": "02 Sep 2026",
+   "confidence": 0.998
+  },
+  {
+   "key": "Site address",
+   "value": "40 Orchard Way, Eastbrook",
+   "confidence": 0.997
+  },
+  {
+   "key": "Engineer",
+   "value": "Luis Vidal",
+   "confidence": 0.997
+  },
+  {
+   "key": "Pos.",
+   "value": "1\n2\n3\n4\n5\n6\n7\n8",
+   "confidence": 0.993
+  },
+  {
+   "key": "Component",
+   "value": "Stairwell lighting out next to the landing door\nMachine room lighting fitting\nFloor levelling sensor, magnetic\nCar floor covering, rubber\nPigeons nesting on the machine room roof\nLight curtain, single-side\nDoor gib, car door\nSAFETY GEAR ADJ",
+   "confidence": 0.995
+  },
+  {
+   "key": "Observation",
+   "value": "building\nnot working, machine room\nbroken, machine room\ndamaged, car\nbuilding\nfaulty, floor 6\nfaulty, floor 3\ncar top",
+   "confidence": 0.935
+  },
+  {
+   "key": "Units",
+   "value": "1\n1\n1\n3 m2\n1\n1\n1\n1",
+   "confidence": 0.996
+  },
+  {
+   "key": "Pos.",
+   "value": null,
+   "confidence": 0.981
+  },
+  {
+   "key": "Component",
+   "value": "Slack rope switch",
+   "confidence": 0.892
+  },
+  {
+   "key": "Observation",
+   "value": null,
+   "confidence": 0.996
+  },
+  {
+   "key": "Units",
+   "value": null,
+   "confidence": 0.974
+  }
+ ],
+ "tables": [
+  {
+   "header": 0,
+   "rows": [
+    [
+     "Unit no.",
+     "LFT-79818",
+     "Date of visit",
+     "02 Sep 2026"
+    ],
+    [
+     "Site address",
+     "40 Orchard Way, Eastbrook",
+     "Engineer",
+     "Luis Vidal"
+    ]
+   ],
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "1",
+     "Stairwell lighting out next to the landing door",
+     "building",
+     "1"
+    ],
+    [
+     "2",
+     "Machine room lighting fitting",
+     "not working, machine room",
+     "1"
+    ],
+    [
+     "3",
+     "Floor levelling sensor, magnetic",
+     "broken, machine room",
+     "1"
+    ],
+    [
+     "4",
+     "Car floor covering, rubber",
+     "damaged, car",
+     "3 m2"
+    ],
+    [
+     "5",
+     "Pigeons nesting on the machine room roof",
+     "building",
+     "1"
+    ],
+    [
+     "6",
+     "Light curtain, single-side",
+     "faulty, floor 6",
+     "1"
+    ],
+    [
+     "7",
+     "Door gib, car door",
+     "faulty, floor 3",
+     "1"
+    ],
+    [
+     "8",
+     "SAFETY GEAR ADJ",
+     "REQUIRED, car top",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "header": 1,
+   "rows": [
+    [
+     "Pos.",
+     "Component",
+     "Observation",
+     "Units"
+    ],
+    [
+     "9",
+     "Slack rope switch",
+     "worn, car top",
+     "1"
+    ],
+    [
+     "10",
+     "CAR APRON",
+     "LSE, car",
+     "1"
+    ],
+    [
+     "11",
+     "Braille floor plate",
+     "worn, floor 6",
+     "2"
+    ],
+    [
+     "12",
+     "Machine room window glass cracked",
+     "building",
+     "1"
+    ],
+    [
+     "13",
+     "Light curtain",
+     "broken, floor 0",
+     "1"
+    ],
+    [
+     "14",
+     "Car emergency light",
+     "worn, car",
+     "2"
+    ],
+    [
+     "15",
+     "Owner asks for an extra stop at the basement",
+     "building",
+     "1"
+    ],
+    [
+     "16",
+     "SUSP ROPE 13 MM",
+     "FLTY, pit",
+     "100 m"
+    ],
+    [
+     "17",
+     "Buffer, car, spring",
+     "corroded, pit",
+     "2"
+    ],
+    [
+     "18",
+     "Brake coil",
+     "out of adjustment, machine room",
+     "1"
+    ]
+   ],
+   "pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  }
+ ]
+}

@@ -1,0 +1,152 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift ID:",
+   "value": "LFT-28532",
+   "confidence": 0.995
+  },
+  {
+   "key": "Location:",
+   "value": "4 Orchard Way, Southcliff",
+   "confidence": 0.997
+  },
+  {
+   "key": "Inspection date:",
+   "value": "2026-09-06",
+   "confidence": 0.996
+  },
+  {
+   "key": "Technician:",
+   "value": "Luis Ortega",
+   "confidence": 0.997
+  },
+  {
+   "key": "No.",
+   "value": "2",
+   "confidence": 0.983
+  },
+  {
+   "key": "Location",
+   "value": "car top\nfloor 8\ncar top\ncar\nfloor 1",
+   "confidence": 0.943
+  },
+  {
+   "key": "Defect description",
+   "value": "Final limit switch, upper faulty\nBRAILLE FLOOR PLATE DMGD\nSafety gear adjustment required\nCAR WALL PANEL FLTY\ndoor roller, 40",
+   "confidence": 0.925
+  },
+  {
+   "key": "Qty",
+   "value": "1\n4\n1",
+   "confidence": 0.898
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "1",
+     "car top",
+     "Final limit switch, upper faulty",
+     "1"
+    ],
+    [
+     "2",
+     "floor 8",
+     "BRAILLE FLOOR PLATE DMGD",
+     "4"
+    ],
+    [
+     "3",
+     "car top",
+     "Safety gear adjustment required",
+     "1"
+    ],
+    [
+     "4",
+     "car",
+     "CAR WALL PANEL FLTY",
+     "2"
+    ],
+    [
+     "5",
+     "floor 1",
+     "Car door roller, 40 mm not working",
+     "3"
+    ],
+    [
+     "6",
+     "car",
+     "Car guide shoe insert faulty",
+     "3"
+    ],
+    [
+     "7",
+     "machine room",
+     "Motor encoder, incremental not working",
+     "1"
+    ],
+    [
+     "8",
+     "floor 4",
+     "Landing door hanger out of adjustment",
+     "4"
+    ],
+    [
+     "9",
+     "floor 7",
+     "Arrival gong broken",
+     "3"
+    ],
+    [
+     "10",
+     "pit",
+     "Buffer, car, spring damaged",
+     "1"
+    ],
+    [
+     "11",
+     "pit",
+     "BUFFER CAR OIL BRKN",
+     "1"
+    ],
+    [
+     "12",
+     "car top",
+     "Overspeed governor, replacement required",
+     "1"
+    ],
+    [
+     "13",
+     "floor 9",
+     "Landing key switch faulty",
+     "3"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}

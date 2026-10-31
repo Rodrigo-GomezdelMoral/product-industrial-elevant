@@ -24,8 +24,12 @@ jobs:
           cache: pip
           cache-dependency-path: requirements*.txt
       - run: make install
+      - name: Start Azurite and the Cosmos DB emulator
+        run: make emulators
       - name: Lint, format, types, tests and budget
         run: make check
+        env:
+          ELEVANT_EMULATORS: "true"
 
   reference:
     if: github.event_name == 'pull_request'

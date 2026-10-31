@@ -1,0 +1,103 @@
+{
+ "pages": 1,
+ "pairs": [
+  {
+   "key": "Lift ID:",
+   "value": "LFT-30126",
+   "confidence": 0.995
+  },
+  {
+   "key": "Location:",
+   "value": "83 Chapel Row, Ashdale",
+   "confidence": 0.997
+  },
+  {
+   "key": "Inspection date:",
+   "value": "2026-09-19",
+   "confidence": 0.997
+  },
+  {
+   "key": "Technician:",
+   "value": "Ana Ferrer",
+   "confidence": 0.997
+  },
+  {
+   "key": "No.",
+   "value": "1\n2\n3\n4\n5\n6",
+   "confidence": 0.996
+  },
+  {
+   "key": "Location",
+   "value": "pit\npit\nmachine room\ncar\nmachine room\ncar",
+   "confidence": 0.997
+  },
+  {
+   "key": "Defect description",
+   "value": "Travelling cable, 40-core damaged\nROPE FASTENING WEDGE SOCKET BRKN\nGearbox oil change required\nCAR POS IND TFT COLOUR LSE\nM/C ROOM LTG FITTING OUT OF ADJ\nCar mirror loose",
+   "confidence": 0.997
+  },
+  {
+   "key": "Qty",
+   "value": "30 m\n3\n1\n1\n3\n1",
+   "confidence": 0.997
+  }
+ ],
+ "tables": [
+  {
+   "header": 1,
+   "rows": [
+    [
+     "No.",
+     "Location",
+     "Defect description",
+     "Qty"
+    ],
+    [
+     "1",
+     "pit",
+     "Travelling cable, 40-core damaged",
+     "30 m"
+    ],
+    [
+     "2",
+     "pit",
+     "ROPE FASTENING WEDGE SOCKET BRKN",
+     "3"
+    ],
+    [
+     "3",
+     "machine room",
+     "Gearbox oil change required",
+     "1"
+    ],
+    [
+     "4",
+     "car",
+     "CAR POS IND TFT COLOUR LSE",
+     "1"
+    ],
+    [
+     "5",
+     "machine room",
+     "M/C ROOM LTG FITTING OUT OF ADJ",
+     "3"
+    ],
+    [
+     "6",
+     "car",
+     "Car mirror loose",
+     "1"
+    ]
+   ],
+   "pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  }
+ ]
+}
