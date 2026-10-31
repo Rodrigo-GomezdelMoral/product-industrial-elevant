@@ -51,6 +51,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   stops with a 504, and a dependency that is down gives a 503 with a plain reason.
 - KPI and SLO events (`quote_drafted`, `quote_failed`, `line_reviewed`, `quote_approved`, `feedback`, `quote_deleted`)
   sent to Application Insights through the Azure Monitor OpenTelemetry distro, with quote ids and numbers only.
+- The web client: upload a report and follow the draft, review it in a table with every control labelled (choose a
+  candidate, search the catalogue, change a quantity, accept, remove, add a line, fill a header field), confirm a correction
+  proposed in plain words, approve, download the Word quote with its traceability and rate the draft. Built with React,
+  TypeScript and Vite, usable by keyboard alone, checked in CI with axe-core against WCAG 2.2 AA, and built a second time as
+  a demo that replays recorded runs (REQ-01, REQ-03, REQ-04, REQ-08, REQ-09).
+- `GET /api/me` for the signed-in user, and `GET /api/quotes/{id}/catalogue` for the items of the catalogue version a
+  quote pinned (REQ-02, REQ-07).
+- Dependabot version updates for the web's npm packages.
 
 ### Changed
 
