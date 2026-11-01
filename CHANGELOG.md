@@ -67,6 +67,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Delivery: one image per merge deployed to staging by digest with a smoke test, a manual load test with four scenarios and a
   real-model one, and releases promoted to production blue/green behind the owner's approval.
 - Architecture, threat model, operations draft, cost and thirteen architecture decision records.
+- A live walk-through of staging in a real browser that uses every Must and ends on the approved quote and its Word download, and
+  the staging measurements in the runbook and the cost page: load tests, cold start, SLOs, the rollback drill, Advisor and the cost
+  to date.
 
 ### Changed
 
@@ -78,3 +81,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The evaluation's injection metric follows the build prompt (flagged, no price or quantity outside the catalogue), and
   match accuracy now also counts the injection defects; each run reports tokens, euros and p50 latency per draft. The
   matcher's output cap is 1,500 plus 150 tokens per defect.
+- Production's Container Apps environment and app run in Spain Central, where the subscription has environment quota; its
+  data, identity and monitoring stay in Sweden Central.
+
+### Fixed
+
+- The workbook's tile of arriving events failed to run because it named a column with a KQL keyword.

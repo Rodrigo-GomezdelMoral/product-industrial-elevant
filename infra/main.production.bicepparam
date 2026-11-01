@@ -1,6 +1,7 @@
 using 'main.bicep'
 
 param env = 'production'
+param appLocation = 'spaincentral'
 param maxReplicas = 5
 param retentionDays = 730
 param dailyCapGb = '0.5'

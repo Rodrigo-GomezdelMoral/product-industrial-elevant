@@ -11,7 +11,7 @@ stages of AI-103 (learning path 1, module 6). Assessed on 2026-10-31, at the end
 |---|---|
 | System | Elevant: lift inspection reports turned into reviewed, traceable repair quotes in Word |
 | Lifecycle stage | In development: domain, agents, workflow and evaluation done; API, web, infrastructure, staging and release to come |
-| Deployment | One Azure Container App per environment in Sweden Central, used by the client's office staff through a web browser after Microsoft Entra ID sign-in |
+| Deployment | One Azure Container App per environment (staging in Sweden Central; production in Spain Central with its data in Sweden Central, ADR-014), used by the client's office staff through a web browser after Microsoft Entra ID sign-in |
 | Users | One client: three estimators and one technical and commercial manager (`docs/PRODUCT.md`) |
 | Languages | English reports, catalogue, interface and quotes |
 | AI components | Azure AI Document Intelligence `prebuilt-layout` reads the PDF. Two Agent Framework agents on `gpt-5-mini` (`2025-08-07`, Global Standard): the **matcher** chooses catalogue codes for the defects, the **corrector** turns a sentence into proposed line edits. Neither agent has tools |

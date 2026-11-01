@@ -1,8 +1,8 @@
 # Cost
 
 Retail Prices API, EUR, `swedencentral`, checked on 2026-10-30 (build prompt), plus the model cost measured by the evaluation on
-2026-10-31. Assumptions: 300 quotes a month, 3 pages each, one matcher call per quote. Nothing is deployed yet: phase 7 compares
-these estimates with Cost Management, per environment.
+2026-10-31. Assumptions: 300 quotes a month, 3 pages each, one matcher call per quote. Phase 7 compares these
+estimates with Cost Management, per environment (below).
 
 ## Prices
 
@@ -15,7 +15,8 @@ these estimates with Cost Management, per environment.
 | Blob hot LRS | €0.0162 per GB-month; writes €0.044 and reads €0.0035 per 10k |
 | Key Vault | €0.0264 per 10k operations (none in v1) |
 | Log Analytics | €2.6311 per GB after 5 GB a month per billing account, shared with P06 to P08; 31 days included |
-| Log alert, 15-minute frequency | €0.44 per rule a month, from the build prompt; the Retail Prices API returned no 15-minute log-alert meter on 2026-10-31, so phase 7 confirms it in Cost Management |
+| Log alert, 15-minute frequency | €0.44 per rule a month, from the build prompt, kept as the estimate. On 2026-11-01 the Retail Prices API listed for Azure Monitor only *Alerts Resource Monitored at 15 Minute Frequency* (€0.044 per resource a month) and the 1-minute *System Log* meter, none matching this rule; it exists only in production, so Cost Management confirms it after the release (prompt 04) |
+| Inter-region data transfer (production's app in Spain Central to its data in Sweden Central, ADR-014) | €0.0176 per GB (`spaincentral`, *Standard Inter-Region Data Transfer*, 2026-11-01); Container Apps in `spaincentral` lists the same meters, requests at €0.352 per 1M |
 
 ## Per quote
 
@@ -36,7 +37,7 @@ price, so an upper bound).
 | | Staging | Production |
 |---|---|---|
 | At rest | about €0.01: stored data only | about €0.50: the SLO alert rule plus stored data |
-| In use | under €1 (about 30 test quotes, load tests with doubles, one short real-model scenario under €0.30) | €10 to €15 a month: Document Intelligence about €7.90, models about €1.20, compute €0 to €4 depending on the grant, logs €0 to €1.30 |
+| In use | under €1 (about 30 test quotes, load tests with doubles, one short real-model scenario under €0.30) | €9 to €15 a month: Document Intelligence about €7.90, models about €1.20, compute €0 to €4 depending on the grant, logs €0 to €1.30, cross-region transfer under €0.75 (quotes under €0.03, image pulls on cold starts under €0.70) |
 | Budget | €5 a month | €20 a month |
 | Daily log cap | 0.1 GB | 0.5 GB |
 | Maximum replicas | 3 | 5 |
@@ -50,3 +51,16 @@ Shared, and paid by the base whatever Elevant does: the registry (Basic, €0.14
 - To stop production's only fixed charge, disable the SLO alert rule.
 - To stop deployments, prompt 06 pauses the workflows.
 - Learn deletes Container Apps environments idle for more than 90 days with no apps; each environment always has its app, so it stays.
+
+## Cost to date
+
+Cost Management, actual cost from 2026-10-30 to 2026-11-01, read on 2026-11-01 (it can lag a day):
+
+| | Staging | Production |
+|---|---|---|
+| Deployed | since 2026-10-31: the app, Cosmos DB, storage, Key Vault, monitoring, the workbook | the app identity only |
+| Cost | €0.16: Cosmos DB serverless €0.16 (the 4,478 drafts of the load test), storage under €0.01, logs €0 (inside the free 5 GB), Container Apps €0 (inside the grant) | €0 |
+| Model and Document Intelligence | billed to the shared base with the other products; staging's share from telemetry, 7 real drafts at about €0.03, about €0.21 | none |
+
+The staging estimate (under €1 in use) holds. The measured model cost of a draft (€0.0032) matches the per-quote estimate.
+
