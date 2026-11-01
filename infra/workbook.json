@@ -70,7 +70,7 @@
       "content": {
         "version": "KqlItem/1.0",
         "title": "KPI and SLI events arriving, last 7 days",
-        "query": "customEvents | summarize events = count(), last = max(timestamp) by name | order by name asc",
+        "query": "customEvents | summarize events = count(), latest = max(timestamp) by name | order by name asc",
         "size": 4,
         "queryType": 0,
         "resourceType": "microsoft.insights/components",
