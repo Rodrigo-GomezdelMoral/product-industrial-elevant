@@ -83,8 +83,9 @@ Three rules govern every choice:
   `Foundry User`) and `-production` (the same on its group, `AcrPull`), with federated credentials and no client secrets.
 - **Quotas:** `gpt-5-mini` Global Standard 500K TPM in the region, 100K used by the shared deployment; `gpt-5-nano` 0 and no quota will be
   requested, so it is not deployed and every agent uses `gpt-5-mini`. The subscription was upgraded from free trial to pay-as-you-go on 2026-10-30 (no spending
-  limit: budgets alert, they do not stop spending). Container Apps managed environments: limit 15 in `swedencentral`, so the two
-  environments of the `Environments` table fit as designed.
+  limit: budgets alert, they do not stop spending). Container Apps managed environments: phase 0 read a limit of 15 in
+  `swedencentral`, but in phase 7 the subscription's usages allowed one there, taken by staging, so production's environment runs in
+  `spaincentral` (limit 5) with its data in `swedencentral` (ADR-014).
 
 ## Decisions taken in phase 0
 
@@ -398,6 +399,29 @@ Three rules govern every choice:
   Every file under `infra/`, the Dockerfile and `.dockerignore` were rewritten in full by this run; its `infra/bicepconfig.json`
   was removed (the default linter rules apply), the duplicated web mount in `app/main.py` was reduced to one, and the
   `docker` entry it added to `.github/dependabot.yml` was kept, since phase 6 adds it.
+
+## Decisions taken in phase 7
+
+- **Production's compute in Spain Central** (ADR-014): the subscription allows one Container Apps environment in `swedencentral`,
+  taken by staging, so `main.bicep` takes `appLocation` (`spaincentral` in production, `cae-elevant-prod-spc`); data, identity,
+  monitoring and the alert stay in `swedencentral`.
+- **Staging measured** (2026-10-31 and 2026-11-01, `docs/OPERATIONS.md`): the four doubles scenarios and the real-model one with no
+  failure and draft p95 at most 1.0 s with the doubles and 18 s with the real model; stress reached the 3-replica maximum without a
+  `429` or `503`. Cold start 24.1 and 27.8 s; the worst cold path (estimated 46 s, start plus slowest draft, for an upload that wakes the replica) is 1 s over the SLO and
+  under the SLA, the server-side SLI starts after it, and a cron rule would need single-revision mode, so it is the accepted trade-off
+  and there is no cron replica (ADR-008). The SLI wording in `docs/PRODUCT.md` now says so.
+- **Telemetry:** `azure-monitor-opentelemetry` 1.8.11 samples traces at 5 a second by default (checked in the installed wheel), so
+  under load `requests` and dependencies are a sample; KPI events are logs and arrive complete. Not changed: Elevant's volume is far
+  below it. The workbook's events tile used `last` as a column name, a KQL keyword, and failed; it is `latest` now. All five
+  workbook queries, the fixed one included, and the SLO alert's query ran on staging's data through the Application Insights query API.
+- **Rollback drill:** `deploy.yml` dispatched with the only `main` tag redeployed it by digest and passed the smoke gate in 2 min 27 s.
+- **Advisor:** staging's zone-redundancy recommendation is justified by ADR-012; production has none (only its identity is deployed).
+- **Cost to date:** staging €0.16 (Cosmos DB RU of the load test), production €0. The 15-minute log alert price has no matching meter
+  in the Retail Prices API; €0.44 stays the estimate until production's rule shows in Cost Management.
+- **Live walk-through:** built-in auth needs the owner's interactive sign-in, so `web/tests/live.spec.ts` (Playwright, selected when
+  `ELEVANT_URL` is set, headed) runs from `04-staging-walkthrough.sh` in the scripts folder: the owner signs in once and the test uses
+  every Must, ending on the approved, read-only quote and its Word download; screenshots, with the user's name masked, go to the
+  gitignored `web/test-results/staging/` and stay local: they are checked, never committed.
 
 ## Verified names (installed wheels, 2026-10-30 and 2026-10-31)
 
