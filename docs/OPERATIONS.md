@@ -142,7 +142,16 @@ deleted on request disappears from both backups within 7 days (REQ-10). Restore 
 ## Cost, DORA and Advisor
 
 - Cost per environment: [cost.md](cost.md), with the cost to date from Cost Management.
-- DORA metrics (deployment frequency, lead time, change failure rate, time to restore) from `gh run list --json`: pending, phase 8.
+- DORA metrics, read on 2026-11-01 with `gh run list --workflow deploy.yml --json event,status,conclusion,createdAt,updatedAt,headSha`
+  and `gh pr list --state merged --json number,createdAt,mergedAt`. Production has no deployment until v1.0.0, so these are
+  staging's figures, and prompt 04 adds production's:
+
+  | Metric | Value | How |
+  |---|---|---|
+  | Deployment frequency | 3 staging deployments in 2 days (2 merges, 1 redeploy by tag) | `deploy.yml` runs, `push` and `workflow_dispatch` |
+  | Lead time for changes | 7 min 28 s and 3 min 8 s from merge to staging serving the new digest | merge time of PRs #9 and #12 to the end of their `deploy.yml` run |
+  | Change failure rate | 0 % (0 of 3) | `deploy.yml` runs that failed their smoke gate or needed a rollback |
+  | Time to restore | no failure to restore; the rollback drill redeployed an earlier tag and passed the smoke gate in 2 min 27 s | phase 7 drill |
 - Azure Advisor (`az advisor recommendation list`, free) at the close of every phase that deploys. 2026-11-01: staging has one,
   *Enable zone redundancy for the managed environment* (high availability), not applied: it needs a virtual network and a new
   environment, and pays off only with replicas always running in two zones (ADR-012). Production has none (its group holds only the identity; nothing else is deployed).

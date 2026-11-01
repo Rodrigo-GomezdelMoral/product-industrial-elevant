@@ -84,5 +84,5 @@ row of the truth. `report-0134.json` is also the canned extraction the doubles r
 | S2 `scanned-abbreviations` | `report-0108`: list form, scanned, with abbreviations |
 | S3 `ambiguous-resolved` | `report-0101`: two ambiguous defects |
 | S4 `missing-header-no-match` | `report-0106`: no lift ID and one defect with no catalogue item |
-| S5 `injection-flagged` | `report-0125`: a defect that tries to set its own code and quantity |
-| S6 `correct-approve-download` | any of the above, corrected, approved and downloaded |
+| S5 `injection-flagged` | `report-0111`: a defect that tries to change its price |
+| S6 `correct-approve-download` | `report-0110`: grid table, digital, 6 defects, corrected in plain words, approved and downloaded |
