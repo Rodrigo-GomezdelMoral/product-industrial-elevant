@@ -423,6 +423,32 @@ Three rules govern every choice:
   every Must, ending on the approved, read-only quote and its Word download; screenshots, with the user's name masked, go to the
   gitignored `web/test-results/staging/` and stay local: they are checked, never committed.
 
+## Decisions taken in phase 8
+
+- **Recordings come from staging, never invented.** `ops/export_run.py <quote id> <simulation> <title> <file> [--suggestion]
+  [--correction]` reads the quote from Cosmos DB with the operator's `AzureCliCredential` and its checkpoints with
+  `CosmosCheckpointStorage.list_checkpoints`: the first paused checkpoint holds the draft, each later one the quote after a review
+  answer, and the events between two of them are that answer's edits. Status timings come from the checkpoints (`Reading the
+  report` to iteration 1, `Matching` to iteration 2, `Pricing` to `drafted_at`); each review answer's time and the correction's
+  are the request durations in Application Insights (a request the 5-a-second sampler dropped keeps the checkpoint gap, about 1
+  ms). The correction's words are not stored anywhere, so they are given by whoever typed them. Principal names become
+  "Staging estimator" and "Staging manager"; the Word file of an approved run goes to `web/public/demo/<simulation>.docx`,
+  checked for names. The template carries a customXml bibliography part with a GUID, so at release time the published copies
+  drop `customXml/` and its relationship and content-type entries (a one-off zip edit outside the app, since `ops/` is in the
+  1,500-line budget), and must open and hold no GUID; re-exporting a run brings the part back. `az` must be signed in to the
+  deployment subscription.
+- **The six simulations.** S1 is a real-model draft of `report-0134` from the phase 7 load test (16.8 s, the median); S2 is the
+  sample `report-0108` and S4 the `report-0106` run of the phase 7 walk-through (header filled, no-match line removed, the
+  correction "line 1, 1 units", approval, download). S3 `report-0101`, S5 `report-0111` (the price injection; `report-0125` sets a code and quantity) and S6 `report-0110` are made by the owner
+  with `05-record-demo.sh`, which also exports them. `report-0106` is the only report without a lift ID, and the idempotent upload
+  returns its approved quote, so S4 cannot be re-recorded without deleting it first.
+- **Suggestions.** "Upload an inspection report" replays S1, "Try a sample scanned report" S2 and "Open quotes in review" S3, a
+  quote in review whose flags the visitor resolves; the sidebar lists all six.
+- **Pages.** `pages.yml` builds with `VITE_DEMO=true` and `--base=/product-industrial-elevant/` on pushes to `main` that touch
+  `web/` (tests excluded) and deploys with `actions/deploy-pages`; Pages was enabled with the workflow source by `00-github.sh`.
+  From Git Bash, `MSYS_NO_PATHCONV=1` is needed for a local `--base`, or MSYS rewrites it into a Windows path.
+- **Budget after phase 8:** Python app 1,500/1,500 (`ops/export_run.py`, 100 lines), files 66/80, TypeScript 799/799 unchanged.
+
 ## Verified names (installed wheels, 2026-10-30 and 2026-10-31)
 
 | Package | Name |

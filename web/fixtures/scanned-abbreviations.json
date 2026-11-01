@@ -1,0 +1,1208 @@
+{
+ "title": "A scanned report full of abbreviations",
+ "file": "report-0108.pdf",
+ "suggestion": "Try a sample scanned report",
+ "status": [
+  [
+   "Reading the report",
+   5874
+  ],
+  [
+   "Matching 20 defects",
+   16860
+  ],
+  [
+   "Pricing",
+   260
+  ]
+ ],
+ "draft": {
+  "id": "q-33572eccfe6b9796",
+  "state": "review",
+  "catalogue": {
+   "name": "catalogue-v1",
+   "sha256": "cf029d38a39edf3711a36302713a7c881585b21555ee9428c053512cca444980"
+  },
+  "template": {
+   "name": "quote-template-v1",
+   "sha256": "ad13138d6e413ecae1055c0352c15b276b2797ef60383b7fd53924cf54be05e3"
+  },
+  "header": {
+   "lift_id": "LFT-25448",
+   "location": "76 Quarry Road, Southcliff",
+   "inspection_date": "2026-09-06",
+   "technician": "Jorge Rubio"
+  },
+  "header_flags": {},
+  "lines": [
+   {
+    "number": 1,
+    "defect": {
+     "page": 1,
+     "row": 1,
+     "text": "car top: EMERG LIGHT BATT NOT WKG (qty 1)"
+    },
+    "expanded": "car top: emergency light battery not working",
+    "item_code": "SAF-107",
+    "description": "Emergency light battery",
+    "unit": "unit",
+    "quantity": "1.0",
+    "unit_price": "26",
+    "amount": "26.00",
+    "candidates": [
+     "SAF-107"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 2,
+    "defect": {
+     "page": 1,
+     "row": 2,
+     "text": "car top: PIT REFUGE SIGN LSE (qty 2)"
+    },
+    "expanded": "car top: pit refuge sign loose",
+    "item_code": "SAF-113",
+    "description": "Pit refuge sign",
+    "unit": "unit",
+    "quantity": "2.0",
+    "unit_price": "12.5",
+    "amount": "25.00",
+    "candidates": [
+     "SAF-113"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 3,
+    "defect": {
+     "page": 1,
+     "row": 3,
+     "text": "pit: Travelling cable, 24-core not working (qty 60 m)"
+    },
+    "expanded": "pit: travelling cable, 24-core not working",
+    "item_code": "SHA-115",
+    "description": "Travelling cable, 24-core",
+    "unit": "m",
+    "quantity": "60.0",
+    "unit_price": "11.2",
+    "amount": "672.00",
+    "candidates": [
+     "SHA-115"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 4,
+    "defect": {
+     "page": 1,
+     "row": 4,
+     "text": "machine room: Phase monitoring relay worn (qty 1)"
+    },
+    "expanded": "machine room: phase monitoring relay worn",
+    "item_code": "ELE-110",
+    "description": "Phase monitoring relay",
+    "unit": "unit",
+    "quantity": "1.0",
+    "unit_price": "79",
+    "amount": "79.00",
+    "candidates": [
+     "ELE-110"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 5,
+    "defect": {
+     "page": 1,
+     "row": 5,
+     "text": "building: Graffiti on the car walls (qty 1)"
+    },
+    "expanded": "building: graffiti on the car walls",
+    "item_code": null,
+    "description": "",
+    "unit": "",
+    "quantity": "1.0",
+    "unit_price": null,
+    "amount": null,
+    "candidates": [],
+    "flag": "no_match",
+    "reason": "Graffiti is a building finish issue outside the lift catalogue.",
+    "outcome": "proposed"
+   },
+   {
+    "number": 6,
+    "defect": {
+     "page": 1,
+     "row": 6,
+     "text": "floor 5: Braille floor plate not working (qty 1)"
+    },
+    "expanded": "floor 5: braille floor plate not working",
+    "item_code": "SIG-107",
+    "description": "Braille floor plate",
+    "unit": "unit",
+    "quantity": "1.0",
+    "unit_price": "9.8",
+    "amount": "9.80",
+    "candidates": [
+     "SIG-107"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 7,
+    "defect": {
+     "page": 1,
+     "row": 7,
+     "text": "machine room: RESIDUAL CURRENT DEVICE NOT WKG (qty 2)"
+    },
+    "expanded": "machine room: residual current device not working",
+    "item_code": "ELE-111",
+    "description": "Residual current device",
+    "unit": "unit",
+    "quantity": "2.0",
+    "unit_price": "63",
+    "amount": "126.00",
+    "candidates": [
+     "ELE-111"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 8,
+    "defect": {
+     "page": 1,
+     "row": 8,
+     "text": "car top: Final limit switch, upper loose (qty 2)"
+    },
+    "expanded": "car top: final limit switch, upper loose",
+    "item_code": "SAF-109",
+    "description": "Final limit switch, upper",
+    "unit": "unit",
+    "quantity": "2.0",
+    "unit_price": "61",
+    "amount": "122.00",
+    "candidates": [
+     "SAF-109"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 9,
+    "defect": {
+     "page": 1,
+     "row": 9,
+     "text": "floor 3: Light curtain, single-side corroded (qty 1)"
+    },
+    "expanded": "floor 3: light curtain, single-side corroded",
+    "item_code": "DOR-116",
+    "description": "Light curtain, single-side",
+    "unit": "unit",
+    "quantity": "1.0",
+    "unit_price": "312",
+    "amount": "312.00",
+    "candidates": [
+     "DOR-116"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 10,
+    "defect": {
+     "page": 1,
+     "row": 10,
+     "text": "pit: TRAV CBL LSE (qty 50 m)"
+    },
+    "expanded": "pit: travelling cable loose",
+    "item_code": null,
+    "description": "",
+    "unit": "",
+    "quantity": "50.0",
+    "unit_price": null,
+    "amount": null,
+    "candidates": [
+     "SHA-115",
+     "SHA-116"
+    ],
+    "flag": "ambiguous",
+    "reason": "Core count/type of travelling cable not specified, so cannot choose 24- or 40-core.",
+    "outcome": "proposed"
+   },
+   {
+    "number": 11,
+    "defect": {
+     "page": 1,
+     "row": 11,
+     "text": "machine room: Hydraulic hose, 1 m not working (qty 1)"
+    },
+    "expanded": "machine room: hydraulic hose, 1 m not working",
+    "item_code": "MAC-118",
+    "description": "Hydraulic hose, 1 m",
+    "unit": "unit",
+    "quantity": "1.0",
+    "unit_price": "92",
+    "amount": "92.00",
+    "candidates": [
+     "MAC-118"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 12,
+    "defect": {
+     "page": 1,
+     "row": 12,
+     "text": "machine room: BRAKE COIL WRN (qty 2)"
+    },
+    "expanded": "machine room: brake coil worn",
+    "item_code": "MAC-103",
+    "description": "Brake coil",
+    "unit": "unit",
+    "quantity": "2.0",
+    "unit_price": "214",
+    "amount": "428.00",
+    "candidates": [
+     "MAC-103"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 13,
+    "defect": {
+     "page": 1,
+     "row": 13,
+     "text": "car top: Emergency light battery out of adjustment (qty 1)"
+    },
+    "expanded": "car top: emergency light battery out of adjustment",
+    "item_code": "SAF-107",
+    "description": "Emergency light battery",
+    "unit": "unit",
+    "quantity": "1.0",
+    "unit_price": "26",
+    "amount": "26.00",
+    "candidates": [
+     "SAF-107"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 14,
+    "defect": {
+     "page": 1,
+     "row": 14,
+     "text": "machine room: MOTOR BRG LSE (qty 1)"
+    },
+    "expanded": "machine room: motor bearing loose",
+    "item_code": null,
+    "description": "",
+    "unit": "",
+    "quantity": "1.0",
+    "unit_price": null,
+    "amount": null,
+    "candidates": [
+     "MAC-107",
+     "MAC-108"
+    ],
+    "flag": "ambiguous",
+    "reason": "Drive or non-drive end not specified, so cannot choose between the two motor bearing items.",
+    "outcome": "proposed"
+   },
+   {
+    "number": 15,
+    "defect": {
+     "page": 1,
+     "row": 15,
+     "text": "car: CAR LED CLG PANEL 300 \u00d7 300 MM DMGD (qty 2)"
+    },
+    "expanded": "car: car LED ceiling panel 300 x 300 mm damaged",
+    "item_code": "CAR-101",
+    "description": "Car LED ceiling panel, 300 x 300 mm",
+    "unit": "unit",
+    "quantity": "2.0",
+    "unit_price": "68",
+    "amount": "136.00",
+    "candidates": [
+     "CAR-101"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 16,
+    "defect": {
+     "page": 1,
+     "row": 16,
+     "text": "building: Pigeons nesting on the machine room roof (qty 1)"
+    },
+    "expanded": "building: pigeons nesting on the machine room roof",
+    "item_code": null,
+    "description": "",
+    "unit": "",
+    "quantity": "1.0",
+    "unit_price": null,
+    "amount": null,
+    "candidates": [],
+    "flag": "no_match",
+    "reason": "Pest control / roof maintenance is outside the lift parts catalogue.",
+    "outcome": "proposed"
+   },
+   {
+    "number": 17,
+    "defect": {
+     "page": 2,
+     "row": 1,
+     "text": "floor 7: Hall position indicator, dot-matrix damaged (qty 3)"
+    },
+    "expanded": "floor 7: hall position indicator, dot-matrix damaged",
+    "item_code": "SIG-103",
+    "description": "Hall position indicator, dot-matrix",
+    "unit": "unit",
+    "quantity": "3.0",
+    "unit_price": "118",
+    "amount": "354.00",
+    "candidates": [
+     "SIG-103"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 18,
+    "defect": {
+     "page": 2,
+     "row": 2,
+     "text": "machine room: Hydraulic cylinder packing worn (qty 1)"
+    },
+    "expanded": "machine room: hydraulic cylinder packing worn",
+    "item_code": "MAC-117",
+    "description": "Hydraulic cylinder packing",
+    "unit": "unit",
+    "quantity": "1.0",
+    "unit_price": "260",
+    "amount": "260.00",
+    "candidates": [
+     "MAC-117"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   },
+   {
+    "number": 19,
+    "defect": {
+     "page": 2,
+     "row": 3,
+     "text": "building: Stairwell lighting out next to the landing door (qty 1)"
+    },
+    "expanded": "building: stairwell lighting out next to the landing door",
+    "item_code": null,
+    "description": "",
+    "unit": "",
+    "quantity": "1.0",
+    "unit_price": null,
+    "amount": null,
+    "candidates": [],
+    "flag": "no_match",
+    "reason": "Stairwell/building lighting is outside the lift parts catalogue.",
+    "outcome": "proposed"
+   },
+   {
+    "number": 20,
+    "defect": {
+     "page": 2,
+     "row": 4,
+     "text": "pit: Governor tension pulley loose (qty 1)"
+    },
+    "expanded": "pit: governor tension pulley loose",
+    "item_code": "SHA-118",
+    "description": "Governor tension pulley",
+    "unit": "unit",
+    "quantity": "1.0",
+    "unit_price": "165",
+    "amount": "165.00",
+    "candidates": [
+     "SHA-118"
+    ],
+    "flag": null,
+    "reason": "",
+    "outcome": "proposed"
+   }
+  ],
+  "vat_rate": "0.21",
+  "subtotal": "2832.80",
+  "vat": "594.89",
+  "total": "3427.69",
+  "events": [],
+  "created_at": "2026-11-01T09:34:09.068593Z",
+  "drafted_at": "2026-11-01T09:34:32.062780Z",
+  "approved_at": null,
+  "approved_by": null
+ },
+ "catalogue": [
+  {
+   "code": "DOR-101",
+   "description": "Landing door roller, 40 mm",
+   "unit": "unit",
+   "unit_price": "18.4"
+  },
+  {
+   "code": "DOR-102",
+   "description": "Landing door roller, 60 mm",
+   "unit": "unit",
+   "unit_price": "21.7"
+  },
+  {
+   "code": "DOR-103",
+   "description": "Landing door roller, 80 mm",
+   "unit": "unit",
+   "unit_price": "26.3"
+  },
+  {
+   "code": "DOR-104",
+   "description": "Car door roller, 40 mm",
+   "unit": "unit",
+   "unit_price": "19.9"
+  },
+  {
+   "code": "DOR-105",
+   "description": "Car door roller, 60 mm",
+   "unit": "unit",
+   "unit_price": "23.1"
+  },
+  {
+   "code": "DOR-106",
+   "description": "Landing door interlock, mechanical lock",
+   "unit": "unit",
+   "unit_price": "64.5"
+  },
+  {
+   "code": "DOR-107",
+   "description": "Landing door interlock, electrical contact",
+   "unit": "unit",
+   "unit_price": "52.8"
+  },
+  {
+   "code": "DOR-108",
+   "description": "Car door contact",
+   "unit": "unit",
+   "unit_price": "49.6"
+  },
+  {
+   "code": "DOR-109",
+   "description": "Door gib, landing door",
+   "unit": "unit",
+   "unit_price": "9.6"
+  },
+  {
+   "code": "DOR-110",
+   "description": "Door gib, car door",
+   "unit": "unit",
+   "unit_price": "11.2"
+  },
+  {
+   "code": "DOR-111",
+   "description": "Landing door closer, spring",
+   "unit": "unit",
+   "unit_price": "38.7"
+  },
+  {
+   "code": "DOR-112",
+   "description": "Landing door closer, weight and cable",
+   "unit": "unit",
+   "unit_price": "44.9"
+  },
+  {
+   "code": "DOR-113",
+   "description": "Door operator belt",
+   "unit": "unit",
+   "unit_price": "47.9"
+  },
+  {
+   "code": "DOR-114",
+   "description": "Door operator motor, AC",
+   "unit": "unit",
+   "unit_price": "486"
+  },
+  {
+   "code": "DOR-115",
+   "description": "Door operator motor, DC",
+   "unit": "unit",
+   "unit_price": "512"
+  },
+  {
+   "code": "DOR-116",
+   "description": "Light curtain, single-side",
+   "unit": "unit",
+   "unit_price": "312"
+  },
+  {
+   "code": "DOR-117",
+   "description": "Light curtain, double-side",
+   "unit": "unit",
+   "unit_price": "398"
+  },
+  {
+   "code": "DOR-118",
+   "description": "Landing door hanger",
+   "unit": "unit",
+   "unit_price": "74.2"
+  },
+  {
+   "code": "DOR-119",
+   "description": "Door sill adjustment and cleaning, landing",
+   "unit": "unit",
+   "unit_price": "32"
+  },
+  {
+   "code": "DOR-120",
+   "description": "Door sill adjustment and cleaning, car",
+   "unit": "unit",
+   "unit_price": "34.5"
+  },
+  {
+   "code": "CAR-101",
+   "description": "Car LED ceiling panel, 300 x 300 mm",
+   "unit": "unit",
+   "unit_price": "68"
+  },
+  {
+   "code": "CAR-102",
+   "description": "Car LED ceiling panel, 600 x 600 mm",
+   "unit": "unit",
+   "unit_price": "104"
+  },
+  {
+   "code": "CAR-103",
+   "description": "Car operating panel push button",
+   "unit": "unit",
+   "unit_price": "24.5"
+  },
+  {
+   "code": "CAR-104",
+   "description": "Car position indicator, dot-matrix",
+   "unit": "unit",
+   "unit_price": "145"
+  },
+  {
+   "code": "CAR-105",
+   "description": "Car position indicator, TFT colour",
+   "unit": "unit",
+   "unit_price": "228"
+  },
+  {
+   "code": "CAR-106",
+   "description": "Car ventilation fan",
+   "unit": "unit",
+   "unit_price": "96"
+  },
+  {
+   "code": "CAR-107",
+   "description": "Car handrail, stainless steel",
+   "unit": "unit",
+   "unit_price": "132"
+  },
+  {
+   "code": "CAR-108",
+   "description": "Car handrail, aluminium",
+   "unit": "unit",
+   "unit_price": "98"
+  },
+  {
+   "code": "CAR-109",
+   "description": "Car floor covering, vinyl",
+   "unit": "m2",
+   "unit_price": "42"
+  },
+  {
+   "code": "CAR-110",
+   "description": "Car floor covering, rubber",
+   "unit": "m2",
+   "unit_price": "51"
+  },
+  {
+   "code": "CAR-111",
+   "description": "Car mirror",
+   "unit": "unit",
+   "unit_price": "155"
+  },
+  {
+   "code": "CAR-112",
+   "description": "Car emergency light",
+   "unit": "unit",
+   "unit_price": "58"
+  },
+  {
+   "code": "CAR-113",
+   "description": "Car top inspection box",
+   "unit": "unit",
+   "unit_price": "210"
+  },
+  {
+   "code": "CAR-114",
+   "description": "Car apron",
+   "unit": "unit",
+   "unit_price": "180"
+  },
+  {
+   "code": "CAR-115",
+   "description": "Car guide shoe insert, sliding",
+   "unit": "unit",
+   "unit_price": "16.8"
+  },
+  {
+   "code": "CAR-116",
+   "description": "Car guide shoe insert, roller",
+   "unit": "unit",
+   "unit_price": "27.4"
+  },
+  {
+   "code": "CAR-117",
+   "description": "Car wall panel, laminate",
+   "unit": "unit",
+   "unit_price": "118"
+  },
+  {
+   "code": "CAR-118",
+   "description": "Car wall panel, stainless steel",
+   "unit": "unit",
+   "unit_price": "186"
+  },
+  {
+   "code": "SHA-101",
+   "description": "Suspension rope, 8 mm",
+   "unit": "m",
+   "unit_price": "6.4"
+  },
+  {
+   "code": "SHA-102",
+   "description": "Suspension rope, 10 mm",
+   "unit": "m",
+   "unit_price": "8.1"
+  },
+  {
+   "code": "SHA-103",
+   "description": "Suspension rope, 13 mm",
+   "unit": "m",
+   "unit_price": "11.9"
+  },
+  {
+   "code": "SHA-104",
+   "description": "Governor rope, 6 mm",
+   "unit": "m",
+   "unit_price": "4.1"
+  },
+  {
+   "code": "SHA-105",
+   "description": "Governor rope, 8 mm",
+   "unit": "m",
+   "unit_price": "5.3"
+  },
+  {
+   "code": "SHA-106",
+   "description": "Counterweight guide shoe insert, sliding",
+   "unit": "unit",
+   "unit_price": "15.9"
+  },
+  {
+   "code": "SHA-107",
+   "description": "Counterweight guide shoe insert, roller",
+   "unit": "unit",
+   "unit_price": "25.8"
+  },
+  {
+   "code": "SHA-108",
+   "description": "Rail lubricator, car",
+   "unit": "unit",
+   "unit_price": "28.5"
+  },
+  {
+   "code": "SHA-109",
+   "description": "Rail lubricator, counterweight",
+   "unit": "unit",
+   "unit_price": "26.9"
+  },
+  {
+   "code": "SHA-110",
+   "description": "Buffer, car, spring",
+   "unit": "unit",
+   "unit_price": "240"
+  },
+  {
+   "code": "SHA-111",
+   "description": "Buffer, car, oil",
+   "unit": "unit",
+   "unit_price": "465"
+  },
+  {
+   "code": "SHA-112",
+   "description": "Buffer, counterweight, spring",
+   "unit": "unit",
+   "unit_price": "225"
+  },
+  {
+   "code": "SHA-113",
+   "description": "Pit stop switch",
+   "unit": "unit",
+   "unit_price": "39"
+  },
+  {
+   "code": "SHA-114",
+   "description": "Shaft lighting fitting",
+   "unit": "unit",
+   "unit_price": "31"
+  },
+  {
+   "code": "SHA-115",
+   "description": "Travelling cable, 24-core",
+   "unit": "m",
+   "unit_price": "11.2"
+  },
+  {
+   "code": "SHA-116",
+   "description": "Travelling cable, 40-core",
+   "unit": "m",
+   "unit_price": "16.8"
+  },
+  {
+   "code": "SHA-117",
+   "description": "Counterweight filler weight",
+   "unit": "unit",
+   "unit_price": "22"
+  },
+  {
+   "code": "SHA-118",
+   "description": "Governor tension pulley",
+   "unit": "unit",
+   "unit_price": "165"
+  },
+  {
+   "code": "SHA-119",
+   "description": "Pit ladder",
+   "unit": "unit",
+   "unit_price": "190"
+  },
+  {
+   "code": "SHA-120",
+   "description": "Shaft limit switch, upper",
+   "unit": "unit",
+   "unit_price": "58.4"
+  },
+  {
+   "code": "SHA-121",
+   "description": "Shaft limit switch, lower",
+   "unit": "unit",
+   "unit_price": "58.4"
+  },
+  {
+   "code": "SHA-122",
+   "description": "Rope fastening, wedge socket",
+   "unit": "unit",
+   "unit_price": "36.5"
+  },
+  {
+   "code": "MAC-101",
+   "description": "Brake lining, drum brake",
+   "unit": "set",
+   "unit_price": "128"
+  },
+  {
+   "code": "MAC-102",
+   "description": "Brake lining, disc brake",
+   "unit": "set",
+   "unit_price": "146"
+  },
+  {
+   "code": "MAC-103",
+   "description": "Brake coil",
+   "unit": "unit",
+   "unit_price": "214"
+  },
+  {
+   "code": "MAC-104",
+   "description": "Traction sheave, regrooving",
+   "unit": "unit",
+   "unit_price": "390"
+  },
+  {
+   "code": "MAC-105",
+   "description": "Traction sheave, replacement",
+   "unit": "unit",
+   "unit_price": "1240"
+  },
+  {
+   "code": "MAC-106",
+   "description": "Gearbox oil change",
+   "unit": "service",
+   "unit_price": "85"
+  },
+  {
+   "code": "MAC-107",
+   "description": "Motor bearing, drive end",
+   "unit": "unit",
+   "unit_price": "76"
+  },
+  {
+   "code": "MAC-108",
+   "description": "Motor bearing, non-drive end",
+   "unit": "unit",
+   "unit_price": "71"
+  },
+  {
+   "code": "MAC-109",
+   "description": "Motor encoder, incremental",
+   "unit": "unit",
+   "unit_price": "268"
+  },
+  {
+   "code": "MAC-110",
+   "description": "Motor encoder, absolute",
+   "unit": "unit",
+   "unit_price": "342"
+  },
+  {
+   "code": "MAC-111",
+   "description": "Inverter cooling fan",
+   "unit": "unit",
+   "unit_price": "59"
+  },
+  {
+   "code": "MAC-112",
+   "description": "Main contactor",
+   "unit": "unit",
+   "unit_price": "88"
+  },
+  {
+   "code": "MAC-113",
+   "description": "Deflector pulley bearing",
+   "unit": "unit",
+   "unit_price": "64"
+  },
+  {
+   "code": "MAC-114",
+   "description": "Control board relay",
+   "unit": "unit",
+   "unit_price": "18.5"
+  },
+  {
+   "code": "MAC-115",
+   "description": "Hydraulic oil",
+   "unit": "l",
+   "unit_price": "7.2"
+  },
+  {
+   "code": "MAC-116",
+   "description": "Hydraulic valve seal kit",
+   "unit": "unit",
+   "unit_price": "145"
+  },
+  {
+   "code": "MAC-117",
+   "description": "Hydraulic cylinder packing",
+   "unit": "unit",
+   "unit_price": "260"
+  },
+  {
+   "code": "MAC-118",
+   "description": "Hydraulic hose, 1 m",
+   "unit": "unit",
+   "unit_price": "92"
+  },
+  {
+   "code": "MAC-119",
+   "description": "Hydraulic hose, 2 m",
+   "unit": "unit",
+   "unit_price": "118"
+  },
+  {
+   "code": "MAC-120",
+   "description": "Machine room lighting fitting",
+   "unit": "unit",
+   "unit_price": "33"
+  },
+  {
+   "code": "SAF-101",
+   "description": "Overspeed governor, service and test",
+   "unit": "unit",
+   "unit_price": "95"
+  },
+  {
+   "code": "SAF-102",
+   "description": "Overspeed governor, replacement",
+   "unit": "unit",
+   "unit_price": "640"
+  },
+  {
+   "code": "SAF-103",
+   "description": "Safety gear adjustment",
+   "unit": "unit",
+   "unit_price": "120"
+  },
+  {
+   "code": "SAF-104",
+   "description": "Alarm push button",
+   "unit": "unit",
+   "unit_price": "18.87"
+  },
+  {
+   "code": "SAF-105",
+   "description": "Emergency telephone, GSM module",
+   "unit": "unit",
+   "unit_price": "189"
+  },
+  {
+   "code": "SAF-106",
+   "description": "Emergency telephone, landline unit",
+   "unit": "unit",
+   "unit_price": "142"
+  },
+  {
+   "code": "SAF-107",
+   "description": "Emergency light battery",
+   "unit": "unit",
+   "unit_price": "26"
+  },
+  {
+   "code": "SAF-108",
+   "description": "Alarm battery",
+   "unit": "unit",
+   "unit_price": "22"
+  },
+  {
+   "code": "SAF-109",
+   "description": "Final limit switch, upper",
+   "unit": "unit",
+   "unit_price": "61"
+  },
+  {
+   "code": "SAF-110",
+   "description": "Final limit switch, lower",
+   "unit": "unit",
+   "unit_price": "61"
+  },
+  {
+   "code": "SAF-111",
+   "description": "Slack rope switch",
+   "unit": "unit",
+   "unit_price": "74"
+  },
+  {
+   "code": "SAF-112",
+   "description": "Car roof balustrade",
+   "unit": "unit",
+   "unit_price": "260"
+  },
+  {
+   "code": "SAF-113",
+   "description": "Pit refuge sign",
+   "unit": "unit",
+   "unit_price": "12.5"
+  },
+  {
+   "code": "SAF-114",
+   "description": "Unintended car movement detector",
+   "unit": "unit",
+   "unit_price": "410"
+  },
+  {
+   "code": "SIG-101",
+   "description": "Landing call button, single",
+   "unit": "unit",
+   "unit_price": "26"
+  },
+  {
+   "code": "SIG-102",
+   "description": "Landing call button, up and down",
+   "unit": "unit",
+   "unit_price": "41"
+  },
+  {
+   "code": "SIG-103",
+   "description": "Hall position indicator, dot-matrix",
+   "unit": "unit",
+   "unit_price": "118"
+  },
+  {
+   "code": "SIG-104",
+   "description": "Hall position indicator, TFT colour",
+   "unit": "unit",
+   "unit_price": "196"
+  },
+  {
+   "code": "SIG-105",
+   "description": "Arrival gong",
+   "unit": "unit",
+   "unit_price": "38"
+  },
+  {
+   "code": "SIG-106",
+   "description": "Hall lantern",
+   "unit": "unit",
+   "unit_price": "54"
+  },
+  {
+   "code": "SIG-107",
+   "description": "Braille floor plate",
+   "unit": "unit",
+   "unit_price": "9.8"
+  },
+  {
+   "code": "SIG-108",
+   "description": "Landing key switch",
+   "unit": "unit",
+   "unit_price": "46"
+  },
+  {
+   "code": "SIG-109",
+   "description": "Overload indicator",
+   "unit": "unit",
+   "unit_price": "64"
+  },
+  {
+   "code": "SIG-110",
+   "description": "Voice announcer",
+   "unit": "unit",
+   "unit_price": "215"
+  },
+  {
+   "code": "ELE-101",
+   "description": "Load weighing sensor",
+   "unit": "unit",
+   "unit_price": "186"
+  },
+  {
+   "code": "ELE-102",
+   "description": "Floor levelling sensor, magnetic",
+   "unit": "unit",
+   "unit_price": "72"
+  },
+  {
+   "code": "ELE-103",
+   "description": "Floor levelling sensor, optical",
+   "unit": "unit",
+   "unit_price": "94"
+  },
+  {
+   "code": "ELE-104",
+   "description": "Lift main switch",
+   "unit": "unit",
+   "unit_price": "138"
+  },
+  {
+   "code": "ELE-105",
+   "description": "Fuse, 6 A",
+   "unit": "unit",
+   "unit_price": "4.2"
+  },
+  {
+   "code": "ELE-106",
+   "description": "Fuse, 10 A",
+   "unit": "unit",
+   "unit_price": "4.4"
+  },
+  {
+   "code": "ELE-107",
+   "description": "Fuse, 16 A",
+   "unit": "unit",
+   "unit_price": "4.8"
+  },
+  {
+   "code": "ELE-108",
+   "description": "Control cabinet fan",
+   "unit": "unit",
+   "unit_price": "45"
+  },
+  {
+   "code": "ELE-109",
+   "description": "Door zone switch",
+   "unit": "unit",
+   "unit_price": "52"
+  },
+  {
+   "code": "ELE-110",
+   "description": "Phase monitoring relay",
+   "unit": "unit",
+   "unit_price": "79"
+  },
+  {
+   "code": "ELE-111",
+   "description": "Residual current device",
+   "unit": "unit",
+   "unit_price": "63"
+  },
+  {
+   "code": "ELE-112",
+   "description": "Earthing conductor repair",
+   "unit": "unit",
+   "unit_price": "48"
+  },
+  {
+   "code": "ELE-113",
+   "description": "Machine room socket",
+   "unit": "unit",
+   "unit_price": "27"
+  },
+  {
+   "code": "LAB-101",
+   "description": "Technician labour, normal hours",
+   "unit": "h",
+   "unit_price": "37.45"
+  },
+  {
+   "code": "LAB-102",
+   "description": "Technician labour, out of hours",
+   "unit": "h",
+   "unit_price": "56.2"
+  },
+  {
+   "code": "LAB-103",
+   "description": "Call-out fee",
+   "unit": "unit",
+   "unit_price": "55"
+  },
+  {
+   "code": "LAB-104",
+   "description": "Load test with test weights",
+   "unit": "unit",
+   "unit_price": "280"
+  },
+  {
+   "code": "LAB-105",
+   "description": "Rope inspection and report",
+   "unit": "unit",
+   "unit_price": "120"
+  },
+  {
+   "code": "LAB-106",
+   "description": "Disposal of replaced parts",
+   "unit": "unit",
+   "unit_price": "25"
+  }
+ ],
+ "document": "scanned-abbreviations.docx",
+ "steps": [],
+ "corrections": []
+}

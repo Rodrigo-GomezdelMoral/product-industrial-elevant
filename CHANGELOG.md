@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-01
+
+The first release: Elevant drafts a repair quote from a lift inspection report, the estimator reviews it and approves it, and the
+Word quote traces every line to the catalogue and the report. Verified in staging on 2026-11-01; production is deployed by this
+release after the owner's approval.
+
 ### Added
 
 - Product definition in `docs/PRODUCT.md`: the client, the process as-is and to-be, ten requirements with acceptance criteria, three
@@ -70,6 +76,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A live walk-through of staging in a real browser that uses every Must and ends on the approved quote and its Word download, and
   the staging measurements in the runbook and the cost page: load tests, cold start, SLOs, the rollback drill, Advisor and the cost
   to date.
+- The published demo on GitHub Pages: the web in demo mode replaying six real runs recorded from staging with their timings, one
+  per simulation (a clean digital report, a scanned report with abbreviations, ambiguous defects resolved, a missing lift ID and a
+  defect with no catalogue item, an injection attempt flagged, a correction approved and downloaded), and `ops/export_run.py`, which
+  exports a staging run from Cosmos DB, its checkpoints and Application Insights with the principal names replaced.
+- The README with the product's structure and staging's measured figures, the complete traceability of the ten requirements and the
+  DORA metrics in `docs/OPERATIONS.md`.
 
 ### Changed
 
