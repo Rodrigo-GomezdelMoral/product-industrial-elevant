@@ -20,9 +20,10 @@ var revision = '${name}--${revisionSuffix}'
 var green = { revisionName: revision, weight: empty(stableRevision) ? 100 : 0, label: 'green' }
 var blueGreen = empty(stableRevision) ? [green] : [{ revisionName: stableRevision, weight: 100, label: 'blue' }, green]
 var issuer = '${environment().authentication.loginEndpoint}${tenant().tenantId}/v2.0'
+var regionCodes = { swedencentral: 'swc', spaincentral: 'spc' }
 
 resource managed 'Microsoft.App/managedEnvironments@2026-07-01' = {
-  name: 'cae-elevant-${short}-swc'
+  name: 'cae-elevant-${short}-${regionCodes[location]}'
   location: location
   tags: tags
   properties: {

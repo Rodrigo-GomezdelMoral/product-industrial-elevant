@@ -27,6 +27,9 @@ param dailyCapGb string
 @description('Monthly budget of the resource group, in the billing currency (EUR).')
 param budgetAmount int
 param location string = resourceGroup().location
+@allowed(['swedencentral', 'spaincentral'])
+@description('Region of the Container Apps environment and app: production runs in spaincentral, where the subscription has environment quota; data, identity and monitoring stay in location (ADR-014).')
+param appLocation string = location
 param registryName string = 'craiplatformshared'
 
 var short = env == 'staging' ? 'stg' : 'prod'
@@ -51,7 +54,7 @@ module data 'modules/data.bicep' = {
 
 module app 'modules/app.bicep' = {
   params: {
-    location: location, tags: tags, short: short, production: env == 'production', maxReplicas: maxReplicas
+    location: appLocation, tags: tags, short: short, production: env == 'production', maxReplicas: maxReplicas
     image: '${registryServer}/product-industrial-elevant@${digest}', registryServer: registryServer, identityId: identity.id
     revisionSuffix: revisionSuffix, stableRevision: stableRevision, authClientId: authClientId, workspaceId: monitoring.outputs.workspaceId
     settings: {
