@@ -36,8 +36,12 @@ Everything is defined in `infra/` and applied only by the workflows, each preced
 ## Rollback
 
 - **Production, emergency:** `az containerapp ingress traffic set -n ca-elevant-prod -g rg-elevant-prod-swc --label-weight blue=100 green=0`.
-  Seconds, no build. It works from the second release on: v1.0.0 was the first, so until v1.0.1 is promoted production has one
-  revision, labelled `green`, and no `blue` to switch to (checked 2026-11-01). Until then the planned path below is the only one.
+  Seconds, no build. It works from the second release on: v1.0.0 was the first and had no `blue` (checked 2026-11-01). Since v1.0.1
+  production keeps the previous release on `blue` at 0 %; on 2026-11-02 after v1.0.2, `green` is v1.0.2 at 100 % and `blue` is v1.0.1.
+  **Valid until the Container Apps environment change (2026-11-02):** the planned move of both apps to one shared environment,
+  `cae-elevant-env`, deletes and recreates `ca-elevant-prod`. The recreated app starts with one revision and only `green`, so the label
+  rollback is unavailable again until the second release on the new environment, and must be re-drilled then; until that release the
+  planned path below is the only one.
 - **Production, planned:** run `release.yml` (`workflow_dispatch`) with the previous tag. It promotes that tag's image through the same
   smoke gate.
 - **Staging:** run `deploy.yml` (`workflow_dispatch`) with the previous image tag.
@@ -45,9 +49,14 @@ Everything is defined in `infra/` and applied only by the workflows, each preced
   `what-if`, deployed a new revision and passed the smoke gate (`/api/version` returned the digest) in 2 min 27 s, after waiting its
   turn behind the load test. It was the only image of `main` then, so the drill redeployed the same digest.
 - **Drill between two images, staging, planned** (v1.0.1 validation): `deploy.yml` dispatched with an earlier tag of a different digest,
-  `/api/version` checked, then the current tag redeployed. Result: _pending, measured time to be recorded_.
+  `/api/version` checked, then the current tag redeployed. Result (2026-11-02, UTC): v1.0.0's tag dispatched at 10:41:50, the run
+  succeeded in 155 s and `/api/version` returned v1.0.0's digest at 10:44:33, **166 s from dispatch**; v1.0.1's tag dispatched at
+  10:45:05, run 168 s, v1.0.1's digest served at 10:48:05, **182 s from dispatch**.
 - **Drill in production, emergency** (after v1.0.1): `blue=100 green=0`, `/api/version` returns v1.0.0's digest, then `green=100 blue=0`
-  and v1.0.1's digest. Result: _pending, seconds to switch both ways to be recorded_.
+  and v1.0.1's digest. Result (2026-11-02, UTC): `blue=100` at 10:49:31, command 18 s, v1.0.0's digest served at 10:50:22, **50 s in
+  all** (the `blue` revision was at 0 replicas, so this includes its cold start; three further requests, all v1.0.0); `green=100` at
+  10:50:22, command 17 s, v1.0.1's digest served at 10:50:40, **18 s in all** (five further requests, all v1.0.1). No deployment and no
+  `release.yml` run; production ended on `green` 100 %.
 - **Workflow graph changes:** a changed graph cannot resume old checkpoints. Before releasing one, let the quotes in review be approved
   or deleted, and bump `VERSION` in `app/workflow.py` (ADR-004).
 
@@ -130,7 +139,38 @@ names and identifiers, and are not committed.
 
 `06-production-walkthrough.sh` runs the same test against production after v1.0.1, with the screenshots in the gitignored
 `web/test-results/production/`; the owner then deletes one quote as manager (REQ-10) and keeps one approved quote for the recordings.
-Result: _pending (date, outcome per Must, KPI events and the `quote_deleted` event in production's `AppEvents`)_.
+2026-11-02, 17:40 to 17:41 UTC, v1.0.1, the owner signed in with `Quote.Estimator` and `Quote.Manager`: the test passed and every Must
+was shown on production:
+
+| Step | Must | Outcome |
+|---|---|---|
+| Signed in | | the empty chat with its three starters; the signed-in name is masked |
+| A JSON file | REQ-01 | refused, listed as Failed |
+| The sample scanned report | REQ-01, REQ-02, REQ-05 | a fresh draft: LFT-25448, 20 lines priced from the catalogue, 5 flagged, total €3,427.69, in 48.9 s |
+| `report-0106.pdf` | REQ-01, REQ-02, REQ-05 | a fresh draft in 17.6 s: Lift ID flagged missing, 13 lines, 1 flagged, total €3,502.83 |
+| Flags resolved, correction, rating, approval | REQ-03, REQ-08, REQ-09 | Lift ID set to ELV-0106, a correction in plain words proposed and confirmed, 👍 recorded; approved and read-only: 13 lines reviewed (11 accepted, 1 changed, 1 removed), €2,835.90 + €595.54 VAT = €3,431.44, catalogue and template hashes, 4 recorded changes |
+| Word download | REQ-04 | the `.docx` of the approved quote downloaded |
+| Deletion as manager | REQ-10 | the LFT-25448 quote deleted in the web at 18:38 UTC; ELV-0106 kept, approved, for the recordings |
+
+KPI events in production's `AppEvents` (all of production's history, 2026-11-01 to 2026-11-02): `quote_drafted` 2, `line_reviewed`
+13 (11 accepted, 1 changed, 1 removed), `feedback` 1 (up), `quote_approved` 1 (`elapsed_s` 24), `quote_deleted` 1 at 18:38:03 UTC,
+`quote_failed` 0. An earlier delete by mistake went to staging at 18:11 UTC, not to production. The screenshots stay local in the
+gitignored `web/test-results/production/` and are not committed.
+
+Production SLIs and KPIs read on 2026-11-02 at about 19:30 UTC, window 30 days (production's whole life), one walk-through, so these
+are test values, not business figures:
+
+| Measure | Value | n | Target |
+|---|---|---|---|
+| Availability in business hours (no probe, no 4xx) | 100 % | 40 requests (47 in all hours, 0 `5xx`) | SLO 99.7 %, SLA 99.5 % over a calendar month: not yet measurable |
+| Draft p95 | 48.9 s | 2 drafts (48.9 s and 17.6 s) | SLO 45 s, SLA 60 s; the alert needs at least 3 drafts in its hour, so it did not fire |
+| Failed drafts | 0 % | 2 | < 1 % |
+| KPI-1 turnaround | 24 s | 1 approval | ≤ 15 min (an automated walk-through, not office time) |
+| KPI-2 lines accepted unchanged | 84.6 % | 13 lines | ≥ 85 % |
+| KPI-3 positive feedback | 100 % | 1 rating | ≥ 80 % |
+
+The 48.9 s draft is the 20-line scanned report on a cold path; it is above the SLO and inside the SLA. Two drafts do not make a p95;
+the SLO is read again once production has real use.
 
 ## Alerts and incidents
 
@@ -141,7 +181,10 @@ volume, a single failure).
 
 **Alert drill** (v1.0.1 validation): a test notification from `ag-elevant-prod-swc`, confirmed by the owner, and a temporary copy of the
 rule in staging with its own action group and a lowered latency threshold that real staging data breaches, both deleted afterwards.
-Result: _pending (time from the breach to the fired alert and to the mail)_.
+Result (2026-11-02, UTC): the production test notification was requested at about 10:38:48 and Azure reported it complete at
+10:41:59 (about 3 min 11 s); the staging copy (threshold 0.5 s instead of 45 s, frequency 5 min, window 1 day) was created at 10:41:10
+and **fired at 10:46:02, 4 min 52 s later**. The owner confirmed both mails. The temporary rule and action group were deleted at
+10:48:27 and none is left; the production rule is unchanged.
 
 Incident procedure (OE:08, SE:12):
 1. **Detect:** the alert mail, a budget mail, or a user report.
@@ -169,8 +212,13 @@ rebuilds the group, Cosmos DB restores to a point in time into a new account, an
 deleted on request disappears from both backups within 7 days (REQ-10).
 
 Restore drill, staging only: a point-in-time restore of `cosmos-elevant-stg-swc` into a new account, timed to `Succeeded`, its data
-checked, a soft-deleted report blob recovered, the restored account deleted. Result: _pending (restore time; RTO = restore plus a
-`deploy.yml` run; RPO from the restore point)_. Production is not rehearsed on purpose: no human holds a data-plane role there (only
+checked, a soft-deleted report blob recovered, the restored account deleted. Result (2026-11-02, UTC): restore point 10:27:00, after
+the last known write at 10:24:51; the restore with TTL disabled ran from 10:54:58 to `Succeeded` at 11:04:41, **583 s** for about
+322 MB. Item counts in Azure Monitor equal the source (`quotes` 13,389, `checkpoints` 66,975); no data-plane read, because data-plane
+role assignments are not restored and none was granted. **RTO 767 s, about 13 min, against 4 h** (restore 583 s plus a 184 s
+`deploy.yml` run), not counting the identity script that points the app at a restored account and grants its data role, which a real
+recovery adds. **RPO ≤ 100 s against 5 min** (the restore held the last write; continuous backup granularity 100 s). A soft-deleted
+report blob was undeleted in 8 s with the same size and MD5. The restored account was deleted (741 s) and nothing is left. Production is not rehearsed on purpose: no human holds a data-plane role there (only
 the app's identity), so a restore check would need a temporary grant that the design avoids; the backup policy and the procedure are
 the same in both environments, and the staging drill stands for both.
 
@@ -187,14 +235,14 @@ the same in both environments, and the staging drill stands for both.
   | Change failure rate | 0 % (0 of 3) | `deploy.yml` runs that failed their smoke gate or needed a rollback |
   | Time to restore | no failure to restore; the rollback drill redeployed an earlier tag and passed the smoke gate in 2 min 27 s | phase 7 drill |
 
-  Production, v1.0.0 (2026-11-01):
+  Production, v1.0.0 to v1.0.2 (2026-11-01 to 2026-11-02, read on 2026-11-02):
 
   | Metric | Value | How |
   |---|---|---|
-  | Deployment frequency | 1 production deployment | `release.yml` runs |
-  | Lead time for changes | 5 h 28 min from the merge of PR #13 to production serving its digest, gated by the load test and the approval | merge time to the end of the promoting `release.yml` attempt |
-  | Change failure rate | 0 % (0 of 1); attempt 1 stopped in `verify`, before deploying, because the commit had no load test yet | `release.yml` attempts |
-  | Time to restore | no failure to restore | |
+  | Deployment frequency | 3 production deployments in 2 days (v1.0.0, v1.0.1, v1.0.2) | `release.yml` runs |
+  | Lead time for changes | v1.0.0: 5 h 28 min from the merge of PR #13, gated by the load test and the approval; v1.0.1: 46 min 27 s from the merge of PR #14; v1.0.2: 7 min 4 s from the merge of PR #15, a web and docs release without a load test (ADR-015) | merge time to the end of the promoting `release.yml` run |
+  | Change failure rate | 0 % (0 of 3); v1.0.0's attempt 1 stopped in `verify`, before deploying, because the commit had no load test yet | `release.yml` attempts |
+  | Time to restore | no failure to restore; the emergency rollback drill by label served the previous digest in 50 s and returned in 18 s (2026-11-02) | rollback drill |
 - Azure Advisor (`az advisor recommendation list`, free) at the close of every phase that deploys. 2026-11-01: staging has one,
   *Enable zone redundancy for the managed environment* (high availability), not applied: it needs a virtual network and a new
   environment, and pays off only with replicas always running in two zones (ADR-012). By the release a second one had appeared,

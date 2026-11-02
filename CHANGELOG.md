@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- The operations guide, README and product document record the production walk-through of every Must (2026-11-02), production's
+  SLIs and KPIs with their window and n, and the rollback, restore and alert drills with their measured times; the label rollback is
+  stated as valid only until the planned Container Apps environment change recreates the apps.
+
 ## [1.0.2] - 2026-11-02
 
 The web on the portfolio's common web shell, a release gate that does not load-test a release the API does not change, and the
