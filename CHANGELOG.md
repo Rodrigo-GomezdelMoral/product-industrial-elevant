@@ -7,11 +7,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-11-02
+
+Staging and production share one Container Apps environment, `cae-elevant-env`, in Sweden Central (ADR-016). Production's app is
+recreated there with a new address and runs next to its data again. No change to the API, the agents or the web.
+
 ### Changed
 
+- `infra/modules/environment.bicep` declares `cae-elevant-env` in `rg-elevant-prod-swc`, with the previous environments'
+  properties; only production declares it, and staging joins it as `existing`. `cae-elevant-stg-swc`, `cae-elevant-prod-spc` and
+  the `appLocation` parameter are removed, and production's compute returns from Spain Central to Sweden Central.
+- The staging CI principal has a custom role on the environment alone, with `read` and `join/action` (`08-environment.sh staging`).
+- ADR-016 records the subscription's limits (5 environments, 1 in Sweden Central), the decision and what staging and production
+  now share; it supersedes ADR-014 and updates ADR-012. The architecture, cost, operations and responsible-AI documents, the README
+  and `CLAUDE.md` describe the one environment, and the cost document names the shared base without its other users.
+- The label rollback is unavailable until the next release, since production's app restarts with one revision, and a planned
+  rollback cannot go back past this release.
 - The operations guide, README and product document record the production walk-through of every Must (2026-11-02), production's
   SLIs and KPIs with their window and n, and the rollback, restore and alert drills with their measured times; the label rollback is
-  stated as valid only until the planned Container Apps environment change recreates the apps.
+  stated as unavailable from this release until the next one.
 
 ## [1.0.2] - 2026-11-02
 

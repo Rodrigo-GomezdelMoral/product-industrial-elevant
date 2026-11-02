@@ -27,5 +27,5 @@ from a page left open past the 5-minute scale-in, waits for both, estimated at a
 `quote_drafted` duration starts when the app receives the upload, so the SLI does not show that second. The cron rule is not added:
 it needs single-revision mode, which production's blue/green (ADR-009) does not use, and the build prompt allows keeping the HTTP rule
 with the cold start recorded as the accepted trade-off, which this is. Production
-runs in another region from the registry (ADR-014), so prompt 04 measures its cold start and revisits this decision if the cold path
-nears 60 s.
+ran in another region from the registry (ADR-014) until ADR-016 brought it back next to it; prompt 04 measures its cold start and
+revisits this decision if the cold path nears 60 s.

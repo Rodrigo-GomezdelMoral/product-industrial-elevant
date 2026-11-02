@@ -11,7 +11,8 @@ param revisionSuffix string
 param stableRevision string
 param maxReplicas int
 param authClientId string
-param workspaceId string
+@description('Resource id of cae-elevant-env, the Container Apps environment both apps join, owned by production (ADR-016).')
+param environmentId string
 @description('Environment variables of the container.')
 param settings object
 
@@ -20,23 +21,6 @@ var revision = '${name}--${revisionSuffix}'
 var green = { revisionName: revision, weight: empty(stableRevision) ? 100 : 0, label: 'green' }
 var blueGreen = empty(stableRevision) ? [green] : [{ revisionName: stableRevision, weight: 100, label: 'blue' }, green]
 var issuer = '${environment().authentication.loginEndpoint}${tenant().tenantId}/v2.0'
-var regionCodes = { swedencentral: 'swc', spaincentral: 'spc' }
-
-resource managed 'Microsoft.App/managedEnvironments@2026-07-01' = {
-  name: 'cae-elevant-${short}-${regionCodes[location]}'
-  location: location
-  tags: tags
-  properties: {
-    appLogsConfiguration: { destination: 'azure-monitor' }, workloadProfiles: [{ name: 'Consumption', workloadProfileType: 'Consumption' }], zoneRedundant: false
-  }
-}
-
-#disable-next-line use-recent-api-versions
-resource logs 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'to-workspace'
-  scope: managed
-  properties: { workspaceId: workspaceId, logs: [{ categoryGroup: 'allLogs', enabled: true }] }
-}
 
 resource app 'Microsoft.App/containerApps@2026-07-01' = {
   name: name
@@ -44,7 +28,7 @@ resource app 'Microsoft.App/containerApps@2026-07-01' = {
   tags: tags
   identity: { type: 'UserAssigned', userAssignedIdentities: { '${identityId}': {} } }
   properties: {
-    environmentId: managed.id
+    environmentId: environmentId
     workloadProfileName: 'Consumption'
     configuration: {
       activeRevisionsMode: production ? 'Multiple' : 'Single'

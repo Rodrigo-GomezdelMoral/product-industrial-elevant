@@ -84,8 +84,8 @@ Three rules govern every choice:
 - **Quotas:** `gpt-5-mini` Global Standard 500K TPM in the region, 100K used by the shared deployment; `gpt-5-nano` 0 and no quota will be
   requested, so it is not deployed and every agent uses `gpt-5-mini`. The subscription was upgraded from free trial to pay-as-you-go on 2026-10-30 (no spending
   limit: budgets alert, they do not stop spending). Container Apps managed environments: phase 0 read a limit of 15 in
-  `swedencentral`, but in phase 7 the subscription's usages allowed one there, taken by staging, so production's environment runs in
-  `spaincentral` (limit 5) with its data in `swedencentral` (ADR-014).
+  `swedencentral`, but in phase 7 the subscription's usages allowed one there, and on 2026-11-02 preflight showed a limit of 5 per subscription, all in use, so
+  staging and production share one environment, `cae-elevant-env`, in `swedencentral` (ADR-016, superseding ADR-014).
 
 ## Decisions taken in phase 0
 
@@ -362,8 +362,8 @@ Three rules govern every choice:
   minutes over the last hour, one row per breached SLO with `slo` as a dimension; minimum 20 requests for availability and 3
   drafts for latency, failed drafts at 1 % of the hour's drafts (one failure at this volume). The KPI tile looks back 31
   days, the workspace's retention, so the previous month can be partial. The unit-cost tile counts `chat` spans only:
-  Agent Framework copies the usage onto the `invoke_agent` span too. Container logs reach the workspace through a diagnostic setting.
-- **App.** One Consumption workload profile environment per environment; the app at 0.5 vCPU and 1 GiB, 0 to 3 (staging) or 5
+  Agent Framework copies the usage onto the `invoke_agent` span too. Container logs of both apps reach production's workspace through the shared environment's diagnostic setting (ADR-016).
+- **App.** One Consumption workload profile environment, `cae-elevant-env`, shared by both apps (ADR-016); the app at 0.5 vCPU and 1 GiB, 0 to 3 (staging) or 5
   (production) replicas, HTTP rule at 10 concurrent requests, startup probe up to 2 minutes, liveness and readiness on
   `/healthz`. Staging single revision with all traffic on the latest; production multiple revisions, the release's revision at
   0 % as `green` and the serving one as `blue`, then 100 % to `green` after the smoke test (ADR-009). The cron replica waits for
@@ -403,9 +403,9 @@ Three rules govern every choice:
 
 ## Decisions taken in phase 7
 
-- **Production's compute in Spain Central** (ADR-014): the subscription allows one Container Apps environment in `swedencentral`,
-  taken by staging, so `main.bicep` takes `appLocation` (`spaincentral` in production, `cae-elevant-prod-spc`); data, identity,
-  monitoring and the alert stay in `swedencentral`.
+- **One Container Apps environment** (ADR-016, superseding ADR-014 on 2026-11-02): one Container Apps environment,
+  `cae-elevant-env` in `swedencentral`, declared by production in `rg-elevant-prod-swc` (`infra/modules/environment.bicep`) and
+  joined by staging as `existing`; the staging CI principal has only `read` and `join/action` on it (`08-environment.sh staging`).
 - **Staging measured** (2026-10-31 and 2026-11-01, `docs/OPERATIONS.md`): the four doubles scenarios and the real-model one with no
   failure and draft p95 at most 1.0 s with the doubles and 18 s with the real model; stress reached the 3-replica maximum without a
   `429` or `503`. Cold start 24.1 and 27.8 s; the worst cold path (estimated 46 s, start plus slowest draft, for an upload that wakes the replica) is 1 s over the SLO and
