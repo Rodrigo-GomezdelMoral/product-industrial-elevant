@@ -241,8 +241,8 @@ The repository and the published demo use only synthetic reports with fictitious
 
 ## How each requirement is proven
 
-Status on 2026-11-01, the v1.0.0 release candidate: tested in CI, deployed and used in staging, and replayed in the published
-demo. Production evidence follows the release (prompt 04). The demo's simulations S1 to S6 are real staging runs, listed in the README.
+Status on 2026-11-02, v1.0.2 in production: tested in CI, deployed and used in staging, replayed in the published demo, and every Must
+walked through in production (table after this one). The demo's simulations S1 to S6 are real staging runs, listed in the README.
 
 | REQ | Test | Live evidence in staging | Demo |
 |---|---|---|---|
@@ -256,6 +256,23 @@ demo. Production evidence follows the release (prompt 04). The demo's simulation
 | REQ-08 | `test_agents.py`: the corrector proposes catalogue edits without applying them and refuses unknown codes (phase 2); `test_api.py`: the correction endpoint only proposes edits, which are applied through the review answer, and a throttled model answers 429 with `Retry-After` (phase 4); `web/tests/web.spec.ts`: a proposal changes nothing until it is confirmed (phase 5) | correction confirmed in the browser | S4, S6 (the correction card) |
 | REQ-09 | `test_api.py`: 👍 or 👎 sent as the `feedback` event, with `quote_drafted`, `line_reviewed`, `quote_approved` and `quote_deleted`, captured by an in-memory OpenTelemetry exporter, with no personal data (phase 4); `web/tests/web.spec.ts`: 👍 sends the rating (phase 5) | KQL showing `feedback` events | every simulation offers the rating |
 | REQ-10 | `test_api.py`: only `Quote.Manager` deletes; the quote, its checkpoints and its blobs are removed, in memory and in the emulators, and the deletion is logged by quote id only (phase 4); retention in Bicep: Cosmos DB TTL and blob lifecycle at 30 days in staging and 730 in production, continuous backup and soft delete for 7 days (phase 6) | delete as the manager | none: the retention and deletion runbook in OPERATIONS.md |
+
+Live evidence in production, 2026-11-02: the owner's walk-through of v1.0.1 (17:40 to 17:41 UTC, `06-production-walkthrough.sh`,
+`web/tests/live.spec.ts` passed) and production's `AppEvents` and `AppRequests` over its whole life (30-day window). Test values from
+one walk-through, not business figures; outcomes in [OPERATIONS.md](OPERATIONS.md).
+
+| REQ | Live evidence in production | Status in production |
+|---|---|---|
+| REQ-01 | a JSON file refused; the scanned sample and `report-0106.pdf` read with header and defects with page and row | shown |
+| REQ-02 | two fresh drafts priced from the catalogue, 5 and 1 lines flagged; `quote_drafted` 2, `quote_failed` 0 | shown |
+| REQ-03 | flags resolved, approval, read-only after it with 4 recorded changes; `line_reviewed` 13, `quote_approved` 1 | shown |
+| REQ-04 | the approved quote's `.docx` downloaded, €3,431.44 with catalogue and template hashes | shown |
+| REQ-05 | drafts in 17.6 s and 48.9 s (n = 2), inside the 60 s SLA; a p95 needs more drafts | shown, p95 not yet meaningful |
+| REQ-06 | availability in business hours 100 % (n = 40 requests, 0 `5xx` in 47) | not yet measurable over a calendar month |
+| REQ-07 | the approved quote shows `catalogue-v1` and `quote-template-v1` with their hashes | shown |
+| REQ-08 | a correction in plain words proposed and confirmed | shown |
+| REQ-09 | `feedback` 1 (up) | shown |
+| REQ-10 | one quote deleted as manager in the web, `quote_deleted` at 18:38:03 UTC; TTL and lifecycle at 730 days live | shown |
 
 ## Glossary
 

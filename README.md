@@ -112,8 +112,10 @@ Application Insights, with the people's names replaced by their role.
 
 ## In action
 
-The published demo above replays six real staging runs. The production walk-through of every Must runs with v1.0.1's validation:
-_pending (date and outcome in [docs/OPERATIONS.md](docs/OPERATIONS.md))_.
+The published demo above replays six real staging runs. Every Must was also walked through in production on 2026-11-02 with v1.0.1:
+two fresh drafts (17.6 s and 48.9 s), flags resolved, a correction confirmed, the rating, the approval, the Word download and a deletion
+as manager, all recorded in production's `AppEvents`; outcomes in [docs/OPERATIONS.md](docs/OPERATIONS.md). The screenshots stay local
+and are not published.
 
 ## Environments and releases
 
@@ -138,9 +140,12 @@ doubled, the last with the real one; the earlier run of 2026-10-31 is in [docs/O
 | Real model | 3 | 9 | 0 | 17 s (max 17.1 s) | |
 
 SLOs measured in staging to 2026-11-01: real-model draft p95 23.2 s (n = 20) against 45 s, failed drafts 0 of 8,986. Production
-cold start 27.9 s (n = 1). DORA, staging: 3 deployments in 2 days, 3 and 7 minutes from merge to staging, change failure rate 0 %, and
-a rollback by tag in 2 min 27 s; production: 1 release, 5 h 28 min from merge to production through the load test and the approval,
-change failure rate 0 %. Details in
+cold start 27.9 s (n = 1); production after its walk-through (2026-11-02, 30 days, test values): availability in business hours 100 %
+(n = 40), draft p95 48.9 s (n = 2, inside the 60 s SLA), failed drafts 0. DORA, staging: 3 deployments in 2 days, 3 and 7 minutes
+from merge to staging, change failure rate 0 %, and a rollback by tag in 2 min 27 s; production: 3 releases in 2 days, from 5 h 28 min
+(through the load test and the approval) down to 7 min from merge to production, change failure rate 0 %. Drills (2026-11-02):
+rollback by label in production 50 s and back in 18 s, rollback by tag in staging 166 s, restore RTO about 13 min against 4 h, RPO
+≤ 100 s, and a staging copy of the SLO alert fired 4 min 52 s after it was created. Details in
 [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
 ## Cost
@@ -158,7 +163,7 @@ input and 1,504 output tokens measured), the rest under a cent. Details in [docs
 
 | Pillar | Applied | Trade-off accepted |
 |---|---|---|
-| Reliability | SLOs stricter than the SLAs, health probes, checkpoints that resume a review, continuous backup, a rollback drill | one region, no zone redundancy (ADR-012) |
+| Reliability | SLOs stricter than the SLAs, health probes, checkpoints that resume a review, continuous backup, rollback, restore and alert drills | one region, no zone redundancy (ADR-012) |
 | Security | Entra ID sign-in with app roles, managed identity, no keys or secrets, untrusted report text, threat model | no private networking (ADR-012) |
 | Cost Optimization | scale to zero, serverless Cosmos DB, budgets, daily log caps, cost per quote measured | a cold start of 24 to 28 s, no warm replica (ADR-008) |
 | Operational Excellence | infrastructure as code, one image per merge, blue/green releases, evaluation gate, DORA metrics | production's compute in another region for quota (ADR-014) |
