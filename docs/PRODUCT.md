@@ -148,8 +148,8 @@ the first release and has at least one recorded simulation in the published demo
 *As the client, I can rely on Elevant during business hours.*
 
 - **Given** a calendar month, **then** availability in business hours (Monday to Friday, 07:00–20:00 Europe/Madrid) is at least
-  **99.5 %**, measured as requests not failed by a server error over all requests; client errors (4xx) are not counted as failures
-  and the health probe is excluded.
+  **99.5 %**, measured as successful requests over all requests, client errors (4xx) and the health probe excluded: a request
+  fails when it answers a server error (5xx).
 
 ### REQ-07 · Catalogue and template changed without code (Should)
 

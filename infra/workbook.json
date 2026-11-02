@@ -28,7 +28,7 @@
       "content": {
         "version": "KqlItem/1.0",
         "title": "SLOs, last 30 days: availability in business hours (SLO 99.7 %, SLA 99.5 %), draft p95 (SLO 45 s, SLA 60 s), failed drafts (SLO < 1 %)",
-        "query": "let availability = toscalar(requests | extend local = datetime_utc_to_local(timestamp, \"Europe/Madrid\") | where dayofweek(local) between (1d .. 5d) and hourofday(local) between (7 .. 19) | summarize round(100.0 * countif(toint(resultCode) < 500) / count(), 3));\ncustomEvents\n| where name in (\"quote_drafted\", \"quote_failed\")\n| summarize drafts = countif(name == \"quote_drafted\"), draft_p95_s = round(percentile(todouble(customDimensions.duration_ms), 95) / 1000, 1), failed_pct = round(100.0 * countif(name == \"quote_failed\") / count(), 2)\n| extend availability_pct = availability",
+        "query": "let availability = toscalar(requests | extend local = datetime_utc_to_local(timestamp, \"Europe/Madrid\") | where dayofweek(local) between (1d .. 5d) and hourofday(local) between (7 .. 19) and name !has \"healthz\" and toint(resultCode) !between (400 .. 499) | summarize round(100.0 * countif(toint(resultCode) < 500) / count(), 3));\ncustomEvents\n| where name in (\"quote_drafted\", \"quote_failed\")\n| summarize drafts = countif(name == \"quote_drafted\"), draft_p95_s = round(percentile(todouble(customDimensions.duration_ms), 95) / 1000, 1), failed_pct = round(100.0 * countif(name == \"quote_failed\") / count(), 2)\n| extend availability_pct = availability",
         "size": 4,
         "queryType": 0,
         "resourceType": "microsoft.insights/components",

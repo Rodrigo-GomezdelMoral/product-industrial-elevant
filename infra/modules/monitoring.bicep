@@ -15,7 +15,7 @@ var slos = '''
 union
   (requests
     | extend local = datetime_utc_to_local(timestamp, "Europe/Madrid")
-    | where dayofweek(local) between (1d .. 5d) and hourofday(local) between (7 .. 19)
+    | where dayofweek(local) between (1d .. 5d) and hourofday(local) between (7 .. 19) and name !has "healthz" and toint(resultCode) !between (400 .. 499)
     | summarize n = count(), value = 100.0 * countif(toint(resultCode) < 500) / count()
     | where n >= 20 and value < 99.7 | extend slo = "availability_pct"),
   (customEvents | where name == "quote_drafted"
