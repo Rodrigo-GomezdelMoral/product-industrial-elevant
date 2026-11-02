@@ -5,7 +5,7 @@ Built by **Rodrigo Martín Gómez del Moral Herranz**
 <a href="https://github.com/Rodrigo-GomezdelMoral"><img src="docs/images/author/github.png" alt="GitHub" height="36"></a>&nbsp;&nbsp;<a href="https://www.linkedin.com/in/rodrigo-mart%C3%ADn-g%C3%B3mez-del-moral-herranz"><img src="docs/images/author/linkedin.png" alt="LinkedIn" height="36"></a>&nbsp;&nbsp;<a href="https://rodrigogomezdelmoralherranz.es"><img src="docs/images/author/portfolio.png" alt="Portfolio" height="36"></a>
 
 Lift inspection reports turned into reviewed, traceable repair quotes in Word. A lift maintenance company spends 33 to 65 minutes of
-office time on every quote; Elevant drafts it from the client's own catalogue in 15 to 19 seconds (staging, 2026-10-31),
+office time on every quote; Elevant drafts it from the client's own catalogue in 12 to 25 seconds (all 20 real-model drafts in staging to 2026-11-01, p95 23 s),
 computes every amount in code, and issues nothing until a person approves it.
 
 **[Try the published demo](https://rodrigo-gomezdelmoral.github.io/product-industrial-elevant/)**: six real runs recorded from
@@ -50,16 +50,16 @@ simulation of each. Status on 2026-11-01:
 
 | Must | What | Status | Evidence |
 |---|---|---|---|
-| REQ-01 | Upload a report and see what it says | deployed to staging | `test_extraction.py`, `test_api.py`; staging walk-through; S1, S2, S4 |
-| REQ-02 | Each defect matched to the catalogue, priced in code | deployed to staging | `test_domain.py`, `test_agents.py`, evaluation gate; S1, S2, S3, S5 |
-| REQ-03 | Correct the draft and approve it | deployed to staging | `test_domain.py`, `test_api.py`, `web.spec.ts`; S3, S4, S6 |
-| REQ-04 | Download a traceable Word quote | deployed to staging | `test_render.py`, `test_api.py`; the Word file of S4 and S6 |
+| REQ-01 | Upload a report and see what it says | in production (v1.0.0), proven in staging | `test_extraction.py`, `test_api.py`; staging walk-through; S1, S2, S4 |
+| REQ-02 | Each defect matched to the catalogue, priced in code | in production (v1.0.0), proven in staging | `test_domain.py`, `test_agents.py`, evaluation gate; S1, S2, S3, S5 |
+| REQ-03 | Correct the draft and approve it | in production (v1.0.0), proven in staging | `test_domain.py`, `test_api.py`, `web.spec.ts`; S3, S4, S6 |
+| REQ-04 | Download a traceable Word quote | in production (v1.0.0), proven in staging | `test_render.py`, `test_api.py`; the Word file of S4 and S6 |
 | REQ-05 | Drafts are fast | measured in staging | load tests and `quote_drafted` p95 in KQL |
 | REQ-06 | Available in business hours | declared and queried in staging | the workbook's SLO query and the production alert |
 
 | SLA | Committed | Measured in staging |
 |---|---|---|
-| Draft latency (REQ-05) | p95 under 60 s | 18 s with the real model (Locust, 2026-10-31); 0.6 to 1.0 s with the model doubled under load; cold start 24 to 28 s before the draft |
+| Draft latency (REQ-05) | p95 under 60 s | 17 s with the real model on the released image (Locust, 2026-11-01, n = 9); 23.2 s over all 20 real drafts in staging to 2026-11-01; 0.5 to 1.4 s with the model doubled under load; cold start 24 to 28 s before the draft |
 | Availability (REQ-06) | 99.5 % in business hours | no `5xx` among the requests recorded; the business-hours SLI waits for weekday traffic in production |
 
 ## KPIs
@@ -112,7 +112,8 @@ Application Insights, with the people's names replaced by their role.
 
 ## In action
 
-Captures of the production walk-through come with the release's validation.
+The published demo above replays six real staging runs. The production walk-through of every Must runs with v1.0.1's validation:
+_pending (date and outcome in [docs/OPERATIONS.md](docs/OPERATIONS.md))_.
 
 ## Environments and releases
 
@@ -125,18 +126,21 @@ flowchart LR
 A merge builds one image that is never rebuilt; staging receives it by digest. A release promotes the digest staging runs, after a
 successful load test, to production as a new revision that takes the traffic only after its smoke test.
 
-Load tests in staging, 2026-10-31 (Locust, `report-0134` uploads; the first four with the model doubled, the last with the real one):
+Load tests in staging on the image v1.0.0 promoted, 2026-11-01 (Locust, `report-0134` uploads; the first four with the model
+doubled, the last with the real one; the earlier run of 2026-10-31 is in [docs/OPERATIONS.md](docs/OPERATIONS.md)):
 
-| Scenario | Users | Requests | Failures | Draft p95 (max) | Rate | Replicas |
-|---|---|---|---|---|---|---|
-| Normal | 5 | 199 | 0 | 0.59 s (4.2 s) | 1.1/s | scale from zero |
-| Peak | 20 | 805 | 0 | 0.98 s (5.1 s) | 4.5/s | scale out at 10 concurrent requests |
-| Stress | ramp to 100 | 3,508 | 0 | 1.0 s (1.8 s) | 11.7/s | 3, the maximum, no `429` or `503` |
-| Soak | 5 for 20 min | 1,392 | 0 | 0.45 s (0.65 s) | 1.2/s | no drift |
-| Real model | 3 | 13 | 0 | 18 s (18.4 s) | 0.1/s | |
+| Scenario | Users | Drafts | Failures | Draft p95 | Replicas |
+|---|---|---|---|---|---|
+| Normal | 5 | 164 | 0 | 0.91 s | scale from zero |
+| Peak | 20 | 625 | 0 | 1.1 s | scale out at 10 concurrent requests |
+| Stress | ramp to 100 | 2,619 | 0 | 1.4 s | 3, the maximum, at most 0.49 vCPU and 500 MB each |
+| Soak | 5 for 20 min | 1,056 | 0 | 0.51 s | no drift |
+| Real model | 3 | 9 | 0 | 17 s (max 17.1 s) | |
 
-SLOs measured on 2026-11-01: draft p95 18.5 s against 45 s, failed drafts 0 %. DORA, staging only until the first release: 3
-deployments in 2 days, 3 and 7 minutes from merge to staging, change failure rate 0 %, and a rollback by tag in 2 min 27 s. Details in
+SLOs measured in staging to 2026-11-01: real-model draft p95 23.2 s (n = 20) against 45 s, failed drafts 0 of 8,986. Production
+cold start 27.9 s (n = 1). DORA, staging: 3 deployments in 2 days, 3 and 7 minutes from merge to staging, change failure rate 0 %, and
+a rollback by tag in 2 min 27 s; production: 1 release, 5 h 28 min from merge to production through the load test and the approval,
+change failure rate 0 %. Details in
 [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
 ## Cost
