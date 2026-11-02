@@ -10,13 +10,13 @@ estimates with Cost Management, per environment (below).
 |---|---|
 | Document Intelligence layout (`S0 Pre-built Pages`) | €8.7997 per 1,000 pages; no free tier on an AIServices account |
 | `gpt-5-mini` Global: input · cached input · output | €0.22 · €0.022 · €1.7599 per 1M tokens |
-| Container Apps: vCPU active · idle; memory; requests | €0.0000211 · €0.00000264 per vCPU-s; €0.00000264 per GiB-s; €0.352 per 1M; monthly grant per subscription of 180k vCPU-s, 360k GiB-s and 2M requests, shared with P06 to P08 |
+| Container Apps: vCPU active · idle; memory; requests | €0.0000211 · €0.00000264 per vCPU-s; €0.00000264 per GiB-s; €0.352 per 1M; monthly grant per subscription of 180k vCPU-s, 360k GiB-s and 2M requests, a shared base allowance, not Elevant's alone |
 | Cosmos DB serverless | €0.2684 per 1M RU; €0.22 per GB-month; continuous 7-day backup storage free; restore €0.132 per GB |
 | Blob hot LRS | €0.0162 per GB-month; writes €0.044 and reads €0.0035 per 10k |
 | Key Vault | €0.0264 per 10k operations (none in v1) |
-| Log Analytics | €2.6311 per GB after 5 GB a month per billing account, shared with P06 to P08; 31 days included |
+| Log Analytics | €2.6311 per GB after 5 GB a month per billing account, a shared base allowance, not Elevant's alone; 31 days included |
 | Log alert, 15-minute frequency | €0.44 per rule a month, from the build prompt, kept as the estimate. On 2026-11-01 the Retail Prices API listed for Azure Monitor only *Alerts Resource Monitored at 15 Minute Frequency* (€0.044 per resource a month) and the 1-minute *System Log* meter, none matching this rule; it exists only in production, so Cost Management confirms it after the release (prompt 04) |
-| Inter-region data transfer (production's app in Spain Central to its data in Sweden Central, ADR-014) | €0.0176 per GB (`spaincentral`, *Standard Inter-Region Data Transfer*, 2026-11-01); Container Apps in `spaincentral` lists the same meters, requests at €0.352 per 1M |
+| Inter-region data transfer | none since ADR-016: both apps, their data and the registry are in Sweden Central (ADR-014 had production's app in Spain Central) |
 
 ## Per quote
 
@@ -37,7 +37,7 @@ price, so an upper bound).
 | | Staging | Production |
 |---|---|---|
 | At rest | about €0.01: stored data only | about €0.50: the SLO alert rule plus stored data |
-| In use | under €1 (about 30 test quotes, load tests with doubles, one short real-model scenario under €0.30) | €9 to €15 a month: Document Intelligence about €7.90, models about €1.20, compute €0 to €4 depending on the grant, logs €0 to €1.30, cross-region transfer under €0.75 (quotes under €0.03, image pulls on cold starts under €0.70) |
+| In use | under €1 (about 30 test quotes, load tests with doubles, one short real-model scenario under €0.30) | €9 to €15 a month: Document Intelligence about €7.90, models about €1.20, compute €0 to €4 depending on the grant, logs €0 to €1.30 (the shared environment's container logs of both apps land in production's workspace, ADR-016) |
 | Budget | €5 a month | €20 a month |
 | Daily log cap | 0.1 GB | 0.5 GB |
 | Maximum replicas | 3 | 5 |
@@ -50,7 +50,7 @@ Shared, and paid by the base whatever Elevant does: the registry (Basic, €0.14
 - It already scales to zero replicas when idle; nothing in Elevant's groups bills by the hour.
 - To stop production's only fixed charge, disable the SLO alert rule.
 - To stop deployments, prompt 06 pauses the workflows.
-- Learn deletes Container Apps environments idle for more than 90 days with no apps; each environment always has its app, so it stays.
+- Learn deletes Container Apps environments idle for more than 90 days with no apps; `cae-elevant-env` always has both apps, so it stays.
 
 ## Cost to date
 

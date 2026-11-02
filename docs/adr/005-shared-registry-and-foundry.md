@@ -12,7 +12,7 @@ Share both, with separate identities: `id-elevant-stg` and `id-elevant-prod` get
 
 ## Consequences
 
-- About €4.40 a month of registry and no idle model cost are paid once for P05 to P08.
+- About €4.40 a month of registry and no idle model cost are paid once by the shared base.
 - The 100K tokens-per-minute deployment is shared: output caps, at most 5 production replicas and the API's clear `429` message bound Elevant's share.
 - The production CI principal cannot read the Foundry account, so the endpoints reach Bicep as GitHub variables.
 
