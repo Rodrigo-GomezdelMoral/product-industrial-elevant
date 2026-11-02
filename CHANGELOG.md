@@ -7,6 +7,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-02
+
+The validation of v1.0.0: one code-scanning alert, the availability SLI aligned with its requirement, merge gates, and the
+documentation corrected with what production and the release's load test measured. No change to the request path's behaviour.
+
+### Changed
+
+- The availability SLI of the workbook and of the production SLO alert now excludes client errors (4xx) and the health probe, as
+  REQ-06 defines it; before, a 4xx counted as a success and the probe was counted. `docs/PRODUCT.md` states the same definition.
+- `eval.yml` runs on every pull request and evaluates only when the change touches prompts, agents, the workflow, the domain rules,
+  the reference data or `eval/`, so its `changes` and `eval` checks can be required on `main` without blocking other pull requests.
+- The live walk-through takes its screenshot folder from `ELEVANT_SHOTS` (staging by default), for the production walk-through.
+- Dependabot ignores major updates of the `node` image and of `typescript`, and major and minor updates of the `python` image
+  (Python's feature releases change the minor number): those runtimes are pinned on purpose and change on a planned branch (ADR-013).
+- `docs/OPERATIONS.md` and the README publish the load test of the image v1.0.0 promoted (2026-11-01) beside the earlier run,
+  staging's real-model drafts with n and window (n = 20, p95 23.2 s), production's cold start (27.9 s, n = 1) and production's DORA
+  figures; the emergency rollback by label is valid from the second release on, and the drills and the production walk-through have
+  their place for v1.0.1's results.
+- `docs/RESPONSIBLE_AI.md` reassessed after the release: every mitigation is implemented, with where.
+- ADR-012 names Advisor's storage zone-redundancy recommendation and why it stays open; ADR-002 records why the workflow is
+  self-hosted without `agent-framework-hosting`; `docs/architecture.md` lists the Failure Anomalies rule Application Insights creates.
+
+### Fixed
+
+- The retirement date of `gpt-5-mini` `2025-08-07` is 2027-07-13 (Learn model retirement schedule and the Models API, read
+  2026-11-01), not 2027-02-09 as ADR-013, `docs/OPERATIONS.md` and `docs/RESPONSIBLE_AI.md` said.
+- `app/render.py` writes the XML character filter with escapes instead of invisible literal characters (code scanning
+  `py/overly-large-range`; the range is the XML 1.0 character set on purpose).
+
 ## [1.0.0] - 2026-11-01
 
 The first release: Elevant drafts a repair quote from a lift inspection report, the estimator reviews it and approves it, and the

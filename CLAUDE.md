@@ -449,6 +449,20 @@ Three rules govern every choice:
   From Git Bash, `MSYS_NO_PATHCONV=1` is needed for a local `--base`, or MSYS rewrites it into a Windows path.
 - **Budget after phase 8:** Python app 1,500/1,500 (`ops/export_run.py`, 100 lines), files 66/80, TypeScript 799/799 unchanged.
 
+## Decisions taken in the validation of v1.0.0 (`feature/fixes`, 2026-11-02)
+
+- **Pinned runtimes stay pinned.** `.github/dependabot.yml` ignores major updates of the `node` image and of `typescript`, and
+  major and minor updates of the `python` image (3.12 to 3.15 is a minor bump for Dependabot). Moving a runtime is a planned branch
+  with the full checks and the load test (ADR-013); patch updates, and minor ones of `node` and `typescript`, keep arriving. The owner closes pull requests #8, #10 and #11.
+- **Merge gates.** `protect-main` requires the `ci.yml` jobs, the `changes` and `eval` checks and CodeQL results (author script
+  `07-required-checks.sh`). For `eval` to be required, `eval.yml` runs on every pull request: a `changes` job reads the pull
+  request's files and the `eval` job runs only when they touch the evaluated paths; a skipped job counts as passed, so
+  `changes` is required too (a failed `changes` would otherwise skip `eval` silently).
+- **Availability SLI.** Client errors (4xx) and the health probe are excluded from numerator and denominator, as REQ-06 says, in
+  both the workbook and the SLO alert; same query cost.
+- **`app/render.py`.** The XML 1.0 character filter is written with `\x`, `\u` and `\U` escapes in a raw string, same line count;
+  CodeQL may still report the wide range, which is the XML character set on purpose.
+
 ## Verified names (installed wheels, 2026-10-30 and 2026-10-31)
 
 | Package | Name |

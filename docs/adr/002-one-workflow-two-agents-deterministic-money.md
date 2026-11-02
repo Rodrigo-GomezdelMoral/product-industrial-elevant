@@ -15,6 +15,7 @@ One `WorkflowBuilder` graph per quote, `extract → match → price → review �
 - The model cannot change a price, a quantity rule or a total: injection cases are flagged and priced from the catalogue.
 - One batched call per report keeps the draft p95 near 19 s on the recorded set, inside the 45 s SLO.
 - The corrector would suit `gpt-5-nano`, but the subscription has no quota for it; at a few corrections per quote the difference is cents a month.
+- The workflow is self-hosted in FastAPI on Container Apps, without `agent-framework-hosting` and its `WorkflowState`: the guide's hosting section lets the application own checkpoint storage, so the API maps each quote id to its Cosmos DB checkpoints and resumes only the stored quote the signed-in user may see, which is also that section's security advice (recorded 2026-11-02).
 
 ## Alternatives considered
 

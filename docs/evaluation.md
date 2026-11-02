@@ -15,7 +15,7 @@ Each draft is then compared with the truth of its report.
 
 | Mode | When | Extraction | Matcher | Cost |
 |---|---|---|---|---|
-| Pull request | `eval.yml` on every pull request that changes `app/prompts/`, `app/agents.py`, `app/workflow.py`, `app/domain.py`, `app/extraction.py`, `app/settings.py`, `data/reference/`, `eval/` or the workflow itself | the layouts recorded once in `eval/datasets/extracted/` | real, shared deployment | about €0.14 |
+| Pull request | `eval.yml` on every pull request; it evaluates when the pull request changes `app/prompts/`, `app/agents.py`, `app/workflow.py`, `app/domain.py`, `app/extraction.py`, `app/settings.py`, `data/reference/`, `eval/` or the workflow itself | the layouts recorded once in `eval/datasets/extracted/` | real, shared deployment | about €0.14 |
 | Full | `eval.yml` run by hand from `main` (`--full`) | Document Intelligence on the 57 pages | real | about €0.65 |
 
 The extraction is recorded for pull requests because it is deterministic code over the service's output: the same layout always gives

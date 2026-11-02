@@ -1,10 +1,10 @@
 # ADR-013: Model versions, retirement date and the change plan
 
-Status: accepted (phase 6, recorded 2026-10-31)
+Status: accepted (phase 6, recorded 2026-10-31; retirement date corrected and dependency majors added 2026-11-02)
 
 ## Context
 
-The shared `gpt-5-mini` deployment is version `2025-08-07` with `NoAutoUpgrade`, and it retires on 2027-02-09 (Learn model retirement schedule, 2026-09-21); no replacement is named yet. After that date calls would fail.
+The shared `gpt-5-mini` deployment is version `2025-08-07` with `NoAutoUpgrade`, and it retires on 2027-07-13 (Learn model retirement schedule, updated 2026-09-21, and `az cognitiveservices account list-models`, `deprecation.inference`, read 2026-11-01); no replacement is named yet. Version 1.0.0 published 2027-02-09, which is the date of `gpt-5` and `gpt-5-nano`, not of `gpt-5-mini`; corrected in 1.0.1. After that date calls would fail.
 
 ## Decision
 
@@ -14,6 +14,7 @@ Pin the version and treat a model change like a code change: when a replacement 
 
 - No silent behaviour change from an automatic upgrade.
 - The date is in `OPERATIONS.md` and is checked at each phase that deploys.
+- The same rule holds for the runtimes: Dependabot ignores major updates of the `python` and `node` base images (and minor updates of `python`, whose feature releases change the minor number) and of `typescript` in `/web`. Python 3.12, Node 24 and TypeScript 6 are pinned on purpose; moving to a new major or Python feature release is a planned change on its own branch, with the full checks and the load test, not a weekly Dependabot pull request. Patch updates, and minor ones of `node` and `typescript`, keep arriving.
 
 ## Alternatives considered
 

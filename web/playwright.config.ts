@@ -4,7 +4,7 @@ declare const process: { env: Record<string, string | undefined> }
 const live = process.env.ELEVANT_URL
 
 export default defineConfig({
-  testDir: 'tests',
+  testDir: 'tests', metadata: { shots: process.env.ELEVANT_SHOTS ?? 'test-results/staging' },
   testMatch: live ? 'live.spec.ts' : 'web.spec.ts',
   timeout: live ? 900_000 : 120_000,
   use: { baseURL: live ?? 'http://127.0.0.1:4173', acceptDownloads: true, headless: !live },

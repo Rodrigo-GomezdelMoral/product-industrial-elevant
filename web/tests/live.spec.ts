@@ -1,12 +1,12 @@
 import { expect, test, type Page } from '@playwright/test'
 
-const SHOTS = 'test-results/staging'
+const SHOTS = () => String(test.info().config.metadata.shots)
 const REPORT = '../data/reports/report-0106.pdf'
 const FALLBACK: Record<string, string> = { 'Lift ID': 'ELV-0106', Location: '115 Chapel Row, Fairholm', 'Inspection date': '2026-09-02', Technician: 'Luis Campos' }
 
 test.use({ viewport: { width: 1440, height: 1000 }, actionTimeout: 60_000 })
 
-const shot = (page: Page, name: string) => page.screenshot({ path: `${SHOTS}/${name}.png`, mask: [page.locator('p.user'), page.locator('.avatar'), page.getByText(/^Approved by/)], maskColor: '#CBD9F0' })
+const shot = (page: Page, name: string) => page.screenshot({ path: `${SHOTS()}/${name}.png`, mask: [page.locator('p.user'), page.locator('.avatar'), page.getByText(/^Approved by/)], maskColor: '#CBD9F0' })
 
 async function act(page: Page, action: () => Promise<unknown>) {
   const answer = page.waitForResponse((response) => new URL(response.url()).pathname.endsWith('/review'), { timeout: 120_000 })

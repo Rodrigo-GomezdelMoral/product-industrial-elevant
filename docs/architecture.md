@@ -26,6 +26,7 @@ graph LR
 | Blob Storage, hot LRS | `reports` and `quotes`, shared key off, soft delete 7 days, lifecycle deletion at retention | `data.bicep` |
 | Key Vault | RBAC only, soft delete and purge protection; empty in v1 | `data.bicep`, ADR-010 |
 | Log Analytics and Application Insights | 31 days, daily cap, Entra-authenticated ingestion; KPI events, workbook, SLO alert (production) | `infra/modules/monitoring.bicep`, `infra/workbook.json` |
+| Failure Anomalies (not in Bicep) | The smart detector rule Application Insights creates in each group on its own; free, left as created and not declared (read 2026-11-01) | created by Application Insights |
 | Budget | Monthly, actual 50/80/100 % and forecast 100 % | `infra/modules/budget.bicep` |
 | Shared base | Registry `craiplatformshared`, Foundry account `fdry-aiplatform-shared-swc` (`gpt-5-mini` `2025-08-07`, Document Intelligence) | `rg-aiplatform-shared-swc`, ADR-005 |
 

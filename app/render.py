@@ -8,7 +8,7 @@ from docxtpl import DocxTemplate
 
 from app.domain import HEADER_FIELDS, REFERENCE, DomainError, Line, Quote, reference
 
-NOT_XML = re.compile("[^\t\n\r -퟿-�\U00010000-\U0010ffff]")
+NOT_XML = re.compile(r"[^\t\n\r\x20-\uD7FF\uE000-\uFFFD\U00010000-\U0010FFFF]")
 
 
 def euros(value: Decimal | None) -> str:

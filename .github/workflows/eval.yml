@@ -3,16 +3,6 @@ name: eval
 on:
   pull_request:
     branches: [main]
-    paths:
-      - app/prompts/**
-      - app/agents.py
-      - app/workflow.py
-      - app/domain.py
-      - app/extraction.py
-      - app/settings.py
-      - data/reference/**
-      - eval/**
-      - .github/workflows/eval.yml
   workflow_dispatch:
 
 permissions:
@@ -32,9 +22,30 @@ env:
   PROJECT: proj-aiplatform-shared
 
 jobs:
+  changes:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+    outputs:
+      eval: ${{ steps.paths.outputs.eval }}
+    steps:
+      - name: Does the pull request touch prompts, agents, workflow, domain, reference data or eval?
+        id: paths
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          files=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate --jq '.[].filename')
+          pattern='^(app/prompts/|app/(agents|workflow|domain|extraction|settings)\.py$|data/reference/|eval/|\.github/workflows/eval\.yml$)'
+          if grep -qE "$pattern" <<< "$files"; then echo "eval=true" >> "$GITHUB_OUTPUT"; else echo "eval=false" >> "$GITHUB_OUTPUT"; fi
+
   pull-request:
+    name: eval
+    needs: changes
     if: >-
-      github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository &&
+      needs.changes.outputs.eval == 'true' && github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
