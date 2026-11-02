@@ -27,14 +27,13 @@ param dailyCapGb string
 @description('Monthly budget of the resource group, in the billing currency (EUR).')
 param budgetAmount int
 param location string = resourceGroup().location
-@allowed(['swedencentral', 'spaincentral'])
-@description('Region of the Container Apps environment and app: production runs in spaincentral, where the subscription has environment quota; data, identity and monitoring stay in location (ADR-014).')
-param appLocation string = location
 param registryName string = 'craiplatformshared'
 
 var short = env == 'staging' ? 'stg' : 'prod'
 var tags = { project: 'product-industrial-elevant', environment: env, owner: 'Rodrigo-GomezdelMoral' }
 var registryServer = '${registryName}${environment().suffixes.acrLoginServer}'
+var environmentName = 'cae-elevant-env'
+var environmentGroup = 'rg-elevant-prod-swc'
 
 resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing = { name: 'id-elevant-${short}' }
 
@@ -52,11 +51,19 @@ module data 'modules/data.bicep' = {
   }
 }
 
+@description('Only production declares the shared Container Apps environment; staging joins it as existing (ADR-016).')
+module containerEnvironment 'modules/environment.bicep' = if (env == 'production') {
+  params: { name: environmentName, location: location, tags: union(tags, { environment: 'shared' }), workspaceId: monitoring.outputs.workspaceId }
+}
+
+resource sharedEnvironment 'Microsoft.App/managedEnvironments@2026-07-01' existing = { name: environmentName, scope: resourceGroup(environmentGroup) }
+
 module app 'modules/app.bicep' = {
+  dependsOn: [containerEnvironment]
   params: {
-    location: appLocation, tags: tags, short: short, production: env == 'production', maxReplicas: maxReplicas
+    location: location, environmentId: sharedEnvironment.id, tags: tags, short: short, production: env == 'production', maxReplicas: maxReplicas
     image: '${registryServer}/product-industrial-elevant@${digest}', registryServer: registryServer, identityId: identity.id
-    revisionSuffix: revisionSuffix, stableRevision: stableRevision, authClientId: authClientId, workspaceId: monitoring.outputs.workspaceId
+    revisionSuffix: revisionSuffix, stableRevision: stableRevision, authClientId: authClientId
     settings: {
       ELEVANT_ENV: env
       ELEVANT_IMAGE: digest
