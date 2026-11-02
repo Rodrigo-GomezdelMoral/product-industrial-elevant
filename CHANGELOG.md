@@ -7,6 +7,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-11-02
+
+The web on the portfolio's common web shell, a release gate that does not load-test a release the API does not change, and the
+documentation about this product only. No change to the API, the agents or the infrastructure.
+
+### Changed
+
+- The web uses the common shell: the same stylesheet, header band, sidebar, user block with the user icon, logo and icon sizes, list
+  items, turns, progress lines, composer, suggestions, empty state and mobile layout, with the static Inter font and the same
+  versions of the shared packages (`typescript` 7.0.2, `lucide-react` 1.59.0, `@fontsource/inter` 5.3.0). The sidebar lists quotes
+  with the document icon and no heading; the user block reads "User" for a signed-in user with a role; the demo visitor is
+  "Visitor". Progress lines show while a draft runs. Elevant's texts, quote review and demo recordings are unchanged.
+- `release.yml` requires the load test unless every path changed since the previous release that reached production is under
+  `web/`, `docs/` or `.github/`, or is Markdown (ADR-015); the merge deployment to staging is always required, and the job log
+  lists the paths and the decision.
+- The documentation states the shared base's facts without naming other products.
+
 ## [1.0.1] - 2026-11-02
 
 The validation of v1.0.0: one code-scanning alert, the availability SLI aligned with its requirement, merge gates, and the
