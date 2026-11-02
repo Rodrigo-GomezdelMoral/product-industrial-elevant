@@ -14,7 +14,7 @@ Pin the version and treat a model change like a code change: when a replacement 
 
 - No silent behaviour change from an automatic upgrade.
 - The date is in `OPERATIONS.md` and is checked at each phase that deploys.
-- The same rule holds for the runtimes: Dependabot ignores major updates of the `python` and `node` base images (and minor updates of `python`, whose feature releases change the minor number) and of `typescript` in `/web`. Python 3.12, Node 24 and TypeScript 6 are pinned on purpose; moving to a new major or Python feature release is a planned change on its own branch, with the full checks and the load test, not a weekly Dependabot pull request. Patch updates, and minor ones of `node` and `typescript`, keep arriving.
+- The same rule holds for the runtimes: Dependabot ignores major updates of the `python` and `node` base images (and minor updates of `python`, whose feature releases change the minor number) and of `typescript` in `/web`. Python 3.12, Node 24 and TypeScript 7 (6 until 2026-11-02, when the web moved to the common web shell; it only type-checks in CI and never reaches the image) are pinned on purpose; moving to a new major or Python feature release is a planned change on its own branch, with the full checks and the load test, not a weekly Dependabot pull request. Patch updates, and minor ones of `node` and `typescript`, keep arriving.
 
 ## Alternatives considered
 

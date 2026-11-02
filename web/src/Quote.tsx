@@ -150,12 +150,12 @@ function Lines({ quote, items, review, problem }: { quote: Quote; items: Item[];
         <form className="add" onSubmit={add}>
           <input name="code" list="catalogue" aria-label="Item to add" placeholder="Add an item from the catalogue" required />
           <input name="quantity" type="number" min="0" step="any" defaultValue="1" aria-label="Quantity to add" required />
-          <button type="submit">Add line</button>
+          <button type="submit" className="secondary">Add line</button>
         </form>
       )}
       {problem && <p className="problem" role="alert"><TriangleAlert size={16} aria-hidden /> {problem}</p>}
       {editing && (
-        <div className="approve">
+        <div className="buttons">
           <button type="button" className="primary" aria-disabled={open.length > 0} aria-describedby={`open-${quote.id}`} onClick={() => open.length === 0 && review([], true)}>Approve</button>
           <span id={`open-${quote.id}`}>{open.length ? `Resolve first: ${open.join(', ')}` : 'Every flag is resolved.'}</span>
         </div>
@@ -210,49 +210,45 @@ export function Answer({ status, busy, error, quote, review, problem }: Answered
   const copy = () =>
     quote && Promise.resolve().then(() => navigator.clipboard.writeText(`${summary(quote)}\n\n${table(quote)}`)).then(() => setSaid('Copied.'), () => setSaid('This browser does not allow copying here.'))
   return (
-    <article className="turn" aria-label="Elevant">
-      <p className="by">Elevant</p>
-      <div aria-live="polite">
-        <ul className="status">
-          {status.map((step, index) => <li key={index}>{step}…{busy && index === status.length - 1 && <LoaderCircle size={16} className="spin" aria-hidden />}</li>)}
-        </ul>
+    <section className="turn product" aria-label="Elevant">
+      <p className="name">Elevant</p>
+      <div className="answer" aria-live="polite">
+        {busy && status.map((step, index) => <p className="status" key={index}>{index === status.length - 1 && <LoaderCircle size={16} className="spin" aria-hidden />}{step}…</p>)}
         {quote && <Markdown {...PLAIN}>{summary(quote)}</Markdown>}
       </div>
-      {error && <p className="problem card" role="alert"><TriangleAlert size={16} aria-hidden /> {error}</p>}
+      {error && <p className="status error" role="alert">{error}</p>}
       {quote && (
         <>
           <Lines quote={quote} items={items} review={review} problem={problem} />
           {quote.state === 'approved' && <Approved quote={quote} />}
-          <div className="after">
-            <button type="button" aria-label="Copy the quote as Markdown" onClick={copy}><Copy size={16} aria-hidden /></button>
-            <button type="button" aria-label="Good draft" aria-pressed={rated === 'up'} onClick={() => rate('up')}><ThumbsUp size={16} aria-hidden /></button>
-            <button type="button" aria-label="Poor draft" aria-pressed={rated === 'down'} onClick={() => rate('down')}><ThumbsDown size={16} aria-hidden /></button>
-            <span aria-live="polite">{said}</span>
+          <div className="actions">
+            <button type="button" className="icon" aria-label="Copy the quote as Markdown" onClick={copy}><Copy size={16} /></button>
+            <button type="button" className="icon" aria-label="Good draft" aria-pressed={rated === 'up'} onClick={() => rate('up')}><ThumbsUp size={16} /></button>
+            <button type="button" className="icon" aria-label="Poor draft" aria-pressed={rated === 'down'} onClick={() => rate('down')}><ThumbsDown size={16} /></button>
+            <span className="status" aria-live="polite">{said}</span>
           </div>
         </>
       )}
-      <hr />
-    </article>
+    </section>
   )
 }
 
 export function Proposal({ edits, state, confirm, dismiss }: { edits: Edit[]; state: 'open' | 'applied' | 'dismissed'; confirm: () => void; dismiss: () => void }) {
   return (
-    <article className="turn" aria-label="Elevant">
-      <p className="by">Elevant</p>
+    <section className="turn product" aria-label="Elevant">
+      <p className="name">Elevant</p>
       <section className="card" aria-label="Proposed correction">
         <p>I propose these changes. Nothing changes until you confirm.</p>
         <ul>{edits.map((edit, index) => <li key={index}>{describe(edit)}</li>)}</ul>
         {state === 'open' ? (
-          <div className="approve">
+          <div className="buttons">
             <button type="button" className="primary" onClick={confirm}>Confirm</button>
-            <button type="button" onClick={dismiss}>Dismiss</button>
+            <button type="button" className="secondary" onClick={dismiss}>Dismiss</button>
           </div>
         ) : (
-          <p className="muted" role="status">{state === 'applied' ? 'Applied.' : 'Dismissed.'}</p>
+          <p className="status" role="status">{state === 'applied' ? 'Applied.' : 'Dismissed.'}</p>
         )}
       </section>
-      <hr />
-    </article>
+    </section>
   )
 }

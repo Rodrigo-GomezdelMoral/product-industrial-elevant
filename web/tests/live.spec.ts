@@ -6,7 +6,7 @@ const FALLBACK: Record<string, string> = { 'Lift ID': 'ELV-0106', Location: '115
 
 test.use({ viewport: { width: 1440, height: 1000 }, actionTimeout: 60_000 })
 
-const shot = (page: Page, name: string) => page.screenshot({ path: `${SHOTS()}/${name}.png`, mask: [page.locator('p.user'), page.locator('.avatar'), page.getByText(/^Approved by/)], maskColor: '#CBD9F0' })
+const shot = (page: Page, name: string) => page.screenshot({ path: `${SHOTS()}/${name}.png`, mask: [page.locator('.me'), page.getByText(/^Approved by/)], maskColor: '#CBD9F0' })
 
 async function act(page: Page, action: () => Promise<unknown>) {
   const answer = page.waitForResponse((response) => new URL(response.url()).pathname.endsWith('/review'), { timeout: 120_000 })
