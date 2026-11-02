@@ -28,7 +28,9 @@ Everything is defined in `infra/` and applied only by the workflows, each preced
    doubles, runs the four scenarios, removes the doubles and runs the real-model scenario. It fails when a scenario other than stress
    misses the SLA (p95 of a draft over 60 s, or more than 0.5 % failed requests).
 4. A release `vX.Y.Z` runs `release.yml`: it checks that the tag's commit has a successful merge deployment and a successful load test,
-   waits for approval, deploys the same digest as a new revision at 0 % labelled `green`, smoke-tests it through the label address and
+   the load test being waived only when every path changed since the previous release that reached production (a successful `release.yml` run) is under `web/`, `docs/` or
+   `.github/`, or is Markdown (ADR-015: the load test measures the API, which those paths do not change at runtime); the job log
+   lists the paths and the decision. It then waits for approval, deploys the same digest as a new revision at 0 % labelled `green`, smoke-tests it through the label address and
    then moves 100 % to it. The previous revision stays active at 0 % as `blue`; older ones are deactivated.
 
 ## Rollback
@@ -151,8 +153,8 @@ Incident procedure (OE:08, SE:12):
 5. **Review:** a short note in the repository with the timeline, the cause and the fix, and a hotfix if code changed.
 
 **Hotfix path** (pre-approved, OE:11): a `hotfix/<what>` branch and a pull request with `ci.yml` and `eval.yml` (which evaluates if it touches
-prompts or agents), the merge, staging, then a patch release. The load test may be skipped only for a hotfix that touches neither the request
-path nor the infrastructure, and the release notes say so.
+prompts or agents), the merge, staging, then a patch release. The load test is required unless every changed path is web, docs, Markdown or
+workflows (ADR-015); `release.yml` decides it from the diff against the previous release, not from the release notes.
 
 ## Starting and stopping
 

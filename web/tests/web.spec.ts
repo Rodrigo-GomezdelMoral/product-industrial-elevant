@@ -35,7 +35,7 @@ test('by keyboard alone an estimator uploads, reviews, approves and downloads, a
   await press(page, page.getByRole('button', { name: 'Send' }))
   const approve = page.getByRole('button', { name: 'Approve' })
   await expect(approve).toHaveAttribute('aria-disabled', 'true')
-  await expect(page.getByText('Matching 12 defects…')).toBeVisible()
+  await expect(page.getByText(/^12 lines,/)).toBeVisible()
   await audit(page)
 
   await tabTo(page, page.getByLabel('Quantity for line 2'))

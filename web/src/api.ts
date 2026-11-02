@@ -82,7 +82,7 @@ const played = new Map<string, number>()
 const recording = (id: string) => RECORDINGS.find((run) => run.draft.id === id)!
 
 const demo: Omit<typeof live, 'list' | 'get'> = {
-  me: async () => ({ name: 'Demo visitor', roles: ['Quote.Estimator'] }),
+  me: async () => ({ name: 'Visitor', roles: ['Quote.Estimator'] }),
   upload: async function* (file: File) {
     const run = RECORDINGS.find((candidate) => candidate.file === file.name)
     if (!run) throw new Refusal(NEEDS_SYSTEM)

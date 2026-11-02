@@ -1,4 +1,4 @@
-import { ArrowUp, FileText, Menu, Paperclip, Plus, Search, X } from 'lucide-react'
+import { ArrowUp, CircleUserRound, FileText, LogOut, Menu, Paperclip, Search, SquarePen, X } from 'lucide-react'
 import { type KeyboardEvent, useEffect, useRef, useState } from 'react'
 import Markdown from 'react-markdown'
 import { api, BASE, DEMO, live, NEEDS_SYSTEM, RECORDINGS, type Edit, type Quote, type Recording, type State } from './api'
@@ -12,7 +12,6 @@ type Turn =
 type Chat = { key: string; title: string; state?: State; quote?: Quote; turns: Turn[]; problem?: string }
 
 const SAMPLE = 'report-0108.pdf'
-const LOGO = `${BASE}elevant-logo.svg`
 const reason = (error: unknown) => (error instanceof Error ? error.message : String(error))
 const title = (quote: Quote) => quote.header.lift_id ?? 'Lift ID missing'
 const recorded = (): Chat[] => RECORDINGS.map((run) => ({ key: run.draft.id, title: run.title, turns: [] }))
@@ -20,7 +19,7 @@ const recorded = (): Chat[] => RECORDINGS.map((run) => ({ key: run.draft.id, tit
 export function App() {
   const [chats, setChats] = useState<Chat[]>(recorded)
   const [selected, setSelected] = useState<string>()
-  const [user, setUser] = useState('')
+  const [user, setUser] = useState<{ name: string; roles: string[] }>({ name: '', roles: [] })
   const [query, setQuery] = useState<string>()
   const [menu, setMenu] = useState(false)
   const [text, setText] = useState('')
@@ -29,7 +28,8 @@ export function App() {
   const [busy, setBusy] = useState(false)
   const picker = useRef<HTMLInputElement>(null)
   const composer = useRef<HTMLTextAreaElement>(null)
-  const opener = useRef<HTMLButtonElement>(null)
+  const end = useRef<HTMLDivElement>(null)
+  const thread = useRef<HTMLDivElement>(null)
   const queue = useRef(Promise.resolve(true))
   const chat = chats.find((candidate) => candidate.key === selected)
   const recording = RECORDINGS.find((candidate) => candidate.draft.id === selected)
@@ -41,18 +41,17 @@ export function App() {
     setChats((all) => [...all, ...rows.filter((row) => !all.some((known) => known.key === row.id)).map((row) => ({ key: row.id, title: row.lift_id ?? 'Lift ID missing', state: row.state, turns: [] }))])
 
   useEffect(() => {
-    api.me().then((me) => setUser(me.name), (error: unknown) => setNotice(reason(error)))
+    api.me().then(setUser, (error: unknown) => setNotice(reason(error)))
     if (!DEMO) live.list().then(listed, (error: unknown) => setNotice(reason(error)))
   }, [])
-
-  const hide = () => {
-    if (menu) opener.current?.focus()
-    setMenu(false)
-  }
+  useEffect(() => {
+    end.current?.scrollIntoView({ block: 'end' })
+    if (document.activeElement === document.body) thread.current?.focus({ preventScroll: true })
+  }, [chat?.turns.length])
 
   const play = (run: Recording) => {
     setSelected(run.draft.id)
-    hide()
+    setMenu(false)
     setNotice('')
     if (!chats.find((candidate) => candidate.key === run.draft.id)?.turns.length) void upload(new File([], run.file), run.draft.id)
   }
@@ -61,7 +60,7 @@ export function App() {
     const run = RECORDINGS.find((candidate) => candidate.draft.id === key)
     if (run) return play(run)
     setSelected(key)
-    hide()
+    setMenu(false)
     setNotice('')
     if (DEMO || key.startsWith('new-') || chats.find((candidate) => candidate.key === key)?.quote) return
     try {
@@ -163,10 +162,6 @@ export function App() {
     await upload(new File([await response.blob()], SAMPLE, { type: 'application/pdf' }))
   }
 
-  const replay = (label: string) => {
-    const run = RECORDINGS.find((candidate) => candidate.suggestion === label)
-    return run ? play(run) : setNotice('This suggestion has no recorded run yet.')
-  }
   const suggestions: [string, () => void][] = [
     ['Upload an inspection report', () => picker.current?.click()],
     ['Try a sample scanned report', () => void sample()],
@@ -175,81 +170,82 @@ export function App() {
   const sent = (words: string) => chat?.turns.some((turn) => turn.kind === 'user' && turn.text === words)
   const pending = DEMO && chat?.quote?.state === 'review' ? (recording?.corrections ?? []).filter((correction) => !sent(correction.text)) : []
   const shown = chats.filter((item) => query === undefined || `${item.title} ${item.state ? STATES[item.state] : ''}`.toLowerCase().includes(query.trim().toLowerCase()))
-  const initial = (user || '?').charAt(0).toUpperCase()
+  const alert = notice && <p className="status error" role="alert">{notice}</p>
 
   return (
     <div className="app">
-      <aside id="sidebar" className={menu ? 'sidebar open' : 'sidebar'} aria-label="Quotes" onKeyDown={(event) => event.key === 'Escape' && hide()}>
-        <div className="brand">
-          <img src={LOGO} alt="Elevant" height={28} />
-          {menu && <button type="button" className="icon close" aria-label="Hide quotes" onClick={hide} autoFocus><X size={20} aria-hidden /></button>}
-        </div>
-        <div className="new">
-          <button type="button" className="pill primary" onClick={() => (setSelected(undefined), hide(), setNotice(''))}><Plus size={16} aria-hidden /> New chat</button>
-          <button type="button" className="icon round" aria-label="Search quotes" aria-expanded={query !== undefined} onClick={() => setQuery(query === undefined ? '' : undefined)}><Search size={18} aria-hidden /></button>
-        </div>
-        {query !== undefined && <input className="search" aria-label="Search quotes by lift ID or state" value={query} onChange={(event) => setQuery(event.target.value)} autoFocus />}
-        <nav aria-label="Conversations">
-          <ul>
-            {shown.map((item) => (
-              <li key={item.key}>
-                <button type="button" aria-current={item.key === selected ? 'page' : undefined} onClick={() => void open(item.key)}>
-                  <FileText size={18} aria-hidden />
-                  <span>{item.title}<small>{item.state ? STATES[item.state] : 'Recorded run'}</small></span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <p className="user"><span className="avatar" aria-hidden>{initial}</span>{user || 'Not signed in'}</p>
-      </aside>
-      <main>
-        {DEMO && <p className="demo">Demo mode · recorded runs from the deployed system</p>}
-        <button ref={opener} type="button" className="icon menu" aria-label="Show quotes" aria-expanded={menu} aria-controls="sidebar" onClick={() => setMenu(true)}><Menu size={20} aria-hidden /></button>
-        <h1 className="sr-only">Elevant{chat ? `: ${chat.title}` : ''}</h1>
-        <div className="scroller">
-        <div className="thread">
-          {!chat?.turns.length && (
-            <div className="empty">
-              <img src={LOGO} alt="" height={40} />
-              <p>Turn an inspection report into a priced quote you can trust.</p>
-              <ul>{suggestions.map(([label, action]) => <li key={label}><button type="button" className="pill" onClick={DEMO ? () => replay(label) : action}>{label}</button></li>)}</ul>
-            </div>
-          )}
-          {chat?.turns.map((turn, index) =>
-            turn.kind === 'user' ? (
-              <div className="turn user" key={index}><span className="avatar" aria-hidden>{initial}</span><Markdown {...PLAIN}>{turn.text}</Markdown></div>
-            ) : turn.kind === 'answer' ? (
-              <Answer key={index} {...turn} quote={chat.quote} problem={chat.problem} review={(edits, approve) => void review(edits, approve)} />
-            ) : turn.kind === 'proposal' ? (
-              <Proposal key={index} edits={turn.edits} state={turn.state} confirm={() => void review(turn.edits).then((done) => done && settle(index, 'applied'))} dismiss={() => settle(index, 'dismissed')} />
-            ) : (
-              <p className="turn note" key={index}>{turn.text}</p>
-            ),
-          )}
-          {notice && <p className="turn note" role="alert">{notice}</p>}
-        </div>
-        </div>
-        <form className="composer" aria-busy={busy} onSubmit={(event) => (event.preventDefault(), submit())}>
-          {pending.length > 0 && (
-            <div className="chips">
-              {pending.map((correction) => <button type="button" className="pill" key={correction.text} onClick={() => void correct(correction.text)}>{correction.text}</button>)}
-            </div>
-          )}
-          {file && (
-            <p className="chip">
-              <FileText size={16} aria-hidden /> {file.name}
-              <button type="button" className="icon" aria-label={`Remove ${file.name}`} onClick={() => (setFile(undefined), composer.current?.focus())}><X size={16} aria-hidden /></button>
-            </p>
-          )}
+      {DEMO && <header className="band">Demo mode · recorded runs from the deployed system</header>}
+      <div className="layout">
+        <button type="button" className="icon menu" aria-label="Quotes" aria-expanded={menu} onClick={() => setMenu(!menu)}><Menu size={20} /></button>
+        <aside className={menu ? 'sidebar open' : 'sidebar'} aria-label="Quotes">
+          <h1><img src={`${BASE}elevant-logo.svg`} alt="Elevant" height={28} /></h1>
           <div className="row">
-            <button type="button" className="icon" aria-label="Attach a PDF report" onClick={() => (DEMO ? setNotice(NEEDS_SYSTEM) : picker.current?.click())}><Paperclip size={20} aria-hidden /></button>
+            <button type="button" className="primary" onClick={() => (setSelected(undefined), setMenu(false), setNotice(''))}><SquarePen size={16} aria-hidden /> New chat</button>
+            <button type="button" className="icon round" aria-label="Search quotes" aria-expanded={query !== undefined} onClick={() => setQuery(query === undefined ? '' : undefined)}><Search size={16} /></button>
+          </div>
+          {query !== undefined && <input className="search" aria-label="Search quotes by lift ID or state" autoFocus value={query} onChange={(event) => setQuery(event.target.value)} />}
+          <nav aria-label="Quotes">
+            <ul>
+              {shown.map((item) => (
+                <li key={item.key}>
+                  <button type="button" className={item.key === selected ? 'item selected' : 'item'} aria-current={item.key === selected} onClick={() => void open(item.key)}>
+                    <FileText size={16} aria-hidden /> <span>{item.title}{item.state && <small> · {STATES[item.state]}</small>}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            {chats.length === 0 && <p className="status">No quotes yet.</p>}
+          </nav>
+          <div className="me">
+            <CircleUserRound className="avatar" size={28} strokeWidth={1.5} aria-hidden />
+            <span>{user.name || 'Signed out'}<small>{DEMO ? 'Demo' : user.roles.length ? 'User' : 'No Elevant role'}</small></span>
+            {!DEMO && <a className="icon" href="/.auth/logout" aria-label="Sign out"><LogOut size={16} /></a>}
+          </div>
+        </aside>
+        <main>
+          {!chat?.turns.length ? (
+            <div className="empty">
+              <img src={`${BASE}elevant-icon.svg`} alt="" width={56} height={56} />
+              <h2>Turn an inspection report into a priced quote you can trust.</h2>
+              <div className="suggestions">
+                {suggestions.map(([label, action]) => {
+                  const run = RECORDINGS.find((candidate) => candidate.suggestion === label)
+                  return <button type="button" key={label} className="suggestion" disabled={busy || (DEMO && !run)} onClick={run ? () => play(run) : action}>{label}</button>
+                })}
+              </div>
+              {alert}
+            </div>
+          ) : (
+            <div className="thread" role="log" aria-label="Conversation" aria-busy={busy} ref={thread} tabIndex={-1}>
+              {chat.turns.map((turn, index) =>
+                turn.kind === 'user' ? (
+                  <div className="turn user" key={index}><CircleUserRound className="avatar" size={28} strokeWidth={1.5} aria-hidden /><Markdown {...PLAIN}>{turn.text}</Markdown></div>
+                ) : turn.kind === 'answer' ? (
+                  <Answer key={index} {...turn} quote={chat.quote} problem={chat.problem} review={(edits, approve) => void review(edits, approve)} />
+                ) : turn.kind === 'proposal' ? (
+                  <Proposal key={index} edits={turn.edits} state={turn.state} confirm={() => void review(turn.edits).then((done) => done && settle(index, 'applied'))} dismiss={() => settle(index, 'dismissed')} />
+                ) : (
+                  <p className="status error" key={index}>{turn.text}</p>
+                ),
+              )}
+              {alert}
+              <div ref={end} />
+            </div>
+          )}
+          {(pending.length > 0 || file) && (
+            <div className="chips">
+              {pending.map((correction) => <button type="button" className="secondary" key={correction.text} onClick={() => void correct(correction.text)}>{correction.text}</button>)}
+              {file && <p className="chip"><FileText size={16} aria-hidden /> {file.name}<button type="button" className="icon" aria-label={`Remove ${file.name}`} onClick={() => (setFile(undefined), composer.current?.focus())}><X size={16} /></button></p>}
+            </div>
+          )}
+          <form className="composer" aria-busy={busy} onSubmit={(event) => (event.preventDefault(), submit())}>
+            <button type="button" className="icon" aria-label="Attach a PDF report" onClick={() => (DEMO ? setNotice(NEEDS_SYSTEM) : picker.current?.click())}><Paperclip size={18} /></button>
             <input ref={picker} type="file" accept="application/pdf,.pdf" hidden onChange={(event) => (setFile(event.target.files?.[0]), (event.target.value = ''))} />
             <textarea ref={composer} rows={1} aria-label="Message Elevant" placeholder={chat?.quote?.state === 'review' ? 'Describe a correction, for example: line 3 is the landing door roller, 2 units' : 'Attach an inspection report (PDF), then press Enter'} value={text} onChange={(event) => setText(event.target.value)} onKeyDown={enter} />
-            <button type="submit" className="icon round primary" aria-label="Send"><ArrowUp size={20} aria-hidden /></button>
-          </div>
-        </form>
-      </main>
+            <button type="submit" className="send" aria-label="Send" disabled={busy || !(file || text.trim())}><ArrowUp size={18} /></button>
+          </form>
+        </main>
+      </div>
     </div>
   )
 }

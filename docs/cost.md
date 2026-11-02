@@ -60,7 +60,7 @@ Cost Management, actual cost from 2026-10-30 to 2026-11-01, read on 2026-11-01 (
 |---|---|---|
 | Deployed | since 2026-10-31: the app, Cosmos DB, storage, Key Vault, monitoring, the workbook | the app identity only |
 | Cost | €0.16: Cosmos DB serverless €0.16 (the 4,478 drafts of the load test), storage under €0.01, logs €0 (inside the free 5 GB), Container Apps €0 (inside the grant) | €0 |
-| Model and Document Intelligence | billed to the shared base with the other products; staging's share from telemetry, 7 real drafts at about €0.03, about €0.21 | none |
+| Model and Document Intelligence | billed to the shared base; staging's share from telemetry, 7 real drafts at about €0.03, about €0.21 | none |
 
 The staging estimate (under €1 in use) holds. The measured model cost of a draft (€0.0032) matches the per-quote estimate.
 
