@@ -52,13 +52,14 @@ graph LR
 ## Environments and promotion
 
 Staging (`rg-elevant-stg-swc`) and production (`rg-elevant-prod-swc`) are separate groups with separate everything that holds data
-or bills while idle; only the registry and the Foundry account are shared. The tables of environments, costs and sizes are in
+or bills while idle; only the shared base (the registry and the Foundry account) and the Container Apps environment `cae-elevant-env` are shared (ADR-016). The tables of environments, costs and sizes are in
 [PRODUCT.md](PRODUCT.md) and [cost.md](cost.md).
 
 | Region | Staging | Production |
 |---|---|---|
-| Container Apps environment and app | Sweden Central: `cae-elevant-stg-swc`, `ca-elevant-stg` | Spain Central: `cae-elevant-prod-spc`, `ca-elevant-prod` (ADR-014: the subscription's environment quota in Sweden Central is taken by staging) |
-| Data, identity, monitoring | Sweden Central | Sweden Central, reached across regions (50 ms P50 round trip) |
+| Container Apps environment | `cae-elevant-env`, Sweden Central, declared by production in `rg-elevant-prod-swc`; staging joins it (ADR-016) | the same |
+| App | `ca-elevant-stg`, Sweden Central | `ca-elevant-prod`, Sweden Central |
+| Data, identity, monitoring | Sweden Central | Sweden Central |
 | Shared registry and Foundry account | Sweden Central | Sweden Central |
 
 ```mermaid

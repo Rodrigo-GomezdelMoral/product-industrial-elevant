@@ -1,6 +1,6 @@
 # ADR-014: Production compute in Spain Central, data in Sweden Central
 
-Status: accepted (phase 7, recorded 2026-11-01)
+Status: superseded by ADR-016 on 2026-11-02 (phase 7, recorded 2026-11-01). Production's compute returns to Sweden Central in the one environment both apps share; the text below is the record of the earlier decision.
 
 ## Context
 

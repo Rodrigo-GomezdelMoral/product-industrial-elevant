@@ -80,7 +80,7 @@ by the evaluation gate: on 2026-10-31, over 40 reports and 535 defects, match ac
 |---|---|
 | Type | AI product: a quoting assistant for a lift maintenance company's estimators |
 | Client and users | One client tenant; estimators (`Quote.Estimator`) and a manager (`Quote.Manager`) |
-| Azure services | Per environment: Container Apps (Consumption), Cosmos DB serverless, Blob Storage, Key Vault, Log Analytics and Application Insights, a budget. Shared (marked in the base): the container registry and the Foundry account with Document Intelligence and `gpt-5-mini` |
+| Azure services | Per environment: a container app, in one Consumption environment that both share (ADR-016), Cosmos DB serverless, Blob Storage, Key Vault, Log Analytics and Application Insights, a budget. Shared (marked in the base): the container registry and the Foundry account with Document Intelligence and `gpt-5-mini` |
 | AI | `gpt-5-mini` `2025-08-07` with structured output; two Microsoft Agent Framework agents (matcher, corrector) in one workflow with a human-in-the-loop approval and Cosmos DB checkpoints; Document Intelligence layout |
 | Stack | Python 3.12, FastAPI, Pydantic; React, TypeScript and Vite with the common chat interface |
 | Environments and delivery | Local with emulators; staging and production. One image per merge, deployed to staging by digest; a GitHub Release promotes the same image to production blue/green after approval; GitHub Actions with OIDC |
@@ -166,7 +166,7 @@ input and 1,504 output tokens measured), the rest under a cent. Details in [docs
 | Reliability | SLOs stricter than the SLAs, health probes, checkpoints that resume a review, continuous backup, rollback, restore and alert drills | one region, no zone redundancy (ADR-012) |
 | Security | Entra ID sign-in with app roles, managed identity, no keys or secrets, untrusted report text, threat model | no private networking (ADR-012) |
 | Cost Optimization | scale to zero, serverless Cosmos DB, budgets, daily log caps, cost per quote measured | a cold start of 24 to 28 s, no warm replica (ADR-008) |
-| Operational Excellence | infrastructure as code, one image per merge, blue/green releases, evaluation gate, DORA metrics | production's compute in another region for quota (ADR-014) |
+| Operational Excellence | infrastructure as code, one image per merge, blue/green releases, evaluation gate, DORA metrics | one Container Apps environment shared by staging and production, for quota (ADR-016) |
 | Performance Efficiency | numeric targets, four load scenarios plus the real model, HTTP scaling at 10 concurrent requests | traces sampled under load; KPI events complete |
 
 ## Deploy
