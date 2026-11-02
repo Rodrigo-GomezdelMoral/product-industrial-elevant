@@ -134,7 +134,7 @@ duties are unchanged, and defect recall is part of the evaluation gate.
 | Personal data leaving the region | | | Only defect text and catalogue fields sent | Payload test for all 40 reports (implemented and tested) |
 
 The guardrail was read from the shared deployment on 2026-10-31. It has no indirect-attack (document) filter, and changing the shared
-guardrail would affect other products, so injection through documents is handled by the closed-choice design above.
+guardrail would affect everything that uses the shared deployment, so injection through documents is handled by the closed-choice design above.
 
 **Measuring and managing.**
 

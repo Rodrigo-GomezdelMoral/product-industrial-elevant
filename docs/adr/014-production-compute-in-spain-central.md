@@ -4,11 +4,11 @@ Status: accepted (phase 7, recorded 2026-11-01)
 
 ## Context
 
-Each environment has its own Container Apps environment (SE:04, ADR-009). When production was prepared, the subscription's `Microsoft.App` usages allowed one managed environment in `swedencentral` (`ManagedEnvironmentCount`), and `cae-elevant-stg-swc` uses it. In `spaincentral` the limit is 5, none in use on 2026-11-01; Folium will take two of them. The owner decided to keep production on schedule rather than wait for a quota increase.
+Each environment has its own Container Apps environment (SE:04, ADR-009). When production was prepared, the subscription's `Microsoft.App` usages allowed one managed environment in `swedencentral` (`ManagedEnvironmentCount`), and `cae-elevant-stg-swc` uses it. In `spaincentral` the limit is 5, none in use on 2026-11-01. The owner decided to keep production on schedule rather than wait for a quota increase.
 
 ## Decision
 
-Production's Container Apps environment and app run in **Spain Central**: `cae-elevant-prod-spc` and `ca-elevant-prod`, both in `rg-elevant-prod-swc` (a group's location is only where its metadata lives). The environment name keeps the convention `cae-<workload>-<env>-<region>` with `spc`, the code Folium uses for Spain Central, so the name does not claim Sweden. Everything else of production stays in **Sweden Central**: Cosmos DB, storage, Key Vault, Log Analytics and Application Insights, the identity, and the shared registry and Foundry account. `infra/main.bicep` takes `appLocation` (default: the group's location) and `main.production.bicepparam` sets `spaincentral`; staging keeps everything in Sweden Central.
+Production's Container Apps environment and app run in **Spain Central**: `cae-elevant-prod-spc` and `ca-elevant-prod`, both in `rg-elevant-prod-swc` (a group's location is only where its metadata lives). The environment name keeps the convention `cae-<workload>-<env>-<region>` with `spc`, the short code for Spain Central, so the name does not claim Sweden. Everything else of production stays in **Sweden Central**: Cosmos DB, storage, Key Vault, Log Analytics and Application Insights, the identity, and the shared registry and Foundry account. `infra/main.bicep` takes `appLocation` (default: the group's location) and `main.production.bicepparam` sets `spaincentral`; staging keeps everything in Sweden Central.
 
 ## Consequences
 

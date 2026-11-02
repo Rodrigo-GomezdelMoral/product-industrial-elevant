@@ -31,6 +31,6 @@ locally unless the proof says otherwise; the live checks run in staging in phase
 
 - **Public endpoints.** Data services are reachable over the internet with Entra ID only; private networking is not bought without a
   requirement (ADR-012).
-- **Shared model quota.** Another product can exhaust the shared 100K tokens per minute; Elevant answers `429` clearly and the draft
+- **Shared model quota.** Another caller of the shared deployment can exhaust its 100K tokens per minute; Elevant answers `429` clearly and the draft
   can be retried.
 - **Over-trust in a confident draft.** Mitigated by flags, the mandatory review and KPI-2; see [RESPONSIBLE_AI.md](RESPONSIBLE_AI.md).
