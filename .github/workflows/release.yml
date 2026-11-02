@@ -30,8 +30,13 @@ jobs:
     outputs:
       sha: ${{ steps.check.outputs.sha }}
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
       - id: check
-        name: The tag's commit was deployed to staging on merge and passed the load test
+        name: The tag's commit was deployed to staging on merge, and passed the load test unless only web, docs or workflows changed
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ inputs.tag || github.event.release.tag_name }}
@@ -42,7 +47,34 @@ jobs:
           loaded="$(runs load-test.yml workflow_dispatch)"
           echo "$TAG: successful staging deployments $deployed, successful load tests $loaded"
           [ "$deployed" -gt 0 ] || exit 1
-          [ "$loaded" -gt 0 ] || exit 1
+          releases="$(gh release list -R "$GITHUB_REPOSITORY" --exclude-drafts --exclude-pre-releases --limit 100 --json tagName,publishedAt --jq 'sort_by(.publishedAt) | reverse | .[].tagName')"
+          previous=""
+          for candidate in $(printf '%s\n' "$releases" | awk -v tag="$TAG" 'found { print } $0 == tag { found = 1 }'); do
+            promoted="$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/release.yml/runs?head_sha=$(git rev-list -n 1 "$candidate")&status=success" --jq .total_count)"
+            [ "$promoted" -gt 0 ] && { previous="$candidate"; break; }
+            echo "$candidate never reached production (no successful release.yml run): not a baseline"
+          done
+          exempt=false
+          if [ -n "$previous" ]; then
+            changed="$(git diff --name-only "$previous" "$TAG")"
+            echo "Paths changed from $previous to $TAG:"
+            printf '%s\n' "${changed:-(none)}"
+            exempt=true
+            while IFS= read -r path; do
+              case "$path" in
+                "" | web/* | docs/* | *.md | .github/*) ;;
+                *) exempt=false ;;
+              esac
+            done <<< "$changed"
+          else
+            echo "No release before $TAG reached production."
+          fi
+          if [ "$exempt" = true ]; then
+            echo "Decision: every path is under web/, docs/ or .github/, or is Markdown; the load test is not required (ADR-015)."
+          else
+            echo "Decision: the load test is required."
+            [ "$loaded" -gt 0 ] || exit 1
+          fi
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
   promote:

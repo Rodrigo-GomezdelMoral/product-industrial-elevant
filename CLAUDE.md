@@ -296,7 +296,7 @@ Three rules govern every choice:
 
 - **Budget.** The user raised it after phase 4: Python app 1,500 and tests 650 (`LIMITS` in `tests/test_budget.py`). After
   phase 5: files 48/80, Python app 1,367/1,500, tests 605/650, TypeScript 710/799.
-- **One web, two builds.** React 19, TypeScript 6 and Vite 8, no component library but `lucide-react`, the tokens as CSS
+- **One web, two builds.** React 19, TypeScript 7 and Vite 8 (since 2026-11-02 the shell, styles and shared versions are the common web shell of the portfolio), no component library but `lucide-react`, the tokens as CSS
   variables in `web/src/styles.css`. `VITE_DEMO=true` builds the demo: `web/src/api.ts` swaps the HTTP client for a replay
   of `web/fixtures/*.json`, and the glob sits behind the flag, so the live bundle carries no recording (checked by
   building with a marker file).
@@ -377,7 +377,8 @@ Three rules govern every choice:
 - **Workflows.** `deploy.yml` builds once on the runner, pushes `YYYYMMDD-main-<sha7>`, resolves the digest, runs `what-if` and
   deploys, then checks `/healthz` and that `/api/version` returns the digest; `workflow_dispatch` with a tag redeploys an older
   image. `release.yml` verifies that the tag's commit has a successful `deploy.yml` push run and a successful `load-test.yml`
-  run, waits for the `production` approval, resolves the commit's tag to its digest with `AcrPull`, deploys `green`, smoke-tests
+  run (waived when every path changed since the previous release with a successful `release.yml` run matches `web/**`, `docs/**`, `.github/**` or
+  `*.md`, ADR-015, decided by the owner on 2026-11-02; the job prints the paths and the decision), waits for the `production` approval, resolves the commit's tag to its digest with `AcrPull`, deploys `green`, smoke-tests
   through the label address and moves the traffic. `load-test.yml` checks that staging serves the dispatched commit's digest,
   sets `ELEVANT_DOUBLES=true` (a new revision of the same image), runs normal, peak, stress and soak, removes the doubles and
   runs the real-model scenario; Locust sets its exit code itself (Locust 2.47 otherwise exits 1 on any failure): 1 for a
@@ -492,9 +493,9 @@ Three rules govern every choice:
 | `agent-framework-core` 1.23.0 (checkpoints) | `list_checkpoint_ids(workflow_name=)` and `delete(checkpoint_id)` on both storages; instrumentation on by default, sensitive data off |
 | Built-in auth (Learn `container-apps/authentication`, 2026-07-08; `app-service/configure-authentication-user-identities`, 2025-07-02) | `X-MS-CLIENT-PRINCIPAL` is base64 JSON `{auth_typ, claims: [{typ, val}], name_typ, role_typ}`; `X-MS-CLIENT-PRINCIPAL-NAME` is a readable name; "External requests aren't allowed to set these headers" |
 | Cosmos DB vNext emulator (Learn, 2026-10-07) | ORDER BY on partitioned containers and paging supported; `SELECT TOP 100 c.id, c.state, c.header.lift_id, c.created_at FROM c ORDER BY c.created_at DESC` returns `lift_id` |
-| npm registry (2026-10-31) | `react` and `react-dom` 19.3.1, `vite` 8.3.5 (Node 20.19 or 22.12 and later), `@vitejs/plugin-react` 6.1.2, `typescript` 6.0.3, `lucide-react` 1.65.0, `react-markdown` 10.1.0, `@fontsource-variable/inter` 5.3.0, `@axe-core/playwright` 4.14.0 (Node 22.12 and later), `@playwright/test` 1.64.1; `@types/react` and `@types/react-dom` 19.3.0 added for TypeScript |
+| npm registry (2026-10-31) | `react` and `react-dom` 19.3.1, `vite` 8.3.5 (Node 20.19 or 22.12 and later), `@vitejs/plugin-react` 6.1.2, `typescript` 7.0.2, `lucide-react` 1.59.0, `react-markdown` 10.1.0, `@fontsource/inter` 5.3.0 (all four aligned to the common web shell on 2026-11-02), `@axe-core/playwright` 4.14.0 (Node 22.12 and later), `@playwright/test` 1.64.1; `@types/react` and `@types/react-dom` 19.3.0 added for TypeScript |
 | `vite` 8.3.5 · `@playwright/test` 1.64.1 | a `server.proxy` entry takes http-proxy-3 `headers`, and `preview.proxy` defaults to `server.proxy` · `webServer` takes an array and merges its `env` over `process.env`; `ControlOrMeta` |
-| `react-markdown` 10.1.0 · `lucide-react` 1.65.0 | `allowedElements` with `unwrapDisallowed`; tables need `remark-gfm`, so the lines table is JSX · `TriangleAlert`, `CircleCheck`, `LoaderCircle`, `Paperclip`, `ArrowUp` |
+| `react-markdown` 10.1.0 · `lucide-react` 1.59.0 | `allowedElements` with `unwrapDisallowed`; tables need `remark-gfm`, so the lines table is JSX · `TriangleAlert`, `CircleCheck`, `LoaderCircle`, `Paperclip`, `ArrowUp` |
 | `fastapi` 0.162.0 (`fastapi.sse`) | every `data` is JSON-encoded, plain strings included (`data: "Pricing"`) |
 | Bicep 0.48.1 (2026-10-31) | types for `Microsoft.Storage/*@2026-06-01`, not `2026-09-01`; `@export()` variables and functions imported with `import { } from`; `loadJsonContent` |
 | Azure CLI 2.89.0 (2026-10-31) | `az deployment group what-if -p <file>.bicepparam --result-format ResourceIdOnly`; `az account get-access-token --scope`; `az containerapp ingress traffic set --label-weight`; `az acr` with a data-plane role falls back to `<name>.azurecr.io` |
