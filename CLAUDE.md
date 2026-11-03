@@ -85,7 +85,8 @@ Three rules govern every choice:
   requested, so it is not deployed and every agent uses `gpt-5-mini`. The subscription was upgraded from free trial to pay-as-you-go on 2026-10-30 (no spending
   limit: budgets alert, they do not stop spending). Container Apps managed environments: phase 0 read a limit of 15 in
   `swedencentral`, but in phase 7 the subscription's usages allowed one there, and on 2026-11-02 preflight showed a limit of 5 per subscription, all in use, so
-  staging and production share one environment, `cae-elevant-env`, in `swedencentral` (ADR-016, superseding ADR-014).
+  staging and production share one environment, `cae-elevant-env` (ADR-016, superseding ADR-014). On 2026-11-03 preflight rejected it in
+  `swedencentral` although usage read 0 of 1, so it and both apps run in `spaincentral`, the rest in `swedencentral` (ADR-017).
 
 ## Decisions taken in phase 0
 
@@ -404,7 +405,7 @@ Three rules govern every choice:
 ## Decisions taken in phase 7
 
 - **One Container Apps environment** (ADR-016, superseding ADR-014 on 2026-11-02): one Container Apps environment,
-  `cae-elevant-env` in `swedencentral`, declared by production in `rg-elevant-prod-swc` (`infra/modules/environment.bicep`) and
+  `cae-elevant-env` in `spaincentral` (ADR-017, 2026-11-03; `appLocation`), declared by production in `rg-elevant-prod-swc` (`infra/modules/environment.bicep`) and
   joined by staging as `existing`; the staging CI principal has only `read` and `join/action` on it (`08-environment.sh staging`).
 - **Staging measured** (2026-10-31 and 2026-11-01, `docs/OPERATIONS.md`): the four doubles scenarios and the real-model one with no
   failure and draft p95 at most 1.0 s with the doubles and 18 s with the real model; stress reached the 3-replica maximum without a

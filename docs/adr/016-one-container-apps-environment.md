@@ -1,6 +1,6 @@
 # ADR-016: One Container Apps environment for staging and production
 
-Status: accepted (decided by the owner on 2026-11-02); supersedes ADR-014
+Status: accepted (decided by the owner on 2026-11-02); supersedes ADR-014. Its region is superseded by ADR-017 on 2026-11-03: the environment and both apps run in Spain Central, the rest of this record holds.
 
 ## Context
 

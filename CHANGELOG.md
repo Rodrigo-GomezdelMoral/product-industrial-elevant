@@ -7,17 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-## [1.0.3] - 2026-11-02
+## [1.0.3] - 2026-11-03
 
-Staging and production share one Container Apps environment, `cae-elevant-env`, in Sweden Central (ADR-016). Production's app is
-recreated there with a new address and runs next to its data again. No change to the API, the agents or the web.
+Staging and production share one Container Apps environment, `cae-elevant-env`, in Spain Central (ADR-016, ADR-017). Both apps are
+recreated there with new addresses; their data stays in Sweden Central. No change to the API, the agents or the web.
 
 ### Changed
 
 - `infra/modules/environment.bicep` declares `cae-elevant-env` in `rg-elevant-prod-swc`, with the previous environments'
-  properties; only production declares it, and staging joins it as `existing`. `cae-elevant-stg-swc`, `cae-elevant-prod-spc` and
-  the `appLocation` parameter are removed, and production's compute returns from Spain Central to Sweden Central.
+  properties; only production declares it, and staging joins it as `existing`. `cae-elevant-stg-swc` and `cae-elevant-prod-spc`
+  are removed, and `appLocation` (`spaincentral` in both parameter files) places the environment and both apps in Spain Central.
 - The staging CI principal has a custom role on the environment alone, with `read` and `join/action` (`08-environment.sh staging`).
+- ADR-017 records that preflight rejects a new environment in Sweden Central although its usage reads 0 of 1, and moves the
+  environment and both apps to Spain Central, with data, identities and monitoring in Sweden Central; it supersedes ADR-016's region.
 - ADR-016 records the subscription's limits (5 environments, 1 in Sweden Central), the decision and what staging and production
   now share; it supersedes ADR-014 and updates ADR-012. The architecture, cost, operations and responsible-AI documents, the README
   and `CLAUDE.md` describe the one environment, and the cost document names the shared base without its other users.

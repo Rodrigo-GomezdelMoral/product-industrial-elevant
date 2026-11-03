@@ -163,7 +163,7 @@ input and 1,504 output tokens measured), the rest under a cent. Details in [docs
 
 | Pillar | Applied | Trade-off accepted |
 |---|---|---|
-| Reliability | SLOs stricter than the SLAs, health probes, checkpoints that resume a review, continuous backup, rollback, restore and alert drills | one region, no zone redundancy (ADR-012) |
+| Reliability | SLOs stricter than the SLAs, health probes, checkpoints that resume a review, continuous backup, rollback, restore and alert drills | no failover or zone redundancy; apps in Spain Central, data in Sweden Central (ADR-012, ADR-017) |
 | Security | Entra ID sign-in with app roles, managed identity, no keys or secrets, untrusted report text, threat model | no private networking (ADR-012) |
 | Cost Optimization | scale to zero, serverless Cosmos DB, budgets, daily log caps, cost per quote measured | a cold start of 24 to 28 s, no warm replica (ADR-008) |
 | Operational Excellence | infrastructure as code, one image per merge, blue/green releases, evaluation gate, DORA metrics | one Container Apps environment shared by staging and production, for quota (ADR-016) |

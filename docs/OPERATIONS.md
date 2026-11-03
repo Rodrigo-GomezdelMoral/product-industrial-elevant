@@ -8,7 +8,7 @@ and cost to date); prompt 04 adds the restore drill and repeats the measurements
 | | Staging | Production |
 |---|---|---|
 | Group | `rg-elevant-stg-swc` | `rg-elevant-prod-swc` |
-| Region | Sweden Central | Sweden Central |
+| Region | apps in Spain Central, data in Sweden Central (ADR-017) | the same |
 | Container Apps environment | `cae-elevant-env`, shared, owned by production (ADR-016) | `cae-elevant-env`, declared in `rg-elevant-prod-swc` |
 | App | `ca-elevant-stg`, single revision, 0 to 3 replicas | `ca-elevant-prod`, multiple revisions with labels `green` and `blue`, 0 to 5 replicas |
 | Changed by | `deploy.yml` on every merge to `main` | `release.yml` on a published release, after the owner's approval |
@@ -46,7 +46,7 @@ Everything is defined in `infra/` and applied only by the workflows, each preced
 - **Production, planned:** run `release.yml` (`workflow_dispatch`) with the previous tag. It promotes that tag's image through the same
   smoke gate.
 - **Staging:** run `deploy.yml` (`workflow_dispatch`) with the previous image tag; it deploys `main`'s Bicep, so any earlier image works.
-- **Environment change (ADR-016, once):** `08-environment.sh staging` replaces staging's environment with `cae-elevant-env`
+- **Environment change (ADR-016, ADR-017, once):** `08-environment.sh staging` replaces staging's environment with `cae-elevant-env`, in Spain Central,
   before the merge, which redeploys staging; the load test runs (an infrastructure change is not exempt, ADR-015). When the v1.0.3
   release run waits for approval, `08-environment.sh production` deletes `ca-elevant-prod`, the approval recreates it, and the old
   environment is deleted meanwhile: production is down about 5 to 10 minutes. `03-auth-redirect.sh staging` and `production` then
@@ -109,7 +109,7 @@ as `docs/cost.md` estimates.
 release); warm, 0.2 to 0.3 s. In the web the page and the
 sign-in wake the replica before the upload. The worst case, an upload from a page left open past the 5-minute scale-in, adds a start
 to the slowest real draft, estimated at 46 s (not measured end to end), about 1 s over the 45 s SLO and under the 60 s SLA; the `quote_drafted` duration starts when the app
-receives the upload, so the SLI does not show it. Accepted trade-off, no cron replica (ADR-008); production's one measurement, taken while it ran in Spain Central (ADR-014), is within staging's range; since ADR-016 it runs next to its registry and data.
+receives the upload, so the SLI does not show it. Accepted trade-off, no cron replica (ADR-008); production's one measurement, taken while it ran in Spain Central (ADR-014), is within staging's range; since ADR-017 both apps run there, away from their registry and data.
 
 **SLOs measured** with the workbook's queries on staging's telemetry (2026-11-01): the health model shows the draft flow healthy (4,478
 drafts, p95 0.7 s with the doubles, no failure) and the issue flow without traffic; drafts with the real model, all of staging's to

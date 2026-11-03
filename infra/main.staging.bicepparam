@@ -4,6 +4,7 @@ param env = 'staging'
 param maxReplicas = 3
 param retentionDays = 30
 param dailyCapGb = '0.1'
+param appLocation = 'spaincentral'
 param budgetAmount = 5
 param digest = readEnvironmentVariable('IMAGE_DIGEST')
 param revisionSuffix = readEnvironmentVariable('REVISION_SUFFIX')
