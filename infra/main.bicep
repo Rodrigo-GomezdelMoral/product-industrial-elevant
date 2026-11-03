@@ -27,6 +27,8 @@ param dailyCapGb string
 @description('Monthly budget of the resource group, in the billing currency (EUR).')
 param budgetAmount int
 param location string = resourceGroup().location
+@description('Region of the shared Container Apps environment and both apps: spaincentral, where preflight allows it; data, identities and monitoring stay in location (ADR-017).')
+param appLocation string = location
 param registryName string = 'craiplatformshared'
 
 var short = env == 'staging' ? 'stg' : 'prod'
@@ -53,7 +55,7 @@ module data 'modules/data.bicep' = {
 
 @description('Only production declares the shared Container Apps environment; staging joins it as existing (ADR-016).')
 module containerEnvironment 'modules/environment.bicep' = if (env == 'production') {
-  params: { name: environmentName, location: location, tags: union(tags, { environment: 'shared' }), workspaceId: monitoring.outputs.workspaceId }
+  params: { name: environmentName, location: appLocation, tags: union(tags, { environment: 'shared' }), workspaceId: monitoring.outputs.workspaceId }
 }
 
 resource sharedEnvironment 'Microsoft.App/managedEnvironments@2026-07-01' existing = { name: environmentName, scope: resourceGroup(environmentGroup) }
@@ -61,7 +63,7 @@ resource sharedEnvironment 'Microsoft.App/managedEnvironments@2026-07-01' existi
 module app 'modules/app.bicep' = {
   dependsOn: [containerEnvironment]
   params: {
-    location: location, environmentId: sharedEnvironment.id, tags: tags, short: short, production: env == 'production', maxReplicas: maxReplicas
+    location: appLocation, environmentId: sharedEnvironment.id, tags: tags, short: short, production: env == 'production', maxReplicas: maxReplicas
     image: '${registryServer}/product-industrial-elevant@${digest}', registryServer: registryServer, identityId: identity.id
     revisionSuffix: revisionSuffix, stableRevision: stableRevision, authClientId: authClientId
     settings: {

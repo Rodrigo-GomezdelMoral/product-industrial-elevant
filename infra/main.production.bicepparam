@@ -4,6 +4,7 @@ param env = 'production'
 param maxReplicas = 5
 param retentionDays = 730
 param dailyCapGb = '0.5'
+param appLocation = 'spaincentral'
 param budgetAmount = 20
 param digest = readEnvironmentVariable('IMAGE_DIGEST')
 param revisionSuffix = readEnvironmentVariable('REVISION_SUFFIX')

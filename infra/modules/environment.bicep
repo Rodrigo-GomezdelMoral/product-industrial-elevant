@@ -1,4 +1,4 @@
-@description('The one Container Apps environment of Elevant, shared by staging and production and owned by production (ADR-016).')
+@description('The one Container Apps environment of Elevant, shared by staging and production and owned by production (ADR-016), in Spain Central (ADR-017).')
 param name string
 param location string
 param tags object
