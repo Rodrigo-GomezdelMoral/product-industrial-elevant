@@ -35,14 +35,14 @@ Text = Annotated[str, Body(embed=True, min_length=1, max_length=500)]
 Rating = Annotated[Literal["up", "down"], Body(embed=True)]
 
 
-def principal(request: Request) -> tuple[str, set[str]]:
+def principal(request: Request, shown: bool = False) -> tuple[str, set[str]]:
     try:
         signed = json.loads(base64.b64decode(request.headers["x-ms-client-principal"]))
-        kinds = {signed.get("role_typ"), "roles"}
-        roles = {claim["val"] for claim in signed["claims"] if claim["typ"] in kinds}
+        roles = {claim["val"] for claim in signed["claims"] if claim["typ"] in {signed.get("role_typ"), "roles"}}
+        names = [claim["val"] for claim in signed["claims"] if shown and claim["typ"] == "name"]
     except (AttributeError, KeyError, TypeError, ValueError) as error:
         raise HTTPException(401, "sign in to use Elevant") from error
-    return request.headers.get("x-ms-client-principal-name", "unnamed"), roles & {ESTIMATOR, MANAGER}
+    return (names or [request.headers.get("x-ms-client-principal-name", "unnamed")])[0], roles & {ESTIMATOR, MANAGER}
 
 
 def role(*allowed: str) -> Callable[[Request], Awaitable[str]]:
@@ -150,7 +150,7 @@ async def version() -> dict[str, str]:
 
 @app.get("/api/me")
 async def me(request: Request) -> dict[str, Any]:
-    name, roles = principal(request)
+    name, roles = principal(request, shown=True)
     return {"name": name, "roles": sorted(roles)}
 
 
