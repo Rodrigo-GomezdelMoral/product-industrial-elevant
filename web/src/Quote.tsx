@@ -212,9 +212,9 @@ export function Answer({ status, busy, error, quote, review, problem }: Answered
   return (
     <section className="turn product" aria-label="Elevant">
       <p className="name">Elevant</p>
-      <div className="answer" aria-live="polite">
+      <div aria-live="polite">
         {busy && status.map((step, index) => <p className="status" key={index}>{index === status.length - 1 && <LoaderCircle size={16} className="spin" aria-hidden />}{step}…</p>)}
-        {quote && <Markdown {...PLAIN}>{summary(quote)}</Markdown>}
+        {quote && <div className="answer"><Markdown {...PLAIN}>{summary(quote)}</Markdown></div>}
       </div>
       {error && <p className="status error" role="alert">{error}</p>}
       {quote && (
