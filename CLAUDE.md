@@ -252,9 +252,10 @@ Three rules govern every choice:
   dependency: a probe that fails with Cosmos DB would restart healthy replicas during an outage. Responses hide
   `request_id` and `checkpoint_id`.
 - **Roles.** From `X-MS-CLIENT-PRINCIPAL`: no valid header is 401, no allowed role 403. `Quote.Estimator` uploads, reviews,
-  asks for corrections and rates; `Quote.Manager` deletes; both list, read and download. Who is
-  `X-MS-CLIENT-PRINCIPAL-NAME`. `/api/version` needs no role and stays unauthenticated like `/healthz` (decided after phase 4
-  and recorded in the build prompt), so the release smoke test needs no session.
+  asks for corrections and rates; `Quote.Manager` deletes; both list, read and download. Who is the
+  display name, the `name` claim, else `X-MS-CLIENT-PRINCIPAL-NAME`; edits, approvals and `/api/me` read it the same way.
+  `/api/version` needs no role and stays unauthenticated like `/healthz` (decided after phase 4 and recorded in the build
+  prompt), so the release smoke test needs no session.
 - **Failures in one place.** `main.failure` maps an oversize file (over 10 MB or 10 pages) to 413, another refused file to
   422, a domain rule to 409, a 404 from Cosmos DB or Blob to 404, a 429 from the model (`ChatClientException` whose cause
   is `openai.RateLimitError`) or an Azure SDK to 429 with the service's `Retry-After`, the draft deadline to 504, and any
@@ -335,7 +336,7 @@ Three rules govern every choice:
 - **For phase 8 (`ops/export_run.py`).** A recording is `Recording` in `web/src/api.ts`: `{title, file, suggestion?, status: [[text,
   ms]], draft, steps: [{edits, approve, ms, quote, error}], corrections: [{text, edits, ms}], catalogue, document}`.
   `steps[].edits` must be the exact bodies the web sent (the quote's event list holds each as `Edit` JSON; quantities as
-  numbers); the draft's time is `drafted_at` minus `created_at`. Scrub `approved_by` and `events[].by` (principal names)
+  numbers); the draft's time is `drafted_at` minus `created_at`. Scrub `approved_by` and `events[].by` (signers' names)
   as well as the header: the identifier scan skips `web/fixtures/`. `suggestion` names the empty-state suggestion
   that replays the run: S1 "Upload an inspection report", S2 "Try a sample scanned report", S3 "Open quotes in review".
 - **For phase 6.** Serve `web/dist` from the app; exclude `/healthz` and `/api/version` from the built-in auth.
@@ -433,7 +434,7 @@ Three rules govern every choice:
   answer, and the events between two of them are that answer's edits. Status timings come from the checkpoints (`Reading the
   report` to iteration 1, `Matching` to iteration 2, `Pricing` to `drafted_at`); each review answer's time and the correction's
   are the request durations in Application Insights (a request the 5-a-second sampler dropped keeps the checkpoint gap, about 1
-  ms). The correction's words are not stored anywhere, so they are given by whoever typed them. Principal names become
+  ms). The correction's words are not stored anywhere, so they are given by whoever typed them. Signers' names become
   "Staging estimator" and "Staging manager"; the Word file of an approved run goes to `web/public/demo/<simulation>.docx`,
   checked for names. The template carries a customXml bibliography part with a GUID, so at release time the published copies
   drop `customXml/` and its relationship and content-type entries (a one-off zip edit outside the app, since `ops/` is in the

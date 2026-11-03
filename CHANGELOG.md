@@ -7,6 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-11-03
+
+The approver and the history of a quote show the signer's display name. No change to the agents or the infrastructure.
+
+### Fixed
+
+- The approver of an approved quote and each entry of its history show the signer's display name, the `name` claim of the
+  signed-in principal, not the sign-in name; the principal name header stays the fallback when the claim is missing. Every
+  role check reads the name the same way as `/api/me`, so edits and approvals record the name the user block shows. Quotes
+  recorded before this release keep the sign-in name they were stored with. Telemetry still carries no names.
+
 ## [1.0.3] - 2026-11-03
 
 Staging and production share one Container Apps environment, `cae-elevant-env`, in Spain Central (ADR-016, ADR-017). Both apps are
