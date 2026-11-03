@@ -83,7 +83,8 @@ async def walk(api: httpx.AsyncClient, pdf: bytes) -> dict[str, Any]:
     flagged = [line for line in refused["quote"]["lines"] if line["flag"]]
     answer = {"edits": [{"action": "item", "line": n["number"], "code": n["candidates"][0]} for n in flagged]}
     approved = (await api.post(f"{path}/review", json=answer | {"approve": True}, headers=ESTIMATOR)).json()
-    assert [event["by"] for event in approved["quote"]["events"]] == ["Ana"] * (len(answer["edits"]) + 1)
+    signers = [event["by"] for event in approved["quote"]["events"]] + [approved["quote"]["approved_by"]]
+    assert signers == ["Ana Ruiz"] * (len(answer["edits"]) + 2), "approval and edits record the display name"
     assert (await api.post(f"{path}/review", json={}, headers=ESTIMATOR)).status_code == 409
     assert (await api.get(f"{path}/document", headers=MANAGER)).content.startswith(b"PK")
     return dict(approved["quote"])
