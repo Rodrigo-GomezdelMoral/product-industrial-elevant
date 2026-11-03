@@ -33,7 +33,8 @@ EMULATORS = pytest.mark.skipif(not os.environ.get("ELEVANT_EMULATORS"), reason="
 
 
 def signed(*roles: str) -> dict[str, str]:
-    principal = json.dumps({"claims": [{"typ": "roles", "val": role} for role in roles]})
+    claims = [{"typ": "roles", "val": role} for role in roles] + [{"typ": "name", "val": "Ana Ruiz"}]
+    principal = json.dumps({"claims": claims})
     return {"X-MS-CLIENT-PRINCIPAL": base64.b64encode(principal.encode()).decode(), "X-MS-CLIENT-PRINCIPAL-NAME": "Ana"}
 
 
@@ -92,7 +93,9 @@ async def test_only_signed_in_roles_and_readable_reports_get_in(api: httpx.Async
     assert (await api.get("/healthz")).json() == {"status": "ok"}
     assert (await api.get("/api/version")).json() == {"workflow": "quote-v1", "image": "local"}
     me = (await api.get("/api/me", headers=signed("Quote.Estimator", "Other"))).json()
-    assert me == {"name": "Ana", "roles": ["Quote.Estimator"]}
+    nameless = {**ESTIMATOR, "X-MS-CLIENT-PRINCIPAL": base64.b64encode(b'{"claims": []}').decode()}
+    assert me == {"name": "Ana Ruiz", "roles": ["Quote.Estimator"]}
+    assert (await api.get("/api/me", headers=nameless)).json() == {"name": "Ana", "roles": []}
     calls = [("POST", "/api/quotes", {}, 401), ("GET", "/api/quotes", {"X-MS-CLIENT-PRINCIPAL": "?"}, 401)]
     calls += [("GET", "/api/me", {}, 401), ("GET", f"/api/quotes/{ID}/catalogue", signed(), 403)]
     calls += [("GET", "/api/quotes", signed(), 403), ("DELETE", f"/api/quotes/{ID}", ESTIMATOR, 403)]

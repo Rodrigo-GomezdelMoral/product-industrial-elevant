@@ -10,7 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [1.0.3] - 2026-11-03
 
 Staging and production share one Container Apps environment, `cae-elevant-env`, in Spain Central (ADR-016, ADR-017). Both apps are
-recreated there with new addresses; their data stays in Sweden Central. No change to the API, the agents or the web.
+recreated there with new addresses; their data stays in Sweden Central. The user block shows the signed-in person's name, and
+the web matches the common web shell's sizes again. No change to the agents.
 
 ### Changed
 
@@ -28,6 +29,14 @@ recreated there with new addresses; their data stays in Sweden Central. No chang
 - The operations guide, README and product document record the production walk-through of every Must (2026-11-02), production's
   SLIs and KPIs with their window and n, and the rollback, restore and alert drills with their measured times; the label rollback is
   stated as unavailable from this release until the next one.
+
+### Fixed
+
+- `/api/me` returns the display name from the `name` claim of the signed-in principal, and the principal name header only when
+  the claim is missing. A quote still records the principal name as its author and approver.
+- The shared part of the stylesheet is the common web shell's again: the logo, New chat, search and the user block stay in view
+  while the list scrolls, a long name ends in an ellipsis, and neither the page nor the sidebar scrolls sideways at 1440 and
+  390 px. Progress lines have the shell's spacing, and the actions row of a quote centres only its status text.
 
 ## [1.0.2] - 2026-11-02
 
