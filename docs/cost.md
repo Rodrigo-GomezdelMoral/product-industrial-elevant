@@ -16,7 +16,7 @@ estimates with Cost Management, per environment (below).
 | Key Vault | €0.0264 per 10k operations (none in v1) |
 | Log Analytics | €2.6311 per GB after 5 GB a month per billing account, a shared base allowance, not Elevant's alone; 31 days included |
 | Log alert, 15-minute frequency | €0.44 per rule a month, from the build prompt, kept as the estimate. On 2026-11-01 the Retail Prices API listed for Azure Monitor only *Alerts Resource Monitored at 15 Minute Frequency* (€0.044 per resource a month) and the 1-minute *System Log* meter, none matching this rule; it exists only in production, so Cost Management confirms it after the release (prompt 04) |
-| Inter-region data transfer | none since ADR-016: both apps, their data and the registry are in Sweden Central (ADR-014 had production's app in Spain Central) |
+| Inter-region data transfer | €0.0176 per GB (`spaincentral`, 2026-11-01): both apps run in Spain Central, their data and the registry in Sweden Central (ADR-017); under €0.03 a month at 300 quotes, plus up to €0.0016 per cold-start image pull |
 
 ## Per quote
 

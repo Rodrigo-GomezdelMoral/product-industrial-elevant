@@ -11,7 +11,7 @@ every mitigation below is **implemented and tested** in this repository, and the
 |---|---|
 | System | Elevant: lift inspection reports turned into reviewed, traceable repair quotes in Word |
 | Lifecycle stage | Released: v1.0.0 in production since 2026-11-01, every Must proven in staging; the production walk-through runs with v1.0.1 (`docs/OPERATIONS.md`) |
-| Deployment | One Azure Container App per environment, both in Sweden Central in one shared Container Apps environment (ADR-016), used by the client's office staff through a web browser after Microsoft Entra ID sign-in |
+| Deployment | One Azure Container App per environment, both in Spain Central in one shared Container Apps environment, with their data in Sweden Central (ADR-016, ADR-017), used by the client's office staff through a web browser after Microsoft Entra ID sign-in |
 | Users | One client: three estimators and one technical and commercial manager (`docs/PRODUCT.md`) |
 | Languages | English reports, catalogue, interface and quotes |
 | AI components | Azure AI Document Intelligence `prebuilt-layout` reads the PDF. Two Agent Framework agents on `gpt-5-mini` (`2025-08-07`, Global Standard): the **matcher** chooses catalogue codes for the defects, the **corrector** turns a sentence into proposed line edits. Neither agent has tools |

@@ -57,8 +57,8 @@ or bills while idle; only the shared base (the registry and the Foundry account)
 
 | Region | Staging | Production |
 |---|---|---|
-| Container Apps environment | `cae-elevant-env`, Sweden Central, declared by production in `rg-elevant-prod-swc`; staging joins it (ADR-016) | the same |
-| App | `ca-elevant-stg`, Sweden Central | `ca-elevant-prod`, Sweden Central |
+| Container Apps environment | `cae-elevant-env`, Spain Central, declared by production in `rg-elevant-prod-swc`; staging joins it (ADR-016, ADR-017) | the same |
+| App | `ca-elevant-stg`, Spain Central | `ca-elevant-prod`, Spain Central |
 | Data, identity, monitoring | Sweden Central | Sweden Central |
 | Shared registry and Foundry account | Sweden Central | Sweden Central |
 

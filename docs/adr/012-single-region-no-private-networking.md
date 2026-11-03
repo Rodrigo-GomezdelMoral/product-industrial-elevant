@@ -1,6 +1,6 @@
 # ADR-012: Single region, no private networking
 
-Status: accepted (phase 6, recorded 2026-10-31; storage recommendation added 2026-11-02; region updated by ADR-016 on 2026-11-02)
+Status: accepted (phase 6, recorded 2026-10-31; storage recommendation added 2026-11-02; region updated by ADR-016 on 2026-11-02 and ADR-017 on 2026-11-03)
 
 ## Context
 
@@ -8,7 +8,7 @@ Zone redundancy in Container Apps needs a virtual network and at least two repli
 
 ## Decision
 
-One region, Sweden Central, for both environments and no failover (staging and production apps share the Container Apps environment `cae-elevant-env`, ADR-016), no zone redundancy, public endpoints with Entra ID only: local and shared-key authentication off on Cosmos DB, storage, Log Analytics and Application Insights, HTTPS only, TLS 1.2 or later. Recovery is cold: Bicep rebuilds the group and Cosmos DB restores to a point in time (continuous 7-day backup) with blob soft delete for 7 days; the restore drill measures the RTO against 4 h.
+One home region, Sweden Central, for both environments' data and no failover; their apps share the Container Apps environment `cae-elevant-env` in Spain Central (ADR-016, ADR-017); no zone redundancy, public endpoints with Entra ID only: local and shared-key authentication off on Cosmos DB, storage, Log Analytics and Application Insights, HTTPS only, TLS 1.2 or later. Recovery is cold: Bicep rebuilds the group and Cosmos DB restores to a point in time (continuous 7-day backup) with blob soft delete for 7 days; the restore drill measures the RTO against 4 h.
 
 ## Consequences
 
