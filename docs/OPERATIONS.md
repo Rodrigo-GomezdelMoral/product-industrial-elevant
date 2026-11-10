@@ -39,10 +39,12 @@ Everything is defined in `infra/` and applied only by the workflows, each preced
 - **Production, emergency:** `az containerapp ingress traffic set -n ca-elevant-prod -g rg-elevant-prod-swc --label-weight blue=100 green=0`.
   Seconds, no build. It works from the second release on: v1.0.0 was the first and had no `blue` (checked 2026-11-01). Since v1.0.1
   production keeps the previous release on `blue` at 0 %; on 2026-11-02 after v1.0.2, `green` is v1.0.2 at 100 % and `blue` is v1.0.1.
-  **Unavailable from v1.0.3 until the next release (ADR-016):** v1.0.3 moves both apps to the shared environment
-  `cae-elevant-env`, so `08-environment.sh production` deletes `ca-elevant-prod` and the release recreates it with one revision and only `green`.
-  The label rollback returns with the next release, which keeps v1.0.3 as `blue`, and is re-drilled then. The planned path below cannot go back past v1.0.3: `release.yml` deploys the tag's own
-  Bicep, and v1.0.2 or earlier declares the two old environments. Until the next release, recovery is a fix-forward patch release.
+  v1.0.3 moved both apps to the shared environment `cae-elevant-env` (ADR-016), so `08-environment.sh production` deleted
+  `ca-elevant-prod` and the release recreated it with one revision and only `green`: between v1.0.3 and v1.0.4 there was no label
+  rollback and recovery was a fix-forward patch release. **Available again since v1.0.4:** after its release (2026-11-06, 12:48 UTC)
+  `green` is v1.0.4 at 100 % and `blue` is v1.0.3 at 0 %, and production serves the digest staging serves. The last drill is the one
+  of 2026-11-02 below; it was not repeated, to leave production unchanged. The planned path below cannot go back past v1.0.3:
+  `release.yml` deploys the tag's own Bicep, and v1.0.2 or earlier declares the two old environments.
 - **Production, planned:** run `release.yml` (`workflow_dispatch`) with the previous tag. It promotes that tag's image through the same
   smoke gate.
 - **Staging:** run `deploy.yml` (`workflow_dispatch`) with the previous image tag; it deploys `main`'s Bicep, so any earlier image works.
@@ -80,7 +82,24 @@ Locust (`load/locustfile.py`) signs in with a token of the staging CI principal,
 | Soak | 5 · 20 min | memory and error drift |
 | Real model | 3 · 2 min, doubles off | the real matcher's and Document Intelligence's latency; about ten quotes, under €0.30 |
 
-Results of the release commit's run, 2026-11-01, 12:13 to 12:48 UTC, on the image `20261101-main-aaab8e4` that v1.0.0 promoted
+Results of v1.0.4's release commit, 2026-11-06, 11:39 to 12:13 UTC, on the image of `96fb763` that staging served and v1.0.4
+promoted (run 42211816475, from its `load-test-results` artifact; Locust's percentiles are approximated to two figures; n is the
+number of drafts, and a draft's time is the client's time from upload to draft ready):
+
+| Scenario | Drafts · failures | Draft p50 | Draft p95 | Draft p99 | Requests/s | Verdict |
+|---|---|---|---|---|---|---|
+| Normal | 127 · 0 | 0.74 s | 1.2 s | 15 s (max 16.3 s) | 0.99 | meets the SLA |
+| Peak | 574 · 0 | 0.76 s | 1.1 s | 1.9 s | 4.3 | meets the SLA |
+| Stress | 2,459 · 0 (3,262 requests) | 0.83 s | 1.3 s | 1.6 s | 10.9 | no breaking point at 100 users: 3 replicas (the maximum), at most 0.41 vCPU and 440 MB a replica |
+| Soak | 937 · 0 | 0.74 s | 0.91 s | 1.0 s | 1.1 | meets the SLA; no drift |
+| Real model | 10 · 0 | 18 s | 20 s | 20 s | 0.11 | meets the SLA and the SLO |
+
+5,499 requests in all, none failed. Normal's p99 comes from its first four drafts, 12.7 to 15.3 s at 11:40 UTC on the revision
+that the switch to the doubles had just started (staging's `requests`, read on 2026-11-10); the rest stayed under 2 s. Replicas
+(`Replicas`, maximum per minute, read on 2026-11-10): 1 until 11:43, 2 at 11:44, 3 from 11:45 to 11:59, 2 until 12:04 and 1 from
+12:05 UTC.
+
+Earlier run on a release commit, 2026-11-01, 12:13 to 12:48 UTC, on the image `20261101-main-aaab8e4` that v1.0.0 promoted
 (recomputed from the run's `load-test-results` artifact; n is the number of drafts; p95 is the client's time from upload to draft ready):
 
 | Scenario | Drafts · failures | Draft p95 | Verdict |
@@ -178,6 +197,19 @@ are test values, not business figures:
 The 48.9 s draft is the 20-line scanned report on a cold path; it is above the SLO and inside the SLA. Two drafts do not make a p95;
 the SLO is read again once production has real use.
 
+Read again after the recording with v1.0.4, window 30 days to 2026-11-06: the SLO tiles of the production workbook that day, and
+the KPI events in `AppEvents` on 2026-11-10, none after 2026-11-06 13:16 UTC. Synthetic use (the walk-through, the prepared scenario
+and the recorded takes), so still test values:
+
+| Measure | Value | n | Target |
+|---|---|---|---|
+| Availability in business hours (no probe, no 4xx) | 100 % | 185 requests, no server error | SLO 99.7 %, SLA 99.5 % over a calendar month: not yet measurable |
+| Draft p95 | 48.9 s | 12 drafts | SLO 45 s, SLA 60 s |
+| Failed drafts | 0 % | 12 | < 1 % |
+| KPI-1 turnaround (median) | 30 s | 9 approvals | ≤ 15 min (walk-throughs and takes, not office time) |
+| KPI-2 lines accepted unchanged | 78.4 % | 109 of 139 lines | ≥ 85 %, not met: choosing a candidate or removing an unmatched line counts as a change |
+| KPI-3 positive feedback | 87.5 % | 7 of 8 ratings | ≥ 80 % |
+
 ## Alerts and incidents
 
 The production SLO alert (`alert-elevant-slo-prod`) runs every 15 minutes over the last hour and mails the owner through
@@ -231,23 +263,24 @@ the same in both environments, and the staging drill stands for both.
 ## Cost, DORA and Advisor
 
 - Cost per environment: [cost.md](cost.md), with the cost to date from Cost Management.
-- DORA metrics, read on 2026-11-01 with `gh run list --workflow deploy.yml --json event,status,conclusion,createdAt,updatedAt,headSha`
-  (`--workflow release.yml` for production) and `gh pr list --state merged --json number,createdAt,mergedAt`. Staging:
+- DORA metrics, read on 2026-11-10 with `gh run list --workflow deploy.yml --json event,status,conclusion,createdAt,updatedAt,headSha`
+  (`--workflow release.yml` for production) and `gh pr list --state merged --json number,createdAt,mergedAt`; the earlier readings, of
+  2026-11-01 and 2026-11-02, covered up to v1.0.2. Staging, 2026-10-31 to 2026-11-03:
 
   | Metric | Value | How |
   |---|---|---|
-  | Deployment frequency | 3 staging deployments in 2 days (2 merges, 1 redeploy by tag) | `deploy.yml` runs, `push` and `workflow_dispatch` |
-  | Lead time for changes | 7 min 28 s and 3 min 8 s from merge to staging serving the new digest | merge time of PRs #9 and #12 to the end of their `deploy.yml` run |
-  | Change failure rate | 0 % (0 of 3) | `deploy.yml` runs that failed their smoke gate or needed a rollback |
-  | Time to restore | no failure to restore; the rollback drill redeployed an earlier tag and passed the smoke gate in 2 min 27 s | phase 7 drill |
+  | Deployment frequency | 13 staging deployments in 4 days (10 merges, 3 redeploys by tag), 12 successful | `deploy.yml` runs, `push` and `workflow_dispatch` |
+  | Lead time for changes | 3 min 4 s to 9 min 19 s from merge to staging serving the new digest, median 3 min 19 s (n = 9) | merge time of PRs #9, #12 to #16 and #18 to #20 to the end of their `deploy.yml` run |
+  | Change failure rate | 8 % (1 of 13): PR #17's run (2026-11-02, 20:32 UTC) stopped in its deployment step with `LinkedAuthorizationFailed`, because the shared environment needed a role the staging CI principal did not hold yet; the smoke gate did not run | `deploy.yml` runs that failed their deployment or smoke gate, or needed a rollback |
+  | Time to restore | 11 h 55 min, overnight, until PR #18 (the environment in Spain Central, ADR-017) deployed at 08:30 UTC; the rollback drill redeployed an earlier tag and passed the smoke gate in 2 min 27 s | `deploy.yml` runs; phase 7 drill |
 
-  Production, v1.0.0 to v1.0.2 (2026-11-01 to 2026-11-02, read on 2026-11-02):
+  Production, v1.0.0 to v1.0.4 (2026-11-01 to 2026-11-06):
 
   | Metric | Value | How |
   |---|---|---|
-  | Deployment frequency | 3 production deployments in 2 days (v1.0.0, v1.0.1, v1.0.2) | `release.yml` runs |
-  | Lead time for changes | v1.0.0: 5 h 28 min from the merge of PR #13, gated by the load test and the approval; v1.0.1: 46 min 27 s from the merge of PR #14; v1.0.2: 7 min 4 s from the merge of PR #15, a web and docs release without a load test (ADR-015) | merge time to the end of the promoting `release.yml` run |
-  | Change failure rate | 0 % (0 of 3); v1.0.0's attempt 1 stopped in `verify`, before deploying, because the commit had no load test yet | `release.yml` attempts |
+  | Deployment frequency | 5 production deployments in 6 days (v1.0.0 to v1.0.4) | `release.yml` runs |
+  | Lead time for changes | v1.0.0: 5 h 28 min from the merge of PR #13, gated by the load test and the approval; v1.0.1: 46 min 27 s from the merge of PR #14; v1.0.2: 7 min 4 s from the merge of PR #15, a web and docs release without a load test (ADR-015); v1.0.3: 53 min 29 s from the merge of PR #19, through the load test, the approval and the environment change; v1.0.4: 3 days 2 h 14 min from the merge of PR #20, held for the recording, where it was load tested, released and approved | merge time to the end of the promoting `release.yml` run |
+  | Change failure rate | 0 % (0 of 5): no release was rolled back or fixed. Two attempts failed before their revision existed: v1.0.0's attempt 1 stopped in `verify` because the commit had no load test yet; v1.0.3's attempt 1 stopped in `promote` with `ContainerAppEnvironmentMismatch`, the app still being in its old environment, and attempt 2 deployed it 4 min 46 s later, inside the planned environment change | `release.yml` attempts |
   | Time to restore | no failure to restore; the emergency rollback drill by label served the previous digest in 50 s and returned in 18 s (2026-11-02) | rollback drill |
 - Azure Advisor (`az advisor recommendation list`, free) at the close of every phase that deploys. 2026-11-01: staging has one,
   *Enable zone redundancy for the managed environment* (high availability), not applied: it needs a virtual network and a new

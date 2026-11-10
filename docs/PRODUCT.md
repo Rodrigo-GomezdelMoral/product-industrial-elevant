@@ -241,8 +241,8 @@ The repository and the published demo use only synthetic reports with fictitious
 
 ## How each requirement is proven
 
-Status on 2026-11-02, v1.0.2 in production: tested in CI, deployed and used in staging, replayed in the published demo, and every Must
-walked through in production (table after this one). The demo's simulations S1 to S6 are real staging runs, listed in the README.
+Status on 2026-11-06, v1.0.4 in production: tested in CI, deployed and used in staging, replayed in the published demo, and every Must
+walked through in production (table after this one) and recorded there with v1.0.4. The demo's simulations S1 to S6 are real staging runs, listed in the README.
 
 | REQ | Test | Live evidence in staging | Demo |
 |---|---|---|---|
@@ -267,8 +267,8 @@ one walk-through, not business figures; outcomes in [OPERATIONS.md](OPERATIONS.m
 | REQ-02 | two fresh drafts priced from the catalogue, 5 and 1 lines flagged; `quote_drafted` 2, `quote_failed` 0 | shown |
 | REQ-03 | flags resolved, approval, read-only after it with 4 recorded changes; `line_reviewed` 13, `quote_approved` 1 | shown |
 | REQ-04 | the approved quote's `.docx` downloaded, €3,431.44 with catalogue and template hashes | shown |
-| REQ-05 | drafts in 17.6 s and 48.9 s (n = 2), inside the 60 s SLA; a p95 needs more drafts | shown, p95 not yet meaningful |
-| REQ-06 | availability in business hours 100 % (n = 40 requests, 0 `5xx` in 47) | not yet measurable over a calendar month |
+| REQ-05 | drafts in 17.6 s and 48.9 s (n = 2), inside the 60 s SLA; by 2026-11-06, after the recording with v1.0.4, draft p95 48.9 s (n = 12), 0 failed | shown; synthetic use, re-read after a month of real use |
+| REQ-06 | availability in business hours 100 % (n = 40 requests, 0 `5xx` in 47); by 2026-11-06, 100 % (n = 185, no server error) | not yet measurable over a calendar month |
 | REQ-07 | the approved quote shows `catalogue-v1` and `quote-template-v1` with their hashes | shown |
 | REQ-08 | a correction in plain words proposed and confirmed | shown |
 | REQ-09 | `feedback` 1 (up) | shown |
