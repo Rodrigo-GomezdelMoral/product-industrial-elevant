@@ -12,8 +12,12 @@ with real quotes.
 **Live demo:** <https://rodrigo-gomezdelmoral.github.io/product-industrial-elevant/> - six real staging runs replayed with their real
 timings and no backend; where the real flow asks you something, you answer it and see what the system did.
 
-A report drafted in production: the header read from the PDF, every line priced from the client's catalogue and traced to its page
-and row, three lines flagged for the estimator, and a box to correct the draft in plain words.
+> **All data is synthetic.** The reports come from [`ops/make_reports.py`](ops/make_reports.py), with fictitious lift IDs,
+> addresses and names, and the client's volumes and times are the product brief's ([`docs/PRODUCT.md`](docs/PRODUCT.md)).
+> Production's figures come from the author's walk-through, a prepared scenario and the demo recording, not from estimators' work.
+
+Production, 2026-11-06: a report drafted with the header read from the PDF, every line priced from the client's catalogue and
+traced to its page and row, three lines flagged for the estimator, and a box to correct the draft in plain words.
 
 ![The deployed web with a draft in review: lift LFT-44009, 16 lines, 3 flagged, subtotal, VAT and total, and each line with its defect, page and row, catalogue item, quantity, unit price and amount](docs/images/draft-review.png)
 
@@ -28,13 +32,14 @@ defect can be priced with different items depending on who does it, and nothing 
 
 ## What it does
 
-- **Reads the report** with Azure AI Document Intelligence: the header and every defect with its page and row, scanned or digital.
-- **Matches each defect** to the client's catalogue with a small agent that can only choose from a closed list; when it is unsure it
-  flags the line with its candidates instead of guessing.
-- **Computes the money in code**: prices, amounts, VAT and totals come from the catalogue, never from the model.
-- **Keeps the estimator in charge**: they correct the draft in a table or in plain words, and approve it; nothing is issued before
+- **Reads the report.** Azure AI Document Intelligence extracts the header and every defect with its page and row, scanned or
+  digital.
+- **Matches each defect.** A small agent chooses from the client's catalogue, a closed list; when it is unsure it flags the line
+  with its candidates instead of guessing.
+- **Computes the money in code.** Prices, amounts, VAT and totals come from the catalogue, never from the model.
+- **Keeps the estimator in charge.** They correct the draft in a table or in plain words, and approve it; nothing is issued before
   their approval.
-- **Writes the Word quote** with every line traced to its catalogue code and version and to the report's page and row.
+- **Writes the Word quote.** Every line is traced to its catalogue code and version and to the report's page and row.
 
 ![The process with Elevant in BPMN: the technician's work is unchanged; the estimator uploads the PDF, Elevant reads the report, matches the catalogue with a closed choice, prices in code, the estimator reviews and approves, and Elevant writes the Word quote; a draft in under 60 s and 6 to 11 minutes of office time](docs/images/process-to-be.png)
 
@@ -47,62 +52,67 @@ file, both versioned in the repository and changed by a release, not by code.
 
 ## Requirements
 
-Ten requirements with acceptance criteria are in [docs/PRODUCT.md](docs/PRODUCT.md), with the test, the live evidence and the demo
+Ten requirements with acceptance criteria are in [`docs/PRODUCT.md`](docs/PRODUCT.md), with the test, the live evidence and the demo
 simulation of each. The six Musts are in production since v1.0.0; they were walked through there on 2026-11-02 and recorded there
 with v1.0.4 on 2026-11-06. The take numbers on the board are those of that recording.
 
 ![Requirements board: the six Musts met, reading the report, catalogue match, correct and approve, traceable Word quote, draft time 48.9 s against 60 s and availability 100 % against 99.5 % over 30 days of synthetic use; four Shoulds, the versioned catalogue, plain-words correction and feedback recorded, and deletion tested and shown live but not recorded](docs/images/requirements.png)
 
-| Must | What | Status | Evidence |
-|---|---|---|---|
-| REQ-01 | Upload a report and see what it says | in production (v1.0.4) | `test_extraction.py`, `test_api.py`; production walk-through (2026-11-02) and recording (2026-11-06); S1, S2, S4 |
-| REQ-02 | Each defect matched to the catalogue, priced in code | in production (v1.0.4) | `test_domain.py`, `test_agents.py`, evaluation gate; production walk-through and recording; S1, S2, S3, S5 |
-| REQ-03 | Correct the draft and approve it | in production (v1.0.4) | `test_domain.py`, `test_api.py`, `web.spec.ts`; production walk-through and recording; S3, S4, S6 |
-| REQ-04 | Download a traceable Word quote | in production (v1.0.4) | `test_render.py`, `test_api.py`; the Word quote of the recording, below; S4, S6 |
-| REQ-05 | Drafts are fast | measured in production and staging | load tests and `quote_drafted` p95 in KQL |
-| REQ-06 | Available in business hours | 100 % over 30 days of synthetic use; the monthly SLA with real traffic is not measured yet | the workbook's SLO query and the production alert |
+| REQ | Must | Staging | Production | Evidence |
+|---|---|---|---|---|
+| REQ-01 | Upload a report and see what it says | done | met | `test_extraction.py`, `test_api.py`; production walk-through (2026-11-02) and recording (2026-11-06); S1, S2, S4 |
+| REQ-02 | Each defect matched to the catalogue, priced in code | done | met | `test_domain.py`, `test_agents.py`, evaluation gate; production walk-through and recording; S1, S2, S3, S5 |
+| REQ-03 | Correct the draft and approve it | done | met | `test_domain.py`, `test_api.py`, `web.spec.ts`; production walk-through and recording; S3, S4, S6 |
+| REQ-04 | Download a traceable Word quote | done | met | `test_render.py`, `test_api.py`; the Word quote of the recording, below; S4, S6 |
+| REQ-05 · SLA | Drafts are fast | met under load | met, synthetic use | load tests and `quote_drafted` p95 in KQL; the SLA table below |
+| REQ-06 · SLA | Available in business hours | met under load | met, synthetic use | the workbook's SLO query and the production alert; the SLA table below |
 
 The Shoulds are in production too: REQ-07 catalogue and template changed without code, REQ-08 corrections in plain words, REQ-09
 rate each draft and REQ-10 retention and deletion on request.
 
-| SLA | Committed | Measured |
-|---|---|---|
-| Draft latency (REQ-05) | p95 under 60 s | production 48.9 s (n = 12, 30 days to 2026-11-06, synthetic use): with so few drafts the p95 is the slowest one, the 20-line scanned report drafted on a cold path on 2026-11-02; staging with the real model, p50 16.7 s and p95 23.2 s (n = 46, 30 days to 2026-11-03); load test with the real model 20 s (n = 10, 2026-11-06); cold start 24 to 28 s before the draft |
-| Availability (REQ-06) | 99.5 % in business hours (Monday to Friday, 07:00 to 20:00 Europe/Madrid), per calendar month | production 100 % (n = 185 requests, no server error, 30 days to 2026-11-06, synthetic use); a calendar month of real traffic is still to come |
+The SLAs committed to the client, against what was measured in the staging load test and in production:
+
+| SLA | Committed | Staging, 30 days to 2026-11-03 and the load test of 2026-11-06 | Production, 30 days to 2026-11-06 (synthetic use) |
+|---|---|---|---|
+| REQ-05 Draft latency | p95 under 60 s | with the real model, p50 16.7 s and p95 23.2 s (n = 46); load test with the real model 20 s (n = 10); cold start 24 to 28 s before the draft | 48.9 s (n = 12): with so few drafts the p95 is the slowest one, the 20-line scanned report drafted on a cold path on 2026-11-02 |
+| REQ-06 Availability | 99.5 % in business hours (Monday to Friday, 07:00 to 20:00 Europe/Madrid), per calendar month | 100 %: none of the load test's 5,499 requests failed | 100 % (n = 185 requests, no server error); a calendar month of real traffic is still to come |
 
 ## KPIs
 
+Read with the workbook's queries on production's Application Insights events, over 30 days of synthetic use to 2026-11-06. Each KPI
+is an Application Insights event and a tile of the workbook declared in Bicep.
+
 ![KPI board, production to 2026-11-06, synthetic use: KPI-1 Quote turnaround (office time) 30 s against 15 minutes, from scripted approvals, not real review time; lines accepted unchanged 78.4 % against 85 %, not met; positive feedback 87.5 % against 80 %, met](docs/images/kpis.png)
 
-| KPI | Target | Today, by hand | Measured in production, 30 days to 2026-11-06 |
+| KPI | Target | Measured in production | Cases |
 |---|---|---|---|
-| KPI-1 Quote turnaround, upload to approval | 15 min or less | 33 to 65 min | 30 s median (n = 9 approvals), scripted: not real review time |
-| KPI-2 Lines accepted unchanged | 85 % or more | not measured | 78.4 % (109 of 139 lines), not met |
-| KPI-3 Positive feedback | 80 % or more | not measured | 87.5 % (7 of 8 ratings) |
+| KPI-1 Quote turnaround, upload to approval | 15 min or less, from 33 to 65 today | 30 s median, scripted: not real review time | 9 approvals |
+| KPI-2 Lines accepted unchanged | 85 % or more | **78.4 %**, missed | 109 of 139 lines |
+| KPI-3 Positive feedback | 80 % or more | 87.5 % | 7 of 8 ratings |
 
 These figures come from synthetic use (the walk-through, a prepared scenario and the recording), where each approval followed a
 script, a median of 30 s after the upload: KPI-1 Quote turnaround measures the tool's path there, not an estimator's review. The KPIs are
 monthly and are read again after a month of real quotes. KPI-2 counts choosing a candidate or removing an unmatched line as a
-change. Each KPI is an Application Insights event and a tile of the workbook declared in Bicep.
+change; KPI-2 and KPI-3 have no equivalent in the manual process.
 
 The draft quality behind KPI-2 is measured by the evaluation gate on 40 synthetic reports (535 defects), the set the prompt was
 tuned on: on 2026-10-31, match accuracy 1.000 (450/450), ambiguity recall 0.978 (45/46), no-match recall 1.000 (37/37), injection
 attempts flagged 2/2, every total exact. Out of sample, 40 new reports from the same generator with another seed, evaluated once,
-gave 444/444 matches, ambiguity recall 43/44, no-match 31/31 and injections 2/2 ([docs/evaluation.md](docs/evaluation.md)).
+gave 444/444 matches, ambiguity recall 43/44, no-match 31/31 and injections 2/2 ([`docs/evaluation.md`](docs/evaluation.md)).
 
 ## Repo card
 
 | | |
 |---|---|
-| Type | AI product: a quoting assistant for a lift maintenance company's estimators |
-| Client and users | One client tenant; estimators (`Quote.Estimator`) and a manager (`Quote.Manager`) |
-| Azure services | Per environment, in its own resource group: a container app, in one Consumption environment that both share (ADR-016), Cosmos DB serverless, Blob Storage, Key Vault, Log Analytics and Application Insights, a managed identity and a budget. Shared, from the owner's platform base, a separate resource group (ADR-005): the container registry and the Foundry account with Document Intelligence and `gpt-5-mini` |
-| AI | `gpt-5-mini` `2025-08-07` with structured output; two Microsoft Agent Framework agents (matcher, corrector) in one workflow with a human-in-the-loop approval and Cosmos DB checkpoints; Document Intelligence layout |
-| Stack | Python 3.12, FastAPI, Pydantic; React, TypeScript and Vite with the common chat interface |
-| Environments and delivery | Local with emulators; staging and production. One image per merge, deployed to staging by digest; a GitHub Release promotes the same image to production blue/green after approval; GitHub Actions with OIDC |
-| Security | Container Apps built-in authentication with Entra ID and app roles; managed identity everywhere; no keys, local auth off on Cosmos DB, Storage and Application Insights; report text treated as untrusted |
-| SLA | Draft p95 under 60 s: 48.9 s in production (n = 12). Availability 99.5 % in business hours: 100 % (n = 185). Both over 30 days of synthetic use to 2026-11-06; the monthly SLA with real traffic is not measured yet |
-| Demo | <https://rodrigo-gomezdelmoral.github.io/product-industrial-elevant/> |
+| **Type** | AI product: a quoting assistant for a lift maintenance company's estimators |
+| **Client and users** | one client tenant; estimators (`Quote.Estimator`) and a manager (`Quote.Manager`) |
+| **Azure services** | per environment, in its own resource group: a container app, in one Consumption environment that both share (ADR-016), Cosmos DB serverless, Blob Storage, Key Vault, Log Analytics and Application Insights, a managed identity and a budget. Shared, from the owner's platform base, a separate resource group (ADR-005): the container registry and the Foundry account with Document Intelligence and `gpt-5-mini` |
+| **AI** | `gpt-5-mini` `2025-08-07` with structured output; two Microsoft Agent Framework agents (matcher, corrector) in one workflow with a human-in-the-loop approval and Cosmos DB checkpoints; Document Intelligence layout |
+| **Stack** | Python 3.12, FastAPI, Pydantic; React, TypeScript and Vite with the common chat interface |
+| **Environments and delivery** | local with emulators; staging and production. One image per merge, deployed to staging by digest; a GitHub Release promotes the same image to production blue/green after approval; GitHub Actions with OIDC |
+| **Security** | Container Apps built-in authentication with Entra ID and app roles; managed identity everywhere; no keys, local auth off on Cosmos DB, Storage and Application Insights; report text treated as untrusted |
+| **SLA** | draft p95 under 60 s: 48.9 s in production (n = 12); availability 99.5 % in business hours: 100 % (n = 185); both over 30 days of synthetic use to 2026-11-06, and the monthly SLA with real traffic is not measured yet |
+| **Demo** | <https://rodrigo-gomezdelmoral.github.io/product-industrial-elevant/> |
 
 ## Architecture
 
@@ -112,7 +122,7 @@ The estimator's browser talks to one Container App that serves the web and the A
 with Entra ID (ADR-010), so only users with an app role get in. The quote workflow reads the report, matches, prices, waits for the
 estimator's approval in a Cosmos DB checkpoint, and renders the Word quote to Blob Storage. The container registry and the Foundry
 account come from the owner's shared platform base, a separate resource group; Elevant reaches them with its own managed identity,
-and its data stays in its own resource groups. Diagrams and identities are in [docs/architecture.md](docs/architecture.md).
+and its data stays in its own resource groups. Diagrams and identities are in [`docs/architecture.md`](docs/architecture.md).
 
 The apps run in Spain Central and the data at rest (Cosmos DB, Blob Storage, Application Insights) stays in Sweden Central, both in
 the EU. The model is a shared Global Standard deployment that may process requests outside the region, so it receives only each
@@ -148,10 +158,17 @@ Application Insights, with the people's names replaced by their role.
 
 ## In action
 
-The published demo replays six real staging runs. In production every Must was walked through on 2026-11-02 with v1.0.1 (two
-fresh drafts, flags resolved, a correction confirmed, the rating, the approval, the Word download and a deletion as manager) and
-recorded on 2026-11-06 with v1.0.4; outcomes in [docs/OPERATIONS.md](docs/OPERATIONS.md). The quote of that recording, once
-approved:
+In production, every Must was walked through on 2026-11-02 with `v1.0.1` and recorded on 2026-11-06 with `v1.0.4`; outcomes in
+[`docs/OPERATIONS.md`](docs/OPERATIONS.md):
+
+- **A draft in review** (the image at the top): the header read from the PDF, every line priced from the catalogue and traced to its
+  page and row, three lines flagged for the estimator, and a box to correct the draft in plain words.
+- **The walk-through of 2026-11-02:** two fresh drafts, flags resolved, a correction confirmed, the rating, the approval, the Word download and a
+  deletion as manager.
+- **The approved quote** (below): the Word quote of the recording, with every line traced to its catalogue code and version and to
+  the report's page and row.
+
+The published demo replays six real staging runs.
 
 ![The approved quote in Word: client header, quote number, date, lift, location and inspection, then each line with its description, quantity, unit price and amount, and under it the catalogue code, the catalogue version and the report's page and row](docs/images/word-quote.png)
 
@@ -159,11 +176,12 @@ approved:
 
 ![Environments: code with emulators locally; a merge deploys the API to staging, which scales to zero; after the load test and the owner's approval a release deploys it to production blue/green; the Container Apps environment, the registry with one image and Foundry are shared](docs/images/environments.png)
 
-A merge builds one image that is never rebuilt, and staging receives it by digest. A release `vX.Y.Z` promotes the digest that runs
-in staging, after a successful load test and the owner's approval, to production as a new revision: it starts at 0 % of the traffic,
-labelled `green`, and takes 100 % only after its smoke test. The previous release stays as `blue` at 0 %, so going back is one
-command that moves the traffic, in seconds. On 2026-11-10 production has v1.0.4 on `green` at 100 % and v1.0.3 on `blue` at 0 %; the last
-rollback drill, on 2026-11-02, served the previous release in 50 s and returned in 18 s.
+- **Image:** a merge builds one image that is never rebuilt, and staging receives it by digest.
+- **Release:** `vX.Y.Z` promotes the digest that runs in staging, after a successful load test and the owner's approval, to
+  production as a new revision: it starts at 0 % of the traffic, labelled `green`, and takes 100 % only after its smoke test. On
+  2026-11-10 production has v1.0.4 on `green` at 100 % and v1.0.3 on `blue` at 0 %.
+- **Rollback:** the previous release stays as `blue` at 0 %, so going back is one command that moves the traffic, in seconds; the
+  last drill, on 2026-11-02, served the previous release in 50 s and returned in 18 s.
 
 ### Load tests
 
@@ -171,33 +189,35 @@ rollback drill, on 2026-11-02, served the previous release in 50 s and returned 
 
 Staging on 2026-11-06, 11:39 to 12:13 UTC, on the commit released as v1.0.4 (Locust from `load-test.yml`, `report-0134` uploads).
 The first four scenarios run with stubs in place of Document Intelligence and the model, so they measure the app, Cosmos DB and the
-platform; the last one uses the real services. The draft time is Locust's, from the upload to the draft ready:
+platform; the last one uses the real services. The p50, p95 and p99 are the draft time as Locust measures it, from the upload to
+the draft ready:
 
-| Scenario | Users | Drafts | Draft p50 | Draft p95 | Draft p99 | Requests/s | Failures | Replicas |
-|---|---|---|---|---|---|---|---|---|
-| Normal | 5 for 3 min | 127 | 0.74 s | 1.2 s | 15 s | 0.99 | 0 | 1 |
-| Peak | 20 for 3 min | 574 | 0.76 s | 1.1 s | 1.9 s | 4.3 | 0 | 1 to 3, at 10 concurrent requests each |
-| Stress | ramp to 100 in 5 min | 2,459 | 0.83 s | 1.3 s | 1.6 s | 10.9 | 0 | 3, the maximum, at most 0.41 vCPU and 440 MB each |
-| Soak | 5 for 20 min | 937 | 0.74 s | 0.91 s | 1.0 s | 1.1 | 0 | 3, back to 1 as the load stays low |
-| Real model | 3 for 2 min | 10 | 18 s | 20 s | 20 s | 0.11 | 0 | 1 |
+| Scenario | Load | p50 | p95 | p99 | Requests/s | Errors | Replicas |
+|---|---|---|---|---|---|---|---|
+| normal | 5 users for 3 min | 0.74 s | 1.2 s | 15 s | 0.99 | 0 of 127 drafts | 1 |
+| peak | 20 users for 3 min | 0.76 s | 1.1 s | 1.9 s | 4.3 | 0 of 574 drafts | 1 to 3, at 10 concurrent requests each |
+| stress | ramp to 100 users in 5 min | 0.83 s | 1.3 s | 1.6 s | 10.9 | 0 of 2,459 drafts | 3, the maximum, at most 0.41 vCPU and 440 MB each |
+| soak | 5 users for 20 min | 0.74 s | 0.91 s | 1.0 s | 1.1 | 0 of 937 drafts | 3, back to 1 as the load stays low |
+| real model | 3 users for 2 min | 18 s | 20 s | 20 s | 0.11 | 0 of 10 drafts | 1 |
 
 5,499 requests in all, none failed. Normal's p99 of 15 s comes from its first four drafts, 12.7 to 15.3 s at 11:40 UTC on the
 revision that the switch to the stubs had just started; the rest stayed under 2 s. The earlier runs, 2026-10-31 and 2026-11-01, are in
-[docs/OPERATIONS.md](docs/OPERATIONS.md).
+[`docs/OPERATIONS.md`](docs/OPERATIONS.md).
+
+In the capture below the clock is UTC+1: one replica during the normal scenario, then three from 11:45 UTC through the peak and the
+stress. The drop to zero at the right edge is the minute still in progress when it was taken; the metric read afterwards shows three
+replicas until 11:59 UTC and one again from 12:05.
 
 ![The staging app's replica count in the Azure portal during that load test, times in UTC+1: one replica in the normal scenario, three, the maximum, from 11:45 UTC through the peak and the stress; the drop to zero at the right edge is the last minute, still incomplete when the capture was taken, since the metric shows three replicas until 11:59 UTC](docs/images/staging-replicas.png)
 
-The capture's clock is UTC+1: one replica during the normal scenario, then three from 11:45 UTC through the peak and the stress.
-The drop to zero at the right edge is the minute still in progress when it was taken; the metric read afterwards shows three
-replicas until 11:59 UTC and one again from 12:05.
-
 ### SLOs and DORA
 
-The SLOs are stricter than the SLAs: draft p95 under 45 s, failed drafts under 1 % and availability 99.7 % in business hours.
-Production's draft p95 is above that SLO and inside the SLA (see [Requirements](#requirements)); failed drafts 0 %, cold start
-27.9 s (n = 1).
+- **SLOs:** stricter than the SLAs: draft p95 under 45 s, failed drafts under 1 % and availability 99.7 % in business hours.
+  Production's draft p95 is above that SLO and inside the SLA (see [Requirements](#requirements)); failed drafts 0 %, cold start
+  27.9 s (n = 1).
+- **DORA**, from the GitHub Actions runs, read on 2026-11-10 ([`docs/OPERATIONS.md`](docs/OPERATIONS.md)):
 
-| DORA | Staging, 2026-10-31 to 2026-11-03 | Production, v1.0.0 to v1.0.4, 2026-11-01 to 2026-11-06 |
+| Metric | Staging, 2026-10-31 to 2026-11-03 | Production, v1.0.0 to v1.0.4, 2026-11-01 to 2026-11-06 |
 |---|---|---|
 | Deployment frequency | 13 deployments in 4 days (10 merges, 3 redeploys by tag) | 5 releases in 6 days |
 | Lead time for changes | merge to staging in 3 min 4 s to 9 min 19 s, median 3 min 19 s (n = 9) | 7 min (a web-only release) to 5 h 28 min through the load test and the approval; v1.0.4 held 3 days for the recording |
@@ -205,19 +225,21 @@ Production's draft p95 is above that SLO and inside the SLA (see [Requirements](
 | Time to restore | 11 h 55 min overnight, fixed by the next merge; a redeploy by tag in 2 min 27 s | no failure; the rollback drill by label served the previous release in 50 s and returned in 18 s |
 
 Drills (2026-11-02): restore RTO about 13 min against 4 h, RPO ≤ 100 s, and a staging copy of the SLO alert fired 4 min 52 s after
-it was created. Details in [docs/OPERATIONS.md](docs/OPERATIONS.md).
+it was created. Details in [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
 
 ## Cost
 
+EUR, a month unless stated otherwise ([`docs/cost.md`](docs/cost.md)):
+
 | | Staging | Production |
 |---|---|---|
-| At rest | about €0.01 a month (stored data) | about €0.50 a month (the SLO alert rule and stored data) |
-| In use | €1.20 to date, test campaign included (2026-10-30 to 2026-11-09) | €0.12 to date, the alert rule (same period); €9 to €15 a month expected at 300 quotes |
-| Budget | €5 a month | €20 a month |
+| At rest | about 0.01 (stored data) | about 0.50 (the SLO alert rule and stored data) |
+| In use | 1.20 to date, test campaign included (2026-10-30 to 2026-11-09) | 0.12 to date, the alert rule (same period); 9 to 15 expected at 300 quotes |
+| Budget | 5 | 20 |
 
 About €0.04 per approved quote against a target of €0.05: Document Intelligence €0.026 for three pages, the matcher €0.003 (3,312
 input and 1,504 output tokens measured), the rest under a cent. The model and Document Intelligence are billed to the shared base.
-Details in [docs/cost.md](docs/cost.md).
+Details in [`docs/cost.md`](docs/cost.md).
 
 ## Well-Architected design
 
@@ -231,7 +253,7 @@ Details in [docs/cost.md](docs/cost.md).
 
 ## Deploy
 
-Deployment runs only from GitHub Actions: a merge to `main` deploys staging (`deploy.yml`), and
+Deployment runs only through GitHub Actions: a merge to `main` deploys staging (`deploy.yml`), and
 `gh release create vX.Y.Z --notes-file <notes>` deploys production after the owner approves (`release.yml`). Prerequisites: an
 Azure subscription with the shared base (registry and Foundry account), the two resource groups, and the identities below.
 
@@ -245,11 +267,12 @@ registrations are created once by the owner's setup scripts, outside this reposi
 One app registration per environment for GitHub Actions, with a federated credential for its GitHub environment, and one for pull
 requests (`what-if` only). The deployment principals can assign only the data roles their RBAC condition allows.
 
-### GitHub secrets
+### GitHub secrets and variables
 
-Repository: `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_CLIENT_ID_PR`, `ALERT_EMAIL_ADDRESS`. Per environment:
-`AZURE_CLIENT_ID` and `AUTH_CLIENT_ID`; staging also `OPERATOR_PRINCIPAL_ID`. Variables: `FOUNDRY_PROJECT_ENDPOINT` and
-`DOCINTEL_ENDPOINT`.
+- Repository secrets: `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_CLIENT_ID_PR` and `ALERT_EMAIL_ADDRESS`.
+- Per environment (`staging`, `production`): the secrets `AZURE_CLIENT_ID` and `AUTH_CLIENT_ID`; staging also
+  `OPERATOR_PRINCIPAL_ID`.
+- Variables: `FOUNDRY_PROJECT_ENDPOINT` and `DOCINTEL_ENDPOINT`.
 
 ### Identities
 
@@ -258,14 +281,16 @@ from Bicep) and the sign-in app per environment with the `Quote.Estimator` and `
 
 ## Documentation
 
-- [PRODUCT.md](docs/PRODUCT.md): the client, the process, the requirements with acceptance criteria, KPIs, SLAs and SLOs
-- [OPERATIONS.md](docs/OPERATIONS.md): environments, promotion, rollback, load tests, walk-throughs, alerts, backup and DORA
-- [THREAT_MODEL.md](docs/THREAT_MODEL.md): threats and mitigations
-- [RESPONSIBLE_AI.md](docs/RESPONSIBLE_AI.md): the responsible AI assessment
-- [evaluation.md](docs/evaluation.md), [architecture.md](docs/architecture.md) and [cost.md](docs/cost.md)
-- [CHANGELOG.md](CHANGELOG.md)
-- [ADRs](docs/adr/): 17 architecture decisions
-- [Latest release, v1.0.4](https://github.com/Rodrigo-GomezdelMoral/product-industrial-elevant/releases/tag/v1.0.4)
+- [`docs/PRODUCT.md`](docs/PRODUCT.md): the client, the process, the requirements with acceptance criteria, KPIs, SLAs and SLOs
+- [`docs/OPERATIONS.md`](docs/OPERATIONS.md): environments, promotion, rollback, load tests, walk-throughs, alerts, backup and DORA
+- [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md): trust boundaries, STRIDE threats with their mitigations and residual risks
+- [`docs/RESPONSIBLE_AI.md`](docs/RESPONSIBLE_AI.md): the responsible AI impact assessment
+- [`docs/evaluation.md`](docs/evaluation.md): the evaluation gate, its dataset, metrics and results, and the matcher tuning
+- [`docs/architecture.md`](docs/architecture.md): components, a quote end to end, identities, environments and promotion
+- [`docs/cost.md`](docs/cost.md): prices, the cost per quote and per environment, and the cost to date
+- [`docs/adr/`](docs/adr/): the 17 architecture decisions
+- [`CHANGELOG.md`](CHANGELOG.md) and the latest release,
+  [`v1.0.4`](https://github.com/Rodrigo-GomezdelMoral/product-industrial-elevant/releases/tag/v1.0.4) (2026-11-06)
 
 ## Author
 
