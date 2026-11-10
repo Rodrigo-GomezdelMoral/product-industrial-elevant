@@ -62,5 +62,10 @@ Cost Management, actual cost from 2026-10-30 to 2026-11-01, read on 2026-11-01 (
 | Cost | €0.16: Cosmos DB serverless €0.16 (the 4,478 drafts of the load test), storage under €0.01, logs €0 (inside the free 5 GB), Container Apps €0 (inside the grant) | €0 |
 | Model and Document Intelligence | billed to the shared base; staging's share from telemetry, 7 real drafts at about €0.03, about €0.21 | none |
 
-The staging estimate (under €1 in use) holds. The measured model cost of a draft (€0.0032) matches the per-quote estimate.
+Read again on 2026-11-10, actual cost from 2026-10-30 to 2026-11-09, after the load tests of 2026-11-03 and 2026-11-06 and the
+recording: staging €1.20 (Cosmos DB serverless €1.13, storage €0.07, monitoring and bandwidth under €0.01), above the €1 estimated
+for the test campaign; production €0.12 (Azure Monitor, the SLO alert rule; Cosmos DB, storage and bandwidth under €0.01); no
+Container Apps charge in either, inside the grant. The model and Document Intelligence stay billed to the shared base.
+
+The staging estimate (under €1 in use) held until 2026-11-01. The measured model cost of a draft (€0.0032) matches the per-quote estimate.
 

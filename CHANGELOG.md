@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-## [1.0.4] - 2026-11-03
+## [1.0.4] - 2026-11-06
 
 The approver and the history of a quote show the signer's display name. No change to the agents or the infrastructure.
 
