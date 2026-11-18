@@ -9,7 +9,7 @@ quote in about 17 seconds, prices every line in code from the client's own catal
 approves it; office time per quote should drop from 33 to 65 minutes to 6 to 11, the estimate of the new process, not yet measured
 with real quotes.
 
-<p align="center"><a href="https://rodrigogomezdelmoral.es/en/projects/product-industrial-elevant#video"><img src="docs/images/author/demo-video.png" alt="Watch the demo video" height="48"></a></p>
+<p align="center"><a href="https://rodrigogomezdelmoral.es/en/projects/product-industrial-elevant#video"><img src="docs/images/author/demo-video.png" alt="Watch the AI solution video" height="48"></a></p>
 
 **Built to standard.** This AI solution is designed, built, validated and operated in alignment with the **Microsoft
 Responsible AI Standard** (Fairness, Reliability and Safety, Privacy and Security, Inclusiveness, Transparency,
