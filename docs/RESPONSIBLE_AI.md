@@ -1,7 +1,10 @@
 # Responsible AI impact assessment
 
-Elevant's impact assessment, with the five sections of Microsoft's Responsible AI Impact Assessment Template (June 2022): system
-information, intended uses, adverse impact, data requirements and summary of impact. It follows the map, measure, mitigate and manage
+Elevant's impact assessment follows the sections of the Responsible AI Impact Assessment Template and the goals of the
+[Microsoft Responsible AI Standard](https://www.microsoft.com/ai/principles-and-approach), together with the responsible AI
+guidance of the [Azure Well-Architected Framework](https://learn.microsoft.com/azure/well-architected/) for
+[AI workloads](https://learn.microsoft.com/azure/well-architected/ai/responsible-ai). Its five sections are system information,
+intended uses, adverse impact, data requirements and summary of impact. It follows the map, measure, mitigate and manage
 stages of AI-103 (learning path 1, module 6). Assessed on 2026-10-31, at the end of phase 3, and reassessed on 2026-11-02 for v1.0.1, after the release:
 every mitigation below is **implemented and tested** in this repository, and the remaining limits are named where they apply.
 
@@ -46,24 +49,31 @@ in-sample: the matcher prompt was tuned on the same 40 reports, so a fresh set f
 | Technician | Unchanged way of writing reports | None identified |
 | The client company | Office time back, fewer pricing errors | Commercial loss or dispute from a wrong quote |
 
-**Responsible AI Standard goals that apply.**
+**Goals of the Responsible AI Standard that apply:**
 
-| Goal | How it applies |
-|---|---|
-| A1 Impact assessment | This document, reviewed at each phase that changes the AI components |
-| A2 Oversight of significant adverse impacts | The evaluation gate on every pull request that changes prompts, agents, the workflow, the domain rules or the reference data |
-| A3 Fit for purpose | The thresholds of `docs/evaluation.md`, met before a change merges |
-| A5 Human oversight and control | Mandatory review and approval; approval refused while any flag is open; an approved quote is read-only |
-| T1 System intelligibility for decision making | Every line shows its source page and row, the catalogue code and version, the flag and the model's reason |
-| T2 Communication to stakeholders | This document, `docs/PRODUCT.md` and the README |
-| T3 Disclosure of AI interaction | The interface labels every draft and proposal as Elevant's (`web/src/Quote.tsx`) |
-| F1 Quality of service | Quality measured per layout and for scanned reports; no personal attribute is used |
-| RS1 to RS3 Reliability and safety | Thresholds, failure handling (an unusable answer flags every line), and monitoring through KPI-2 and KPI-3 in production |
-| PS1, PS2 Privacy and security | Data minimisation towards the model, managed identities, no secrets; `docs/THREAT_MODEL.md` (phase 6) |
-| I1 Accessibility | WCAG 2.2 AA with axe-core in CI (`web/tests/web.spec.ts`, the `web` job of `ci.yml`) |
+- *Impact assessment (A1):* this document, reviewed at each phase that changes the AI components.
+- *Oversight of significant adverse impacts (A2):* the evaluation gate on every pull request that changes prompts, agents, the
+  workflow, the domain rules or the reference data.
+- *Fit for purpose (A3):* the thresholds of `docs/evaluation.md`, met before a change merges.
+- *Data governance and management (A4):* no training or fine-tuning; only the defect texts and catalogue fields reach the model,
+  with `store: false`; the evaluation data is synthetic; production data is kept for 24 months and deleted on request (section 4).
+- *Human oversight and control (A5):* mandatory review and approval; approval is refused while any flag is open; an approved quote
+  is read-only.
+- *System intelligibility for decision making (T1):* every line shows its source page and row, the catalogue code and version, the
+  flag and the model's reason.
+- *Communication to stakeholders (T2):* this document, `docs/PRODUCT.md` and the README.
+- *Disclosure of AI interaction (T3):* the interface labels every draft and proposal as Elevant's (`web/src/Quote.tsx`).
+- *Quality of service (F1):* quality is measured on reports in the client's three layouts, 10 of them scanned; no personal
+  attribute is used.
+- *Failures and remediations (RS2):* an unusable answer flags every line; a throttled model or a dependency that is down gives a
+  clear answer with a plain reason; each failure in section 3 has its detection and recovery.
+- *Ongoing monitoring, feedback and evaluation (RS3):* KPI-2 and KPI-3 in production, with the feedback per draft, the SLO alert
+  and the evaluation gate on every change to an AI component.
 
-F2 (allocation of resources and opportunities) and F3 (stereotyping, demeaning and erasing outputs) do not apply: Elevant allocates
-nothing to people and produces no text about people.
+Privacy and security are covered by data minimisation towards the model, managed identities and no secrets
+(`docs/THREAT_MODEL.md`, phase 6), and accessibility by WCAG 2.2 AA with axe-core in CI (`web/tests/web.spec.ts`, the `web` job of
+`ci.yml`). The fairness goals on the allocation of resources and opportunities and on stereotyping, demeaning and erasing outputs do
+not apply: Elevant allocates nothing to people and produces no text about people.
 
 **Task complexity and role of humans.** Narrow and well defined: choose among about 120 catalogue items for short, abbreviated rows.
 The estimator decides; Elevant proposes. **Deployment environment.** One company, trained users, office hours, a closed catalogue.

@@ -1,6 +1,6 @@
 # Cost
 
-Retail Prices API, EUR, `swedencentral`, checked on 2026-10-30 (build prompt), plus the model cost measured by the evaluation on
+Retail Prices API, EUR, `swedencentral`, checked on 2026-10-30 (the specification), plus the model cost measured by the evaluation on
 2026-10-31. Assumptions: 300 quotes a month, 3 pages each, one matcher call per quote. Phase 7 compares these
 estimates with Cost Management, per environment (below).
 
@@ -15,7 +15,7 @@ estimates with Cost Management, per environment (below).
 | Blob hot LRS | €0.0162 per GB-month; writes €0.044 and reads €0.0035 per 10k |
 | Key Vault | €0.0264 per 10k operations (none in v1) |
 | Log Analytics | €2.6311 per GB after 5 GB a month per billing account, a shared base allowance, not Elevant's alone; 31 days included |
-| Log alert, 15-minute frequency | €0.44 per rule a month, from the build prompt, kept as the estimate. On 2026-11-01 the Retail Prices API listed for Azure Monitor only *Alerts Resource Monitored at 15 Minute Frequency* (€0.044 per resource a month) and the 1-minute *System Log* meter, none matching this rule; it exists only in production, so Cost Management confirms it after the release (prompt 04) |
+| Log alert, 15-minute frequency | €0.44 per rule a month, from the specification, kept as the estimate. On 2026-11-01 the Retail Prices API listed for Azure Monitor only *Alerts Resource Monitored at 15 Minute Frequency* (€0.044 per resource a month) and the 1-minute *System Log* meter, none matching this rule; it exists only in production, so Cost Management confirms it after the release |
 | Inter-region data transfer | €0.0176 per GB (`spaincentral`, 2026-11-01): both apps run in Spain Central, their data and the registry in Sweden Central (ADR-017); under €0.03 a month at 300 quotes, plus up to €0.0016 per cold-start image pull |
 
 ## Per quote
@@ -49,7 +49,7 @@ Shared, and paid by the base whatever Elevant does: the registry (Basic, €0.14
 
 - It already scales to zero replicas when idle; nothing in Elevant's groups bills by the hour.
 - To stop production's only fixed charge, disable the SLO alert rule.
-- To stop deployments, prompt 06 pauses the workflows.
+- To stop deployments, pause the workflows.
 - Learn deletes Container Apps environments idle for more than 90 days with no apps; `cae-elevant-env` always has both apps, so it stays.
 
 ## Cost to date

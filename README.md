@@ -2,15 +2,31 @@
 
 Built by **Rodrigo Martín Gómez del Moral Herranz**
 
-<a href="https://github.com/Rodrigo-GomezdelMoral"><img src="docs/images/author/github.png" alt="GitHub" height="36"></a>&nbsp;&nbsp;<a href="https://www.linkedin.com/in/rodrigo-mart%C3%ADn-g%C3%B3mez-del-moral-herranz"><img src="docs/images/author/linkedin.png" alt="LinkedIn" height="36"></a>&nbsp;&nbsp;<a href="https://rodrigogomezdelmoralherranz.es"><img src="docs/images/author/portfolio.png" alt="Portfolio" height="36"></a>
+<a href="mailto:rodrigo.gomezdelmoral@gmail.com"><img src="docs/images/author/email.png" alt="Email" height="36"></a>&nbsp;&nbsp;<a href="https://www.linkedin.com/in/rodrigo-mart%C3%ADn-g%C3%B3mez-del-moral-herranz"><img src="docs/images/author/linkedin.png" alt="LinkedIn" height="36"></a>&nbsp;&nbsp;<a href="https://github.com/Rodrigo-GomezdelMoral"><img src="docs/images/author/github.png" alt="GitHub" height="36"></a>&nbsp;&nbsp;<a href="https://rodrigogomezdelmoral.es"><img src="docs/images/author/portfolio.png" alt="Professional Portfolio" height="36"></a>
 
-Elevant is an AI assistant on Azure that turns lift inspection reports into reviewed, traceable repair quotes in Word. It drafts a
+Elevant is an AI solution on Azure that turns lift inspection reports into reviewed, traceable repair quotes in Word. It drafts a
 quote in about 17 seconds, prices every line in code from the client's own catalogue, and issues nothing until an estimator
 approves it; office time per quote should drop from 33 to 65 minutes to 6 to 11, the estimate of the new process, not yet measured
 with real quotes.
 
-**Live demo:** <https://rodrigo-gomezdelmoral.github.io/product-industrial-elevant/> - six real staging runs replayed with their real
-timings and no backend; where the real flow asks you something, you answer it and see what the system did.
+<p align="center"><a href="https://rodrigogomezdelmoral.es/en/projects/product-industrial-elevant#video"><img src="docs/images/author/demo-video.png" alt="Watch the demo video" height="48"></a></p>
+
+**Built to standard.** This AI solution is designed, built, validated and operated in alignment with the **Microsoft
+Responsible AI Standard** (Fairness, Reliability and Safety, Privacy and Security, Inclusiveness, Transparency,
+Accountability) and the **Azure Well-Architected Framework** (Reliability, Security, Cost Optimization, Operational
+Excellence, Performance Efficiency).
+
+Every engineering decision is driven by a concrete requirement and grounded in one or more of these principles and
+pillars, with supporting evidence documented in this repository. These principles guide the development of
+responsible, reliable and scalable AI solutions through specialised engineering practices in evaluation, safety,
+identity, operations and cost management.
+
+See how [each principle](#microsoft-responsible-ai-standard) and [each pillar](#azure-well-architected-framework) is
+applied.
+
+<p align="center"><a href="https://rodrigo-gomezdelmoral.github.io/product-industrial-elevant/"><img src="docs/images/author/live-demo.png" alt="Live demo" height="48"></a></p>
+
+Six real staging runs, replayed in the browser with their real timings, no backend and no sign-in: a clean digital report, a scanned one full of abbreviations, two ambiguous defects resolved in review and a defect that tries to change its price. Where the real flow asks you something, you answer it and see what the system did.
 
 > **All data is synthetic.** The reports come from [`ops/make_reports.py`](ops/make_reports.py), with fictitious lift IDs,
 > addresses and names, and the client's volumes and times are the product brief's ([`docs/PRODUCT.md`](docs/PRODUCT.md)).
@@ -28,7 +44,7 @@ manager. Every report becomes a quote by hand: someone reads the technician's PD
 catalogue for each defect, checks prices, calculates VAT and fills a Word template. The office part takes 33 to 65 minutes, the same
 defect can be priced with different items depending on who does it, and nothing links a quote line back to the defect that caused it.
 
-![The process today in BPMN: the technician inspects the lift and writes the PDF report, the back office registers it, the estimator finds each item in the Excel catalogue, calculates the totals and fills the Word template, and the manager reviews the quote or sends it back; 33 to 65 minutes of office time per quote](docs/images/process-as-is.png)
+![The process today in BPMN: the technician inspects the lift and writes the PDF report, the back office registers it, the estimator finds each item in the Excel catalogue, calculates the totals and fills the Word template, and the manager reviews the quote or sends it back; 33 to 65 minutes of office time per quote](docs/images/process-as-is.svg)
 
 ## What it does
 
@@ -41,7 +57,7 @@ defect can be priced with different items depending on who does it, and nothing 
   their approval.
 - **Writes the Word quote.** Every line is traced to its catalogue code and version and to the report's page and row.
 
-![The process with Elevant in BPMN: the technician's work is unchanged; the estimator uploads the PDF, Elevant reads the report, matches the catalogue with a closed choice, prices in code, the estimator reviews and approves, and Elevant writes the Word quote; a draft in under 60 s and 6 to 11 minutes of office time](docs/images/process-to-be.png)
+![The process with Elevant in BPMN: the technician's work is unchanged; the estimator uploads the PDF, Elevant reads the report, matches the catalogue with a closed choice, prices in code, the estimator reviews and approves, and Elevant writes the Word quote; a draft in under 60 s and 6 to 11 minutes of office time](docs/images/process-to-be.svg)
 
 The estimator's approval replaces the manager's review: the manager follows quality through the KPIs and deletes a quote on
 request. Office time goes from 33 to 65 minutes to about 6 to 11, the client's estimate for this process; KPI-1 Quote turnaround
@@ -56,7 +72,7 @@ Ten requirements with acceptance criteria are in [`docs/PRODUCT.md`](docs/PRODUC
 simulation of each. The six Musts are in production since v1.0.0; they were walked through there on 2026-11-02 and recorded there
 with v1.0.4 on 2026-11-06. The take numbers on the board are those of that recording.
 
-![Requirements board: the six Musts met, reading the report, catalogue match, correct and approve, traceable Word quote, draft time 48.9 s against 60 s and availability 100 % against 99.5 % over 30 days of synthetic use; four Shoulds, the versioned catalogue, plain-words correction and feedback recorded, and deletion tested and shown live but not recorded](docs/images/requirements.png)
+![Requirements board: the six Musts met, reading the report, catalogue match, correct and approve, traceable Word quote, draft time 48.9 s against 60 s and availability 100 % against 99.5 % over 30 days of synthetic use; four Shoulds, the versioned catalogue, plain-words correction and feedback recorded, and deletion tested and shown live but not recorded](docs/images/requirements.svg)
 
 | REQ | Must | Staging | Production | Evidence |
 |---|---|---|---|---|
@@ -82,7 +98,7 @@ The SLAs committed to the client, against what was measured in the staging load 
 Read with the workbook's queries on production's Application Insights events, over 30 days of synthetic use to 2026-11-06. Each KPI
 is an Application Insights event and a tile of the workbook declared in Bicep.
 
-![KPI board, production to 2026-11-06, synthetic use: KPI-1 Quote turnaround (office time) 30 s against 15 minutes, from scripted approvals, not real review time; lines accepted unchanged 78.4 % against 85 %, not met; positive feedback 87.5 % against 80 %, met](docs/images/kpis.png)
+![KPI board, production to 2026-11-06, synthetic use: KPI-1 Quote turnaround (office time) 30 s against 15 minutes, from scripted approvals, not real review time; lines accepted unchanged 78.4 % against 85 %, not met; positive feedback 87.5 % against 80 %, met](docs/images/kpis.svg)
 
 | KPI | Target | Measured in production | Cases |
 |---|---|---|---|
@@ -91,7 +107,7 @@ is an Application Insights event and a tile of the workbook declared in Bicep.
 | KPI-3 Positive feedback | 80 % or more | 87.5 % | 7 of 8 ratings |
 
 These figures come from synthetic use (the walk-through, a prepared scenario and the recording), where each approval followed a
-script, a median of 30 s after the upload: KPI-1 Quote turnaround measures the tool's path there, not an estimator's review. The KPIs are
+script, a median of 30 s after the upload: KPI-1 Quote turnaround measures the solution's path there, not an estimator's review. The KPIs are
 monthly and are read again after a month of real quotes. KPI-2 counts choosing a candidate or removing an unmatched line as a
 change; KPI-2 and KPI-3 have no equivalent in the manual process.
 
@@ -104,11 +120,11 @@ gave 444/444 matches, ambiguity recall 43/44, no-match 31/31 and injections 2/2 
 
 | | |
 |---|---|
-| **Type** | AI product: a quoting assistant for a lift maintenance company's estimators |
+| **Type** | AI solution: repair quoting for a lift maintenance company's estimators |
 | **Client and users** | one client tenant; estimators (`Quote.Estimator`) and a manager (`Quote.Manager`) |
 | **Azure services** | per environment, in its own resource group: a container app, in one Consumption environment that both share (ADR-016), Cosmos DB serverless, Blob Storage, Key Vault, Log Analytics and Application Insights, a managed identity and a budget. Shared, from the owner's platform base, a separate resource group (ADR-005): the container registry and the Foundry account with Document Intelligence and `gpt-5-mini` |
 | **AI** | `gpt-5-mini` `2025-08-07` with structured output; two Microsoft Agent Framework agents (matcher, corrector) in one workflow with a human-in-the-loop approval and Cosmos DB checkpoints; Document Intelligence layout |
-| **Stack** | Python 3.12, FastAPI, Pydantic; React, TypeScript and Vite with the common chat interface |
+| **Stack** | Python 3.12, FastAPI, Pydantic; React, TypeScript and Vite with the chat interface |
 | **Environments and delivery** | local with emulators; staging and production. One image per merge, deployed to staging by digest; a GitHub Release promotes the same image to production blue/green after approval; GitHub Actions with OIDC |
 | **Security** | Container Apps built-in authentication with Entra ID and app roles; managed identity everywhere; no keys, local auth off on Cosmos DB, Storage and Application Insights; report text treated as untrusted |
 | **SLA** | draft p95 under 60 s: 48.9 s in production (n = 12); availability 99.5 % in business hours: 100 % (n = 185); both over 30 days of synthetic use to 2026-11-06, and the monthly SLA with real traffic is not measured yet |
@@ -116,7 +132,7 @@ gave 444/444 matches, ambiguity recall 43/44, no-match 31/31 and injections 2/2 
 
 ## Architecture
 
-![The estimator reaches Elevant, the API and web behind Container Apps built-in authentication; per environment it keeps checkpoints in Cosmos DB, files in Blob Storage and telemetry in Application Insights; with its own managed identity it uses the Foundry account, Document Intelligence and the registry of the shared platform base](docs/images/architecture.png)
+![The estimator reaches Elevant, the API and web behind Container Apps built-in authentication; per environment it keeps checkpoints in Cosmos DB, files in Blob Storage and telemetry in Application Insights; with its own managed identity it uses the Foundry account, Document Intelligence and the registry of the shared platform base](docs/images/architecture.svg)
 
 The estimator's browser talks to one Container App that serves the web and the API behind Container Apps built-in authentication
 with Entra ID (ADR-010), so only users with an app role get in. The quote workflow reads the report, matches, prices, waits for the
@@ -135,7 +151,7 @@ defect's text and catalogue codes: no header field, no price and no file (ADR-00
 
 ### A closed choice
 
-![Matching: the matcher receives the defect text and catalogue codes without prices, as data, not instructions; code validates its answer into matched, ambiguous for the estimator to choose, or no match without a price, and rejects an unknown code](docs/images/matching.png)
+![Matching: the matcher receives the defect text and catalogue codes without prices, as data, not instructions; code validates its answer into matched, ambiguous for the estimator to choose, or no match without a price, and rejects an unknown code](docs/images/matching.svg)
 
 The model never sees a price or a person's name. It receives each defect's text and the catalogue's codes, descriptions and units,
 and answers with a code from that list; code then checks the answer and prices it from the catalogue. An answer outside the list is
@@ -158,8 +174,8 @@ Application Insights, with the people's names replaced by their role.
 
 ## In action
 
-In production, every Must was walked through on 2026-11-02 with `v1.0.1` and recorded on 2026-11-06 with `v1.0.4`; outcomes in
-[`docs/OPERATIONS.md`](docs/OPERATIONS.md):
+Recorded in production on 2026-11-06, on `v1.0.4`, after every Must was walked through there on 2026-11-02 with `v1.0.1`;
+outcomes in [`docs/OPERATIONS.md`](docs/OPERATIONS.md):
 
 - **A draft in review** (the image at the top): the header read from the PDF, every line priced from the catalogue and traced to its
   page and row, three lines flagged for the estimator, and a box to correct the draft in plain words.
@@ -174,7 +190,7 @@ The published demo replays six real staging runs.
 
 ## Environments and releases
 
-![Environments: code with emulators locally; a merge deploys the API to staging, which scales to zero; after the load test and the owner's approval a release deploys it to production blue/green; the Container Apps environment, the registry with one image and Foundry are shared](docs/images/environments.png)
+![Environments: code with emulators locally; a merge deploys the API to staging, which scales to zero; after the load test and the owner's approval a release deploys it to production blue/green; the Container Apps environment, the registry with one image and Foundry are shared](docs/images/environments.svg)
 
 - **Image:** a merge builds one image that is never rebuilt, and staging receives it by digest.
 - **Release:** `vX.Y.Z` promotes the digest that runs in staging, after a successful load test and the owner's approval, to
@@ -185,7 +201,7 @@ The published demo replays six real staging runs.
 
 ### Load tests
 
-![Load test: GitHub Actions runs Locust with 100 users against Elevant in staging, which scales to three replicas, first with stubs in place of the AI services and then with the real model, with no failures](docs/images/load-test.png)
+![Load test: GitHub Actions runs Locust with 100 users against Elevant in staging, which scales to three replicas, first with stubs in place of the AI services and then with the real model, with no failures](docs/images/load-test.svg)
 
 Staging on 2026-11-06, 11:39 to 12:13 UTC, on the commit released as v1.0.4 (Locust from `load-test.yml`, `report-0134` uploads).
 The first four scenarios run with stubs in place of Document Intelligence and the model, so they measure the app, Cosmos DB and the
@@ -241,7 +257,23 @@ About €0.04 per approved quote against a target of €0.05: Document Intellige
 input and 1,504 output tokens measured), the rest under a cent. The model and Document Intelligence are billed to the shared base.
 Details in [`docs/cost.md`](docs/cost.md).
 
-## Well-Architected design
+## Microsoft Responsible AI Standard
+
+How the six principles of the Microsoft Responsible AI Standard are applied, and the limitation accepted in each. The impact
+assessment is in [`docs/RESPONSIBLE_AI.md`](docs/RESPONSIBLE_AI.md).
+
+| Principle | Applied | Limitation accepted |
+|---|---|---|
+| Fairness | an evaluation set built over the client's three report layouts, scanned reports and the technicians' shorthand; no name, address or other header field reaches the model (ADR-006); one catalogue price per item, applied in code to every quote (ADR-002) | results are reported for the whole set rather than per layout; the reports are synthetic |
+| Reliability and Safety | an evaluation gate on every pull request that changes prompts, agents, the workflow or reference data; model answers validated against the catalogue in code; content filters and jailbreak detection on the shared deployment; nothing issued before the estimator's approval; rollback, restore and alert drills | a small share of ambiguous variants reaches the estimator without a flag (1 of 46 on 2026-10-31), which the mandatory review covers; injection through a report is handled by the closed choice rather than a dedicated filter |
+| Privacy and Security | Entra ID sign-in with app roles, managed identity, no keys or secrets (ADR-010); only defect text and catalogue fields reach the model (ADR-006); data at rest in the EU (ADR-014); quotes deleted after 24 months and on the manager's request (REQ-10); a STRIDE threat model | a Global Standard deployment may process defect text outside the region (ADR-006); public endpoints protected by identity (ADR-012) |
+| Inclusiveness | WCAG 2.2 AA checked with axe-core in CI, 0 violations, in a keyboard-only walk-through; flags shown with an icon and a word; corrections in plain words (REQ-08) | English only; scans must be legible, and handwriting is out of scope |
+| Transparency | every line shows its report page and row, its catalogue code and version, and its flag with the model's reason; the Word quote carries the catalogue and template versions; model version and retirement plan recorded (ADR-013) | AI use is conveyed by the product's labels on drafts and proposals rather than a separate notice; published figures come from synthetic reports |
+| Accountability | the impact assessment reviewed at each phase that changes an AI component; an estimator approves every quote, and approval is refused while a flag is open; approver, timestamps and an append-only event list on each quote; 17 ADRs | a single-author project (ADR-011) |
+
+## Azure Well-Architected Framework
+
+How the design maps to the five pillars of the Azure Well-Architected Framework, and the trade-off accepted in each.
 
 | Pillar | Applied | Trade-off accepted |
 |---|---|---|
@@ -269,10 +301,10 @@ requests (`what-if` only). The deployment principals can assign only the data ro
 
 ### GitHub secrets and variables
 
-- Repository secrets: `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_CLIENT_ID_PR` and `ALERT_EMAIL_ADDRESS`.
-- Per environment (`staging`, `production`): the secrets `AZURE_CLIENT_ID` and `AUTH_CLIENT_ID`; staging also
+- **Repository secrets:** `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_CLIENT_ID_PR` and `ALERT_EMAIL_ADDRESS`.
+- **Per environment:** in `staging` and `production`, the secrets `AZURE_CLIENT_ID` and `AUTH_CLIENT_ID`; staging also
   `OPERATOR_PRINCIPAL_ID`.
-- Variables: `FOUNDRY_PROJECT_ENDPOINT` and `DOCINTEL_ENDPOINT`.
+- **Variables:** `FOUNDRY_PROJECT_ENDPOINT` and `DOCINTEL_ENDPOINT`.
 
 ### Identities
 
@@ -296,4 +328,4 @@ from Bicep) and the sign-in app per environment with the `Quote.Estimator` and `
 
 **Rodrigo Martín Gómez del Moral Herranz**
 
-<a href="https://github.com/Rodrigo-GomezdelMoral"><img src="docs/images/author/github.png" alt="GitHub" height="36"></a>&nbsp;&nbsp;<a href="https://www.linkedin.com/in/rodrigo-mart%C3%ADn-g%C3%B3mez-del-moral-herranz"><img src="docs/images/author/linkedin.png" alt="LinkedIn" height="36"></a>&nbsp;&nbsp;<a href="https://rodrigogomezdelmoralherranz.es"><img src="docs/images/author/portfolio.png" alt="Portfolio" height="36"></a>
+<a href="mailto:rodrigo.gomezdelmoral@gmail.com"><img src="docs/images/author/email.png" alt="Email" height="36"></a>&nbsp;&nbsp;<a href="https://www.linkedin.com/in/rodrigo-mart%C3%ADn-g%C3%B3mez-del-moral-herranz"><img src="docs/images/author/linkedin.png" alt="LinkedIn" height="36"></a>&nbsp;&nbsp;<a href="https://github.com/Rodrigo-GomezdelMoral"><img src="docs/images/author/github.png" alt="GitHub" height="36"></a>&nbsp;&nbsp;<a href="https://rodrigogomezdelmoral.es"><img src="docs/images/author/portfolio.png" alt="Professional Portfolio" height="36"></a>

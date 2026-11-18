@@ -1,7 +1,7 @@
 # Operations
 
 Written in phase 6 and completed in phase 7 with what staging measured (cold start, load tests, SLOs, the rollback drill, Advisor
-and cost to date); prompt 04 adds the restore drill and repeats the measurements in production.
+and cost to date); the post-release validation adds the restore drill and repeats the measurements in production.
 
 ## Environments
 
@@ -240,7 +240,7 @@ workflows (ADR-015); `release.yml` decides it from the diff against the previous
 ## Starting and stopping
 
 Everything scales to zero when idle. To stop serving production without deleting anything, deactivate its active revisions
-(`az containerapp revision deactivate`); to stop deployments, prompt 06 pauses the workflows; to stop the only fixed charge, disable the
+(`az containerapp revision deactivate`); to stop deployments, pause the workflows; to stop the only fixed charge, disable the
 SLO alert rule. Staging ends every phase at zero replicas.
 
 ## Backup and restore

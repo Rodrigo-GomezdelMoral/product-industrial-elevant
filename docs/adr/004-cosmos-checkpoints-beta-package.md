@@ -1,6 +1,6 @@
-# ADR-004: Cosmos DB checkpoints with the beta package, and graph versioning
+# ADR-004 · Cosmos DB checkpoints with the beta package, and graph versioning
 
-Status: accepted (phase 2, recorded 2026-10-31)
+**Status:** accepted · **Date:** 2026-10-31
 
 ## Context
 

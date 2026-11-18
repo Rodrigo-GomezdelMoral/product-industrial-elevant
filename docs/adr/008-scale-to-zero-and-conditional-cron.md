@@ -1,6 +1,6 @@
-# ADR-008: Scale to zero and the conditional cron replica
+# ADR-008 · Scale to zero and the conditional cron replica
 
-Status: accepted (phase 6, recorded 2026-10-31); measured in phase 7 (2026-11-01): no cron rule
+**Status:** accepted; measured in phase 7 (2026-11-01): no cron rule · **Date:** 2026-10-31
 
 ## Context
 
@@ -25,7 +25,7 @@ Staging started from zero replicas in 24.1 s and 27.8 s; the slowest real draft 
 and the sign-in wake the replica while the estimator picks the file, so the draft does not wait for a start. The worst case, an upload
 from a page left open past the 5-minute scale-in, waits for both, estimated at about 46 s (27.8 s start plus the 18.5 s draft, not measured end to end), about 1 s over the 45 s SLO and well under the 60 s SLA; the
 `quote_drafted` duration starts when the app receives the upload, so the SLI does not show that second. The cron rule is not added:
-it needs single-revision mode, which production's blue/green (ADR-009) does not use, and the build prompt allows keeping the HTTP rule
+it needs single-revision mode, which production's blue/green (ADR-009) does not use, and the specification allows keeping the HTTP rule
 with the cold start recorded as the accepted trade-off, which this is. Production
-ran in another region from the registry (ADR-014), and since ADR-017 both apps do; prompt 04 measures its cold start and
+ran in another region from the registry (ADR-014), and since ADR-017 both apps do; the post-release validation measures its cold start and
 revisits this decision if the cold path nears 60 s.

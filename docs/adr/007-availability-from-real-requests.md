@@ -1,6 +1,6 @@
-# ADR-007: Availability from real requests, no synthetic test
+# ADR-007 · Availability from real requests, no synthetic test
 
-Status: accepted (phase 6, recorded 2026-10-31)
+**Status:** accepted · **Date:** 2026-10-31
 
 ## Context
 

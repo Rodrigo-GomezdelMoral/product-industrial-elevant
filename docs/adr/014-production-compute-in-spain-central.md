@@ -1,6 +1,6 @@
-# ADR-014: Production compute in Spain Central, data in Sweden Central
+# ADR-014 · Production compute in Spain Central, data in Sweden Central
 
-Status: superseded by ADR-016 on 2026-11-02 (phase 7, recorded 2026-11-01). Production's compute returns to Sweden Central in the one environment both apps share; the text below is the record of the earlier decision.
+**Status:** superseded by ADR-016 on 2026-11-02: production's compute returns to Sweden Central in the one environment both apps share, and the text below is the record of the earlier decision · **Date:** 2026-11-01
 
 ## Context
 
@@ -12,9 +12,9 @@ Production's Container Apps environment and app run in **Spain Central**: `cae-e
 
 ## Consequences
 
-- **Latency.** Every dependency call of production crosses Spain Central to Sweden Central: 50 ms P50 round trip (Learn, *Azure network round-trip latency statistics*, 30 days to 2026-07-30). A draft makes on the order of twenty such calls (checkpoints, the quote, the blob, Document Intelligence and its polling, the model), about 1 s against the 45 s SLO, where the matcher's 12 to 19 s dominates. This is an estimate: prompt 04 measures `quote_drafted` p95 in production.
+- **Latency.** Every dependency call of production crosses Spain Central to Sweden Central: 50 ms P50 round trip (Learn, *Azure network round-trip latency statistics*, 30 days to 2026-07-30). A draft makes on the order of twenty such calls (checkpoints, the quote, the blob, Document Intelligence and its polling, the model), about 1 s against the 45 s SLO, where the matcher's 12 to 19 s dominates. This is an estimate: the post-release validation measures `quote_drafted` p95 in production.
 - **Egress.** Inter-region transfer is billed at €0.0176 per GB (Retail Prices API, `spaincentral`, *Standard Inter-Region Data Transfer*, 2026-11-01). A quote moves a few MB across (the PDF, the layout, the document, telemetry): under €0.03 a month at 300 quotes. A cold start may pull the 89 MB image from the registry in Sweden Central, €0.0016 a pull: under €0.70 a month even at 20 cold starts a business day.
-- **Staging is not production's twin in region.** Staging's load tests and cold starts run next to their dependencies, so they understate production's draft latency by the cross-region calls and its cold start by the cross-region image pull. The release smoke test and prompt 04's live run measure production itself.
+- **Staging is not production's twin in region.** Staging's load tests and cold starts run next to their dependencies, so they understate production's draft latency by the cross-region calls and its cold start by the cross-region image pull. The release smoke test and the post-release validation's live run measure production itself.
 - **Data residency is unchanged.** Data at rest stays in Sweden Central; production processes reports in memory in Spain Central. Both are in the EU, so the data table of `PRODUCT.md` holds.
 - **Logs.** The production environment's diagnostic setting sends container logs to its workspace in Sweden Central; a Log Analytics destination may be in another region.
 - **Resilience.** Still no failover (ADR-012): an outage of either region stops production.

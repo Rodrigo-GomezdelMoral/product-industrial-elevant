@@ -1,6 +1,6 @@
-# ADR-009: Blue/green in production, single revision in staging
+# ADR-009 · Blue/green in production, single revision in staging
 
-Status: accepted (phase 6, recorded 2026-10-31)
+**Status:** accepted · **Date:** 2026-10-31
 
 ## Context
 

@@ -1,6 +1,6 @@
-# ADR-011: One SLO alert, production only
+# ADR-011 · One SLO alert, production only
 
-Status: accepted (phase 6, recorded 2026-10-31)
+**Status:** accepted · **Date:** 2026-10-31
 
 ## Context
 
@@ -12,7 +12,7 @@ One scheduled query rule in production, every 15 minutes over the last hour, who
 
 ## Consequences
 
-- About €0.44 a month (the build prompt's price; the Retail Prices API returned no meter for a 15-minute log alert on 2026-10-31, so phase 7 confirms it in Cost Management).
+- About €0.44 a month (the specification's price; the Retail Prices API returned no meter for a 15-minute log alert on 2026-10-31, so phase 7 confirms it in Cost Management).
 - An hourly window detects burn early; the monthly figures live in the workbook.
 
 ## Alternatives considered

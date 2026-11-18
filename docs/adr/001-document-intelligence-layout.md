@@ -1,6 +1,6 @@
-# ADR-001: Document Intelligence layout rather than Content Understanding
+# ADR-001 · Document Intelligence layout rather than Content Understanding
 
-Status: accepted (phase 2, recorded 2026-10-31)
+**Status:** accepted · **Date:** 2026-10-31
 
 ## Context
 

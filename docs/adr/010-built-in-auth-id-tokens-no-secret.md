@@ -1,6 +1,6 @@
-# ADR-010: Built-in auth with ID tokens and no client secret, app roles in the API, an empty vault
+# ADR-010 · Built-in auth with ID tokens and no client secret, app roles in the API, an empty vault
 
-Status: accepted (phase 6, recorded 2026-10-31)
+**Status:** accepted · **Date:** 2026-10-31
 
 ## Context
 
