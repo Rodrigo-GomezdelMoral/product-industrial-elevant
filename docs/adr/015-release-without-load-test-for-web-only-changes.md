@@ -1,6 +1,6 @@
-# ADR-015: Release without a load test when only the web, docs or workflows changed
+# ADR-015 · Release without a load test when only the web, docs or workflows changed
 
-Status: accepted (decided by the owner on 2026-11-02)
+**Status:** accepted (the owner's decision) · **Date:** 2026-11-02
 
 ## Context
 

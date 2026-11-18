@@ -1,6 +1,6 @@
-# ADR-006: Global Standard with data minimisation
+# ADR-006 · Global Standard with data minimisation
 
-Status: accepted (phase 2, recorded 2026-10-31)
+**Status:** accepted · **Date:** 2026-10-31
 
 ## Context
 

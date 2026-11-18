@@ -1,6 +1,6 @@
-# ADR-002: One workflow, two small agents, deterministic money
+# ADR-002 · One workflow, two small agents, deterministic money
 
-Status: accepted (phase 2, recorded 2026-10-31)
+**Status:** accepted · **Date:** 2026-10-31
 
 ## Context
 

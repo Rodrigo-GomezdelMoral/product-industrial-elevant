@@ -1,10 +1,10 @@
-# ADR-005: The shared registry and Foundry account
+# ADR-005 · The shared registry and Foundry account
 
-Status: accepted (phase 6, recorded 2026-10-31)
+**Status:** accepted · **Date:** 2026-10-31
 
 ## Context
 
-A container registry bills by the day whatever it stores, and a Foundry account with model deployments is pay per use but carries quota. The portfolio's shared base (`rg-aiplatform-shared-swc`) already has the registry `craiplatformshared` (Basic) and the Foundry account `fdry-aiplatform-shared-swc` with `gpt-5-mini` and Document Intelligence.
+A container registry bills by the day whatever it stores, and a Foundry account with model deployments is pay per use but carries quota. The owner's shared base (`rg-aiplatform-shared-swc`) already has the registry `craiplatformshared` (Basic) and the Foundry account `fdry-aiplatform-shared-swc` with `gpt-5-mini` and Document Intelligence.
 
 ## Decision
 

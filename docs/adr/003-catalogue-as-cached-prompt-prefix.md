@@ -1,6 +1,6 @@
-# ADR-003: The catalogue as a cached prompt prefix
+# ADR-003 · The catalogue as a cached prompt prefix
 
-Status: accepted (phase 2, recorded 2026-10-31)
+**Status:** accepted · **Date:** 2026-10-31
 
 ## Context
 

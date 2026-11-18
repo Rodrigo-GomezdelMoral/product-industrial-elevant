@@ -1,6 +1,6 @@
-# ADR-017: The Container Apps environment and both apps in Spain Central
+# ADR-017 · The Container Apps environment and both apps in Spain Central
 
-Status: accepted (decided by the owner on 2026-11-03); supersedes the region of ADR-016, whose single shared environment holds
+**Status:** accepted (the owner's decision); supersedes the region of ADR-016, whose single shared environment holds · **Date:** 2026-11-03
 
 ## Context
 

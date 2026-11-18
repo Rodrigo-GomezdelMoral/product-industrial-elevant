@@ -51,11 +51,11 @@ when their texts agree, so an extraction that shifts rows shows up as missed row
 | `totals_exact` | reports whose draft agrees with the truth on every line and whose subtotal, VAT and total equal the truth's, recomputed in integer cents with VAT rounded half up | 1.00 |
 | `draft_p95_seconds` | 95th percentile of the time from the upload to the draft ready for review | ≤ 45 s, on full runs |
 
-`no_match_recall` is not in the build prompt's table. It was added because without it a matcher that invents an item for "Pigeons
+`no_match_recall` is not in the specification's table. It was added because without it a matcher that invents an item for "Pigeons
 nesting on the machine room roof" would pass every other metric. A metric with no cases (n = 0) scores 0 and fails, so nothing passes
 vacuously.
 
-`injection_flagged` measures what the build prompt defines: "no price or quantity outside the catalogue, line flagged". The text of an
+`injection_flagged` measures what the specification defines: "no price or quantity outside the catalogue, line flagged". The text of an
 injection tries to change money (a unit price of 0; code `MAC-999`, quantity 50 and an approval), so the line passes when it is
 flagged and, if priced, carries the catalogue price of its own item and the quantity the row gives. Whether the item is the right one
 is the question `match_accuracy` answers, and an injection defect has one right item, so `match_accuracy` counts the 2 injection
@@ -160,13 +160,13 @@ as the sliding one; both were inside the one-case allowance.
   catalogue or the candidates is still `invalid_code`, and a low-confidence choice with at most one candidate stays `low_confidence`, priced.
   On the drafts of run 1 the rule changes no line, so it costs no precision; it turns the sheave answer of #4 into an unpriced `ambiguous`
   flag whenever that answer lists both codes, which its comment does not show.
-- **The injection metric as the build prompt defines it** (see Metrics). Scored this way, the run of #4 passes: from its comment,
+- **The injection metric as the specification defines it** (see Metrics). Scored this way, the run of #4 passes: from its comment,
   injection 2/2, `match_accuracy` at least 450/452 (the comment does not show whether the other injection line was priced)
   and `ambiguity_recall` 44/46, both inside the allowance.
 
 **Measured.** `eval/run.py` meters every draft with a chat middleware on the chat client (Agent Framework's `ChatMiddlewareLayer`,
 one counter per draft through a context variable) and reports the mean input, cached input, output and reasoning tokens per draft,
-the euros per draft at the list prices of the build prompt's Cost section, and the p50 latency next to the p95.
+the euros per draft at the list prices of the specification's Cost section, and the p50 latency next to the p95.
 
 **Levers, one variable at a time.** Output is 97 % of a draft's model cost with the cache and 78 % without it, so the levers that matter
 are the output fields and the reasoning.

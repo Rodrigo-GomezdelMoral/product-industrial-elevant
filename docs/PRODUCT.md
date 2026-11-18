@@ -1,4 +1,4 @@
-# Elevant product definition
+# Elevant · product definition
 
 Agreed with the client on 2026-10-30. This document is the source for the requirements, the KPIs and the service levels; the README,
 the tests and the operations runbook cite it by `REQ` and `KPI` number.
@@ -71,7 +71,7 @@ Office time, steps 3 to 9: **33–65 minutes per quote**. With the inspection: 5
 | 6 | Generate the Word quote from the template, with traceability | Elevant | a few seconds |
 
 Registering, interpreting, searching, checking, calculating and filling the template are done by Elevant. The manager's review becomes
-the estimator's approval inside the tool, and the manager follows quality through the KPIs instead of reading every quote.
+the estimator's approval inside Elevant, and the manager follows quality through the KPIs instead of reading every quote.
 
 ## Requirements
 
@@ -251,7 +251,7 @@ walked through in production (table after this one) and recorded there with v1.0
 | REQ-03 | `test_domain.py`: edits with who and when, refused approval, read-only after approval (phase 1); `test_api.py`: every request rebuilds the workflow and resumes it from its checkpoint, approval refused while flags remain, each edit and the approval recorded with the signed-in estimator, an approved quote refuses another answer, a stale save refused in the Cosmos DB emulator; only `Quote.Estimator` reviews (401 without a session, 403 without the role) (phases 2 and 4); `web/tests/web.spec.ts`: by keyboard, a quantity change re-prices the line at once, flagged lines are resolved, Approve stays unavailable until no flag is open, and the approved quote is read-only (phase 5) | correct, approve, read-only after approval | S3, S4, S6 |
 | REQ-04 | `test_render.py`: every rendered line traced, no document before approval (phase 1); `test_api.py`: 409 for the document before approval, the `.docx` after it (phase 4); `web/tests/web.spec.ts`: the approved card downloads the `.docx` and shows the catalogue and template versions (phase 5) | download the `.docx` and open it | S4, S6 (the Word file) |
 | REQ-05 | evaluation latency, informational: draft p95 25.4 s with Document Intelligence on the workstation (phase 3); load tests | `quote_drafted` p95 in KQL: 18.5 s with the real model, cold start 24 to 28 s, load tests within the SLA (phase 7) | S1, S2 and S4 replay their real draft timings |
-| REQ-06 | availability query in the workbook and the production SLO alert, declared in Bicep (`infra/workbook.json`, `infra/modules/monitoring.bicep`, phase 6) | availability SLI in the workbook | none: the workbook (prompt 05 capture) |
+| REQ-06 | availability query in the workbook and the production SLO alert, declared in Bicep (`infra/workbook.json`, `infra/modules/monitoring.bicep`, phase 6) | availability SLI in the workbook | none: the workbook |
 | REQ-07 | `test_domain.py`: a catalogue v2 test, drafts in review keep v1 (phase 1); `test_data.py`: every catalogue version well formed; `eval.yml` runs the evaluation gate on any change to `data/reference/` (phase 3) | a quote showing its versions | S6 and S4: the quote shows its catalogue and template versions |
 | REQ-08 | `test_agents.py`: the corrector proposes catalogue edits without applying them and refuses unknown codes (phase 2); `test_api.py`: the correction endpoint only proposes edits, which are applied through the review answer, and a throttled model answers 429 with `Retry-After` (phase 4); `web/tests/web.spec.ts`: a proposal changes nothing until it is confirmed (phase 5) | correction confirmed in the browser | S4, S6 (the correction card) |
 | REQ-09 | `test_api.py`: 👍 or 👎 sent as the `feedback` event, with `quote_drafted`, `line_reviewed`, `quote_approved` and `quote_deleted`, captured by an in-memory OpenTelemetry exporter, with no personal data (phase 4); `web/tests/web.spec.ts`: 👍 sends the rating (phase 5) | KQL showing `feedback` events | every simulation offers the rating |

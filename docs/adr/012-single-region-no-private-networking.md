@@ -1,6 +1,6 @@
-# ADR-012: Single region, no private networking
+# ADR-012 · Single region, no private networking
 
-Status: accepted (phase 6, recorded 2026-10-31; storage recommendation added 2026-11-02; region updated by ADR-016 on 2026-11-02 and ADR-017 on 2026-11-03)
+**Status:** accepted · **Date:** 2026-10-31 · **Amended:** 2026-11-02, storage recommendation added; region updated by ADR-016 on 2026-11-02 and ADR-017 on 2026-11-03
 
 ## Context
 
