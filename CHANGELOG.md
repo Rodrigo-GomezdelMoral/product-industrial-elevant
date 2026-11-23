@@ -33,8 +33,8 @@ the web matches the common web shell's sizes again. No change to the agents.
 - ADR-017 records that preflight rejects a new environment in Sweden Central although its usage reads 0 of 1, and moves the
   environment and both apps to Spain Central, with data, identities and monitoring in Sweden Central; it supersedes ADR-016's region.
 - ADR-016 records the subscription's limits (5 environments, 1 in Sweden Central), the decision and what staging and production
-  now share; it supersedes ADR-014 and updates ADR-012. The architecture, cost, operations and responsible-AI documents, the README
-  and `CLAUDE.md` describe the one environment, and the cost document names the shared base without its other users.
+  now share; it supersedes ADR-014 and updates ADR-012. The architecture, cost, operations and responsible-AI documents and the README
+  describe the one environment, and the cost document names the shared base without its other users.
 - The label rollback is unavailable until the next release, since production's app restarts with one revision, and a planned
   rollback cannot go back past this release.
 - The operations guide, README and product document record the production walk-through of every Must (2026-11-02), production's
@@ -178,7 +178,7 @@ release after the owner's approval.
   the 0.90 threshold.
 - A choice the matcher is unsure of among several catalogue items is flagged ambiguous with its candidates and no price,
   instead of being priced as a low-confidence line (REQ-02).
-- The evaluation's injection metric follows the build prompt (flagged, no price or quantity outside the catalogue), and
+- The evaluation's injection metric follows the specification (flagged, no price or quantity outside the catalogue), and
   match accuracy now also counts the injection defects; each run reports tokens, euros and p50 latency per draft. The
   matcher's output cap is 1,500 plus 150 tokens per defect.
 - Production's Container Apps environment and app run in Spain Central, where the subscription has environment quota; its
